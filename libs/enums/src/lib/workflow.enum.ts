@@ -1,0 +1,25 @@
+export enum WorkflowStatus {
+  DRAFT = 'DRAFT',
+  SUBMITTED = 'SUBMITTED',
+  CHECKED = 'CHECKED',
+  AUTHORIZED = 'AUTHORIZED',
+  PROCESSING = 'PROCESSING',
+  COMPLETED = 'COMPLETED',
+  REJECTED = 'REJECTED',
+  CANCELLED = 'CANCELLED',
+  FAILED = 'FAILED',
+}
+
+export enum WorkflowStageType {
+  MAKER = 'MAKER',
+  CHECKER = 'CHECKER',
+  AUTHORIZER = 'AUTHORIZER',
+}
+
+export enum WorkflowStageStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  REVISION = 'REVISION',
+  ESCALATED = 'ESCALATED',
+}

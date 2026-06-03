@@ -5,6 +5,18 @@
     "production": ["default"],
     "sharedGlobals": []
   },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    },
+    "test": {
+      "inputs": ["default", "^production"]
+    },
+    "lint": {
+      "inputs": ["default"]
+    }
+  },
   "plugins": [
     {
       "plugin": "@nx/js/typescript",
@@ -19,6 +31,21 @@
           "watchDepsName": "watch-deps"
         }
       }
+    },
+    {
+      "plugin": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "buildDepsTargetName": "build-deps",
+        "watchDepsTargetName": "watch-deps",
+        "serveStaticTargetName": "serve-static"
+      }
     }
-  ]
+  ],
+  "sync": {
+    "applyChanges": true
+  },
+  "analytics": true
 }

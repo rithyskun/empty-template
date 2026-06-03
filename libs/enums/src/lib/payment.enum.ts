@@ -1,0 +1,18 @@
+export enum PaymentType {
+  CASH = 'CASH',
+  BANK_TRANSFER = 'BANK_TRANSFER',
+  WALLET = 'WALLET',
+  ABA = 'ABA',
+  ACLEDA = 'ACLEDA',
+  WING = 'WING',
+  BAKONG = 'BAKONG',
+}
+
+export enum PaymentStatus {
+  PENDING = 'PENDING',
+  PROCESSING = 'PROCESSING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+  REVERSED = 'REVERSED',
+  CANCELLED = 'CANCELLED',
+}

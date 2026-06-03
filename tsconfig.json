@@ -2,5 +2,108 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
-  "references": []
+  "references": [
+    {
+      "path": "./apps/auth-service"
+    },
+    {
+      "path": "./apps/identity-service"
+    },
+    {
+      "path": "./apps/workflow-service"
+    },
+    {
+      "path": "./apps/notification-service"
+    },
+    {
+      "path": "./apps/payment-service"
+    },
+    {
+      "path": "./apps/settlement-service"
+    },
+    {
+      "path": "./apps/reconciliation-service"
+    },
+    {
+      "path": "./apps/advance-service"
+    },
+    {
+      "path": "./apps/report-service"
+    },
+    {
+      "path": "./apps/scheduler-service"
+    },
+    {
+      "path": "./apps/api-gateway"
+    },
+    {
+      "path": "./apps/payment-worker"
+    },
+    {
+      "path": "./apps/settlement-worker"
+    },
+    {
+      "path": "./apps/notification-worker"
+    },
+    {
+      "path": "./libs/audit-core"
+    },
+    {
+      "path": "./apps/audit-log-service"
+    },
+    {
+      "path": "./libs/reconciliation-core"
+    },
+    {
+      "path": "./libs/settlement-core"
+    },
+    {
+      "path": "./libs/workflow-core"
+    },
+    {
+      "path": "./libs/advance-core"
+    },
+    {
+      "path": "./libs/payment-core"
+    },
+    {
+      "path": "./libs/constants"
+    },
+    {
+      "path": "./libs/telemetry"
+    },
+    {
+      "path": "./libs/database"
+    },
+    {
+      "path": "./libs/common"
+    },
+    {
+      "path": "./libs/cache"
+    },
+    {
+      "path": "./libs/enums"
+    },
+    {
+      "path": "./libs/auth"
+    },
+    {
+      "path": "./libs/identity-core"
+    },
+    {
+      "path": "./libs/notification-core"
+    },
+    {
+      "path": "./libs/multi-tenancy"
+    },
+    {
+      "path": "./libs/security"
+    },
+    {
+      "path": "./libs/mail"
+    },
+    {
+      "path": "./libs/event-bus"
+    }
+  ]
 }

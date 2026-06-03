@@ -1,0 +1,346 @@
+services:
+  # ── Infrastructure ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: erp_financial
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  # ── Observability ───────────────────────────────────────────────
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    ports:
+      - '4318:4318'
+      - '4317:4317'
+      - '9464:9464'
+    volumes:
+      - ./docker/otel-collector.yml:/etc/otel-collector.yml
+    command: ['--config=/etc/otel-collector.yml']
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+      - promdata:/prometheus
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafanadata:/var/lib/grafana
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  # ── API Gateway ─────────────────────────────────────────────────
+  api-gateway:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: api-gateway
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: development
+      API_GATEWAY_PORT: 3000
+      AUTH_SERVICE_URL: http://auth-service:3001
+      IDENTITY_SERVICE_URL: http://identity-service:3002
+      PAYMENT_SERVICE_URL: http://payment-service:3005
+      SETTLEMENT_SERVICE_URL: http://settlement-service:3006
+      ACCOUNTING_SERVICE_URL: http://accounting-service:3007
+      AUDIT_SERVICE_URL: http://audit-log-service:3021
+      REDIS_HOST: redis
+      JWT_SECRET: local-dev-secret
+    depends_on:
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # ── Services ─────────────────────────────────────────────────────
+  auth-service: &service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: auth-service
+    environment: &service-env
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      JWT_SECRET: local-dev-secret
+    depends_on: &service-depends
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+
+  identity-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: identity-service
+
+  payment-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: payment-service
+
+  settlement-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: settlement-service
+
+  accounting-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: accounting-service
+
+  reconciliation-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: reconciliation-service
+
+  payroll-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: payroll-service
+
+  advance-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: advance-service
+
+  loan-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: loan-service
+
+  inventory-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: inventory-service
+
+  purchase-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: purchase-service
+
+  sales-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: sales-service
+
+  pos-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: pos-service
+
+  treasury-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: treasury-service
+
+  notification-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: notification-service
+
+  workflow-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: workflow-service
+
+  scheduler-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: scheduler-service
+
+  report-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: report-service
+
+  audit-log-service:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: audit-log-service
+
+  # ── Workers ─────────────────────────────────────────────────────
+  payment-worker: &worker-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: payment-worker
+    environment: *service-env
+    depends_on: *service-depends
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+
+  settlement-worker:
+    <<: *worker-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: settlement-worker
+
+  accounting-worker:
+    <<: *worker-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: accounting-worker
+
+  notification-worker:
+    <<: *worker-defaults
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+      args:
+        APP: notification-worker
+
+volumes:
+  pgdata:
+  redisdata:
+  promdata:
+  grafanadata:
