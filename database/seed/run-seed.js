@@ -1,15 +1,47 @@
-require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
+require('dotenv').config({
+  path: require('path').resolve(__dirname, '../../.env'),
+});
 
 const { Client } = require('pg');
 
 const SYSTEM_TENANT_ID = '00000000-0000-0000-0000-000000000001';
 
 const ROLES = [
-  { id: '00000000-0000-0000-0000-000000000010', code: 'SUPER_ADMIN', name: 'Super Administrator', description: 'Complete system access across all tenants', isSystem: true },
-  { id: '00000000-0000-0000-0000-000000000011', code: 'ADMIN', name: 'Administrator', description: 'Tenant level administrator access', isSystem: true },
-  { id: '00000000-0000-0000-0000-000000000012', code: 'USER', name: 'Standard User', description: 'Regular staff user access', isSystem: true },
-  { id: '00000000-0000-0000-0000-000000000013', code: 'FINANCE_MANAGER', name: 'Finance Manager', description: 'Manage financial records and reports', isSystem: false },
-  { id: '00000000-0000-0000-0000-000000000014', code: 'ACCOUNTANT', name: 'Accountant', description: 'Handle day-to-day accounting tasks', isSystem: false },
+  {
+    id: '00000000-0000-0000-0000-000000000010',
+    code: 'SUPER_ADMIN',
+    name: 'Super Administrator',
+    description: 'Complete system access across all tenants',
+    isSystem: true,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000011',
+    code: 'ADMIN',
+    name: 'Administrator',
+    description: 'Tenant level administrator access',
+    isSystem: true,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000012',
+    code: 'USER',
+    name: 'Standard User',
+    description: 'Regular staff user access',
+    isSystem: true,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000013',
+    code: 'FINANCE_MANAGER',
+    name: 'Finance Manager',
+    description: 'Manage financial records and reports',
+    isSystem: false,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000014',
+    code: 'ACCOUNTANT',
+    name: 'Accountant',
+    description: 'Handle day-to-day accounting tasks',
+    isSystem: false,
+  },
 ];
 
 const PERMISSIONS = [
@@ -37,8 +69,16 @@ const PERMISSIONS = [
   { roleCode: 'FINANCE_MANAGER', resource: 'reports', action: 'export' },
   { roleCode: 'FINANCE_MANAGER', resource: 'reports', action: 'create' },
   { roleCode: 'FINANCE_MANAGER', resource: 'journal_entries', action: 'read' },
-  { roleCode: 'FINANCE_MANAGER', resource: 'journal_entries', action: 'create' },
-  { roleCode: 'FINANCE_MANAGER', resource: 'journal_entries', action: 'approve' },
+  {
+    roleCode: 'FINANCE_MANAGER',
+    resource: 'journal_entries',
+    action: 'create',
+  },
+  {
+    roleCode: 'FINANCE_MANAGER',
+    resource: 'journal_entries',
+    action: 'approve',
+  },
   { roleCode: 'FINANCE_MANAGER', resource: 'budgets', action: 'read' },
   { roleCode: 'FINANCE_MANAGER', resource: 'budgets', action: 'create' },
   { roleCode: 'FINANCE_MANAGER', resource: 'budgets', action: 'update' },
@@ -54,14 +94,47 @@ const PERMISSIONS = [
 ];
 
 const USERS = [
-  { id: '00000000-0000-0000-0000-000000000100', email: 'admin@erp.local', firstName: 'System', lastName: 'Admin', phone: '+1234567890', roleCode: 'SUPER_ADMIN', mustChangePwd: true },
-  { id: '00000000-0000-0000-0000-000000000101', email: 'finance@erp.local', firstName: 'Finance', lastName: 'Manager', phone: '+1234567891', roleCode: 'FINANCE_MANAGER', mustChangePwd: false },
-  { id: '00000000-0000-0000-0000-000000000102', email: 'accountant@erp.local', firstName: 'Jane', lastName: 'Doe', phone: '+1234567892', roleCode: 'ACCOUNTANT', mustChangePwd: false },
-  { id: '00000000-0000-0000-0000-000000000103', email: 'user@erp.local', firstName: 'John', lastName: 'Smith', phone: '+1234567893', roleCode: 'USER', mustChangePwd: false },
+  {
+    id: '00000000-0000-0000-0000-000000000100',
+    email: 'admin@erp.local',
+    firstName: 'System',
+    lastName: 'Admin',
+    phone: '+1234567890',
+    roleCode: 'SUPER_ADMIN',
+    mustChangePwd: true,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000101',
+    email: 'finance@erp.local',
+    firstName: 'Finance',
+    lastName: 'Manager',
+    phone: '+1234567891',
+    roleCode: 'FINANCE_MANAGER',
+    mustChangePwd: false,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000102',
+    email: 'accountant@erp.local',
+    firstName: 'Jane',
+    lastName: 'Doe',
+    phone: '+1234567892',
+    roleCode: 'ACCOUNTANT',
+    mustChangePwd: false,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000103',
+    email: 'user@erp.local',
+    firstName: 'John',
+    lastName: 'Smith',
+    phone: '+1234567893',
+    roleCode: 'USER',
+    mustChangePwd: false,
+  },
 ];
 
 // password: password123
-const PASSWORD_HASH = 'bf65e929ab87330290e2dcc1af32d3b9:b0f5246738ecb5467ac8ea1a42de2d5b1d8cee5b9c7e1859b85c34809ccefa2cbb40719ec51a08fbc023cf2932cacb5d23f9f660d074430a1fb8e51d67ae9529';
+const PASSWORD_HASH =
+  'bf65e929ab87330290e2dcc1af32d3b9:b0f5246738ecb5467ac8ea1a42de2d5b1d8cee5b9c7e1859b85c34809ccefa2cbb40719ec51a08fbc023cf2932cacb5d23f9f660d074430a1fb8e51d67ae9529';
 
 async function runSeed() {
   const client = new Client({
@@ -89,7 +162,10 @@ async function runSeed() {
     // 2. Seed Roles
     const roleMap = {};
     for (const r of ROLES) {
-      const existing = await client.query('SELECT id FROM roles WHERE code = $1 LIMIT 1', [r.code]);
+      const existing = await client.query(
+        'SELECT id FROM roles WHERE code = $1 LIMIT 1',
+        [r.code],
+      );
       if (existing.rows.length > 0) {
         roleMap[r.code] = existing.rows[0].id;
         console.log(`Role exists: ${r.code}`);
@@ -119,7 +195,10 @@ async function runSeed() {
 
     // 4. Seed Users
     for (const u of USERS) {
-      const existing = await client.query('SELECT id FROM users WHERE email = $1 LIMIT 1', [u.email]);
+      const existing = await client.query(
+        'SELECT id FROM users WHERE email = $1 LIMIT 1',
+        [u.email],
+      );
       if (existing.rows.length > 0) {
         console.log(`User exists: ${u.email}`);
         continue;
@@ -127,14 +206,26 @@ async function runSeed() {
       await client.query(
         `INSERT INTO users (id, tenant_id, email, phone, password_hash, first_name, last_name, is_active, must_change_pwd, created_at, updated_at, version)
          VALUES ($1, $2, $3, $4, $5, $6, $7, true, $8, now(), now(), 0)`,
-        [u.id, tenantId, u.email, u.phone, PASSWORD_HASH, u.firstName, u.lastName, u.mustChangePwd],
+        [
+          u.id,
+          tenantId,
+          u.email,
+          u.phone,
+          PASSWORD_HASH,
+          u.firstName,
+          u.lastName,
+          u.mustChangePwd,
+        ],
       );
       console.log(`Created user: ${u.email}`);
     }
 
     // 5. Assign Roles
     for (const u of USERS) {
-      const userRes = await client.query('SELECT id FROM users WHERE email = $1', [u.email]);
+      const userRes = await client.query(
+        'SELECT id FROM users WHERE email = $1',
+        [u.email],
+      );
       const roleId = roleMap[u.roleCode];
       if (!userRes.rows[0] || !roleId) continue;
       const userId = userRes.rows[0].id;

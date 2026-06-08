@@ -472,7 +472,10 @@ export class AuthController {
       throw new BadRequestException('Two-factor secret is not configured');
     }
 
-    const isValid = this.totpService.verifyToken(user.twoFactorSecret, dto.code);
+    const isValid = this.totpService.verifyToken(
+      user.twoFactorSecret,
+      dto.code,
+    );
     if (!isValid) {
       throw new BadRequestException('Invalid TOTP verification code');
     }

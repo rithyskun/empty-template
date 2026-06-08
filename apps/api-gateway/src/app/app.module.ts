@@ -12,7 +12,11 @@ import { InternalProxyMiddleware } from './middleware/internal-proxy.middleware'
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(RateLimitMiddleware, ExternalProxyMiddleware, InternalProxyMiddleware)
+      .apply(
+        RateLimitMiddleware,
+        ExternalProxyMiddleware,
+        InternalProxyMiddleware,
+      )
       .forRoutes('*');
   }
 }

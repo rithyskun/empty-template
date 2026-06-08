@@ -8,9 +8,7 @@ import { SettlementCoreService } from '@erp/settlement-core';
 export class SettlementProcessor extends WorkerHost {
   private readonly logger = new Logger(SettlementProcessor.name);
 
-  constructor(
-    private readonly settlementCoreService: SettlementCoreService,
-  ) {
+  constructor(private readonly settlementCoreService: SettlementCoreService) {
     super();
   }
 

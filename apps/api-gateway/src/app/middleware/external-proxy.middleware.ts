@@ -123,11 +123,7 @@ export class ExternalProxyMiddleware implements NestMiddleware {
     }
   }
 
-  async use(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  async use(req: Request, res: Response, next: NextFunction): Promise<void> {
     const matched = this.matchRoute(req.path);
     if (!matched) {
       next();
@@ -154,10 +150,7 @@ export class ExternalProxyMiddleware implements NestMiddleware {
       .find((prefix) => path.startsWith(prefix));
   }
 
-  private async authorizeJwt(
-    req: Request,
-    res: Response,
-  ): Promise<boolean> {
+  private async authorizeJwt(req: Request, res: Response): Promise<boolean> {
     const token = extractBearerToken(req.header('authorization'));
     if (!token) {
       res.status(401).json({ success: false, message: 'Unauthorized' });

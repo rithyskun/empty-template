@@ -146,7 +146,8 @@ export class ProxyMiddleware implements NestMiddleware {
             const user = (req as any).user as UserPayload | undefined;
             if (user) {
               if (user.userId) proxyReq.setHeader('X-User-Id', user.userId);
-              if (user.tenantId) proxyReq.setHeader('X-Tenant-Id', user.tenantId);
+              if (user.tenantId)
+                proxyReq.setHeader('X-Tenant-Id', user.tenantId);
               if (user.companyId)
                 proxyReq.setHeader('X-Company-Id', user.companyId);
               proxyReq.setHeader(
@@ -214,7 +215,9 @@ export class ProxyMiddleware implements NestMiddleware {
   private authorizeInternal(req: Request, res: Response): boolean {
     const expected = process.env.INTERNAL_SERVICE_TOKEN;
     if (!expected) {
-      this.logger.error('INTERNAL_SERVICE_TOKEN environment variable is required');
+      this.logger.error(
+        'INTERNAL_SERVICE_TOKEN environment variable is required',
+      );
       res.status(503).json({ success: false, message: 'Gateway unavailable' });
       return false;
     }

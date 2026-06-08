@@ -83,16 +83,16 @@ export default {
     "outDir": "./out-tsc/jest",
     "tsBuildInfoFile": "./out-tsc/jest/tsconfig.spec.tsbuildinfo",
     "rootDir": ".",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
   },
   "exclude": [],
   "include": [
     "jest.config.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
   ],
-  "references": [{ "path": "./tsconfig.lib.json" }]
+  "references": [{ "path": "./tsconfig.lib.json" }],
 }
 ```
 
@@ -102,8 +102,8 @@ export default {
 {
   "references": [
     { "path": "./tsconfig.lib.json" },
-    { "path": "./tsconfig.spec.json" }
-  ]
+    { "path": "./tsconfig.spec.json" },
+  ],
 }
 ```
 
@@ -112,7 +112,7 @@ export default {
 ```jsonc
 {
   "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "jest.config.ts"]
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "jest.config.ts"],
 }
 ```
 
@@ -151,27 +151,27 @@ cases that genuinely need DI wiring.
 
 Keep this list current as libraries gain tests.
 
-| Library            | Unit tests |
-| ------------------ | ---------- |
-| auth               | yes        |
-| mail               | yes        |
-| identity-core      | yes        |
-| security           | yes        |
-| advance-core       | no         |
-| audit-core         | no         |
-| cache              | no         |
-| common             | no         |
-| constants          | no         |
-| database           | no         |
-| enums              | no         |
-| event-bus          | no         |
-| multi-tenancy      | no         |
-| notification-core  | no         |
-| payment-core       | no         |
-| reconciliation-core| no         |
-| settlement-core    | no         |
-| telemetry          | no         |
-| workflow-core      | no         |
+| Library             | Unit tests |
+| ------------------- | ---------- |
+| auth                | yes        |
+| mail                | yes        |
+| identity-core       | yes        |
+| security            | yes        |
+| advance-core        | no         |
+| audit-core          | no         |
+| cache               | no         |
+| common              | no         |
+| constants           | no         |
+| database            | no         |
+| enums               | no         |
+| event-bus           | no         |
+| multi-tenancy       | no         |
+| notification-core   | no         |
+| payment-core        | no         |
+| reconciliation-core | no         |
+| settlement-core     | no         |
+| telemetry           | no         |
+| workflow-core       | no         |
 
 > `constants` and `enums` are largely declaration-only; cover them only if they
 > contain real logic.
@@ -182,7 +182,7 @@ Keep this list current as libraries gain tests.
 
 Bidirectional TypeORM relations create a **circular import** between entity files
 (e.g. `Role` <-> `Permission`). Under Jest's CommonJS evaluation, `@swc/jest` with
-`decoratorMetadata: true` emits an *eager* `design:type` reference to the related
+`decoratorMetadata: true` emits an _eager_ `design:type` reference to the related
 class, which is hit during the circular load before the class is initialized.
 
 **Fix (already applied to `identity-core`):** wrap the related-entity property type
