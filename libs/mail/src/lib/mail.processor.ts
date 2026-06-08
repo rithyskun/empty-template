@@ -27,7 +27,9 @@ export class MailProcessor extends WorkerHost {
       }
     } else if (job.name === 'send-bulk-email') {
       const { to, subject, html } = job.data;
-      this.logger.debug(`Processing bulk mail job ${job.id} for recipient: ${to}`);
+      this.logger.debug(
+        `Processing bulk mail job ${job.id} for recipient: ${to}`,
+      );
       await this.mailService.sendMail(to, subject, html);
     }
   }

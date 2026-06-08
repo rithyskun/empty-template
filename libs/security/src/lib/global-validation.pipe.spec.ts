@@ -39,8 +39,6 @@ describe('GlobalValidationPipe', () => {
   });
 
   it('rejects payloads that fail validation', async () => {
-    await expect(
-      pipe.transform({ name: 123 }, bodyMeta),
-    ).rejects.toBeDefined();
+    await expect(pipe.transform({ name: 123 }, bodyMeta)).rejects.toBeDefined();
   });
 });
