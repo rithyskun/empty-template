@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.enableCors();
-  const port = process.env.PORT || 3009;
+  const port = process.env.ADVANCE_SERVICE_PORT || 8010;
   await app.listen(port);
   Logger.log(`Advance Service running on: http://localhost:${port}/api`);
 }

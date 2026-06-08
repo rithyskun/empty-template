@@ -12,6 +12,7 @@ export class RsaDecryptionService implements OnModuleInit {
   constructor() {
     this.enabled = process.env.RSA_DECRYPTION_ENABLED === 'true';
     this.privateKey = process.env.RSA_PRIVATE_KEY || '';
+    this.publicKey = '';
   }
 
   onModuleInit() {

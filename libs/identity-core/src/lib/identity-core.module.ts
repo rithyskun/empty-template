@@ -9,9 +9,6 @@ import { Permission } from './entities/permission.entity';
 import { UserRole } from './entities/user-role.entity';
 import { UserService } from './services/user.service';
 import { RoleService } from './services/role.service';
-import { LdapService } from './services/ldap.service';
-import { RsaDecryptionService } from './services/rsa-decryption.service';
-import { TotpService } from './services/totp.service';
 import { MailModule } from '@erp/mail';
 
 @Global()
@@ -28,21 +25,7 @@ import { MailModule } from '@erp/mail';
     ]),
     MailModule,
   ],
-  providers: [
-    UserService,
-    RoleService,
-    LdapService,
-    RsaDecryptionService,
-    TotpService,
-  ],
-  exports: [
-    UserService,
-    RoleService,
-    LdapService,
-    RsaDecryptionService,
-    TotpService,
-    MailModule,
-    TypeOrmModule,
-  ],
+  providers: [UserService, RoleService],
+  exports: [UserService, RoleService, MailModule, TypeOrmModule],
 })
 export class IdentityCoreModule {}

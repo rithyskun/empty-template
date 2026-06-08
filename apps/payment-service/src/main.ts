@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.enableCors();
-  const port = process.env.PORT || 3005;
+  const port = process.env.PAYMENT_SERVICE_PORT || 8005;
   await app.listen(port);
   Logger.log(`Payment Service running on: http://localhost:${port}/api`);
 }

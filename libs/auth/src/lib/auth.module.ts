@@ -3,6 +3,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
+import { LdapService } from './services/ldap.service';
+import { RsaDecryptionService } from './services/rsa-decryption.service';
+import { TotpService } from './services/totp.service';
 
 @Global()
 @Module({
@@ -15,7 +18,20 @@ import { JwtStrategy } from './jwt.strategy';
       }),
     }),
   ],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService, JwtModule, PassportModule],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    LdapService,
+    RsaDecryptionService,
+    TotpService,
+  ],
+  exports: [
+    AuthService,
+    JwtModule,
+    PassportModule,
+    LdapService,
+    RsaDecryptionService,
+    TotpService,
+  ],
 })
 export class AuthModule {}

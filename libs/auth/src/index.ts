@@ -7,3 +7,6 @@ export * from './lib/decorators/public.decorator';
 export * from './lib/decorators/roles.decorator';
 export * from './lib/decorators/current-user.decorator';
 export * from './lib/decorators/request-ctx.decorator';
+export * from './lib/services/ldap.service';
+export * from './lib/services/rsa-decryption.service';
+export * from './lib/services/totp.service';

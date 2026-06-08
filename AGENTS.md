@@ -21,3 +21,31 @@
 - The `nx-generate` skill handles generator discovery internally - don't call nx_docs just to look up generator syntax
 
 <!-- nx configuration end-->
+
+## Unit Testing
+
+- **Every `libs/*` project must have unit tests.** When you add or modify a
+  service/util in a library, add or update its `*.spec.ts` in the same change.
+- The full standard, per-lib setup recipe, and authoring patterns live in
+  [`docs/unit-testing.md`](docs/unit-testing.md). Read it before adding tests to a
+  library that doesn't have them yet, and update its coverage table when a lib
+  gains tests.
+- Stack: Jest 30 + `@swc/jest`, run via the `@nx/jest` inferred target. Run with
+  `npx nx test <project>`, `npx nx affected -t test`, or
+  `npx nx run-many -t test --all`.
+- Tests are colocated as `*.spec.ts`. Prefer instantiating classes directly with
+  mocked collaborators over full `@nestjs/testing` DI wiring.
+- Never delete or weaken tests to make a build pass — fix the root cause.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+When the user types `/graphify`, invoke the `skill` tool with `skill: "graphify"` before doing anything else.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

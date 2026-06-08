@@ -1,4 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, Unique } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { AuditableEntity } from '@erp/common';
 import { Role } from './role.entity';
 
@@ -16,5 +17,5 @@ export class Permission extends AuditableEntity {
 
   @ManyToOne(() => Role, (r) => r.permissions)
   @JoinColumn({ name: 'role_id' })
-  role!: Role;
+  role!: Relation<Role>;
 }

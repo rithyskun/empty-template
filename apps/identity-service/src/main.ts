@@ -14,7 +14,7 @@ async function bootstrap() {
   app.enableCors();
   app.enableShutdownHooks();
 
-  const port = process.env.PORT || 3002;
+  const port = process.env.IDENTITY_SERVICE_PORT || 8002;
   await app.listen(port);
   Logger.log(
     `Identity Service is running on: http://localhost:${port}/${globalPrefix}`,

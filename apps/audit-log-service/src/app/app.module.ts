@@ -5,6 +5,7 @@ import { AuditCoreModule } from '@erp/audit-core';
 import { BullModule } from '@nestjs/bullmq';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuditLogEntry } from '@erp/audit-core';
+import { BullMQRoot } from '@erp/common';
 import { Queues } from '@erp/constants';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,6 +14,7 @@ import { AuditLogProcessor } from './audit-log.processor';
 
 @Module({
   imports: [
+    BullMQRoot,
     DatabaseModule.forRoot(),
     SecurityModule,
     AuditCoreModule,

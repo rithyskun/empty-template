@@ -1,4 +1,5 @@
 import { Entity, Column, OneToMany } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { AuditableEntity } from '@erp/common';
 import { Permission } from './permission.entity';
 
@@ -17,5 +18,5 @@ export class Role extends AuditableEntity {
   isSystem!: boolean;
 
   @OneToMany(() => Permission, (p) => p.role)
-  permissions!: Permission[];
+  permissions!: Relation<Permission[]>;
 }

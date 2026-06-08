@@ -11,7 +11,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const port = process.env.API_GATEWAY_PORT || 3000;
+  const port = process.env.API_GATEWAY_PORT || 8000;
   await app.listen(port);
   Logger.log(`API Gateway running on http://localhost:${port}`);
 }

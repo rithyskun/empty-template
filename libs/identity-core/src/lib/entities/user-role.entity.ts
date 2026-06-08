@@ -1,4 +1,5 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { User } from './user.entity';
 import { Role } from './role.entity';
 
@@ -21,9 +22,9 @@ export class UserRole {
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: Relation<User>;
 
   @ManyToOne(() => Role)
   @JoinColumn({ name: 'role_id' })
-  role: Role;
+  role: Relation<Role>;
 }

@@ -48,3 +48,10 @@ Thumbs.db
 .nx/polygraph
 .nx/self-healing
 test-output
+
+# logs
+logs/
+*.log
+
+# env
+.env

@@ -12,6 +12,12 @@
   "exclude": [],
   "references": [
     {
+      "path": "../../libs/constants/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/common/tsconfig.lib.json"
+    },
+    {
       "path": "../../libs/settlement-core/tsconfig.lib.json"
     },
     {

@@ -1,7 +1,8 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { AuthModule } from '@erp/auth';
-import { ProxyMiddleware } from './middleware/proxy.middleware';
 import { RateLimitMiddleware } from './middleware/rate-limit.middleware';
+import { ExternalProxyMiddleware } from './middleware/external-proxy.middleware';
+import { InternalProxyMiddleware } from './middleware/internal-proxy.middleware';
 
 @Module({
   imports: [AuthModule],
@@ -10,6 +11,8 @@ import { RateLimitMiddleware } from './middleware/rate-limit.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RateLimitMiddleware, ProxyMiddleware).forRoutes('*');
+    consumer
+      .apply(RateLimitMiddleware, ExternalProxyMiddleware, InternalProxyMiddleware)
+      .forRoutes('*');
   }
 }
