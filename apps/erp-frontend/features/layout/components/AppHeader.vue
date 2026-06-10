@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '@features/auth/composables/useAuth';
 import { useLayout } from '../composables/useLayout';
-import { Menu, ChevronLeft, X, LogOut } from 'lucide-vue-next';
+import { Menu, ChevronLeft, X, LogOut, User } from 'lucide-vue-next';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import ThemeToggle from '@/components/ThemeToggle.vue';
 
@@ -40,6 +40,31 @@ async function handleLogout() {
 function goHome() {
   router.push('/dashboard');
 }
+
+const dropdownOpen = ref(false);
+const dropdownRef = ref<HTMLElement | null>(null);
+
+function toggleDropdown() {
+  dropdownOpen.value = !dropdownOpen.value;
+}
+
+function closeDropdown() {
+  dropdownOpen.value = false;
+}
+
+function handleClickOutside(event: MouseEvent) {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+    dropdownOpen.value = false;
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <template>
@@ -94,22 +119,43 @@ function goHome() {
     <div class="flex items-center gap-1 sm:gap-2">
       <ThemeToggle />
       <LanguageSwitcher class="hidden sm:block" />
-      <button
-        class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 flex items-center justify-center text-xs font-bold hover:ring-2 hover:ring-primary-300 dark:hover:ring-primary-700 transition-all"
-        :title="
-          user?.firstName ? `${user.firstName} ${user.lastName}` : user?.email
-        "
-        @click="router.push('/profile')"
-      >
-        {{ userInitials }}
-      </button>
-      <button
-        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-bg-hover text-gray-600 dark:text-dark-text-secondary"
-        title="Logout"
-        @click="handleLogout"
-      >
-        <LogOut class="w-5 h-5" />
-      </button>
+      <div ref="dropdownRef" class="relative">
+        <button
+          class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 flex items-center justify-center text-xs font-bold hover:ring-2 hover:ring-primary-300 dark:hover:ring-primary-700 transition-all"
+          :title="
+            user?.firstName ? `${user.firstName} ${user.lastName}` : user?.email
+          "
+          @click.stop="toggleDropdown"
+        >
+          {{ userInitials }}
+        </button>
+
+        <div
+          v-show="dropdownOpen"
+          class="absolute right-0 mt-2 w-40 bg-white dark:bg-dark-bg-secondary border border-gray-200 dark:border-dark-border rounded-lg shadow-lg py-1 z-50"
+        >
+          <button
+            class="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-bg-hover transition-colors"
+            @click="
+              closeDropdown();
+              router.push('/profile');
+            "
+          >
+            <User class="w-4 h-4" />
+            Profile
+          </button>
+          <button
+            class="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-bg-hover transition-colors"
+            @click="
+              closeDropdown();
+              handleLogout();
+            "
+          >
+            <LogOut class="w-4 h-4" />
+            Logout
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 </template>
