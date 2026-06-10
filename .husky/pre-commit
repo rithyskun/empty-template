@@ -23,4 +23,11 @@ npm run lint || {
   exit 1
 }
 
+# 4. Code quality scan
+echo "🛡️ Running code quality scan..."
+npm run scan:blocker || {
+  echo "❌ Code quality scan found blocker issues! Please fix them before committing."
+  exit 1
+}
+
 echo "✅ All quality gates passed! Committing code..."

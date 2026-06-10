@@ -17,6 +17,9 @@
     "typecheck": "tsc -b tsconfig.json",
     "db:seed": "node database/seed/run-seed.js",
     "graph": "nx graph",
+    "scan": "node scripts/code-scanner.js --severity=medium",
+    "scan:high": "node scripts/code-scanner.js --severity=high",
+    "scan:blocker": "node scripts/code-scanner.js --severity=blocker",
     "prepare": "husky"
   },
   "private": true,
