@@ -3,19 +3,14 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '@features/auth/composables/useAuth';
 import { useLayout } from '../composables/useLayout';
-import { Menu, ChevronLeft, X, LogOut, User } from 'lucide-vue-next';
+import { Menu, LogOut, User } from 'lucide-vue-next';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import ThemeToggle from '@/components/ThemeToggle.vue';
+import Breadcrumb from '@/components/ui/Breadcrumb.vue';
 
 const router = useRouter();
 const { user, logout } = useAuth();
-const {
-  sidebarMode,
-  sidebarCollapsed,
-  sidebarHidden,
-  toggleSidebar,
-  openMobileSidebar,
-} = useLayout();
+const { sidebarCollapsed, sidebarHidden, openMobileSidebar } = useLayout();
 
 const headerLeftClass = computed(() => {
   if (sidebarHidden.value) return 'left-0';
@@ -35,10 +30,6 @@ const userInitials = computed(() => {
 
 async function handleLogout() {
   await logout();
-}
-
-function goHome() {
-  router.push('/dashboard');
 }
 
 const dropdownOpen = ref(false);
@@ -74,46 +65,14 @@ onBeforeUnmount(() => {
       headerLeftClass,
     ]"
   >
-    <div class="flex items-center gap-2 sm:gap-3">
+    <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
       <button
-        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-bg-hover lg:hidden"
+        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-bg-hover lg:hidden shrink-0"
         @click="openMobileSidebar"
       >
         <Menu class="w-5 h-5 text-gray-600 dark:text-dark-text-secondary" />
       </button>
-      <button
-        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-bg-hover hidden lg:block"
-        :title="
-          sidebarMode === 'expanded'
-            ? 'Collapse sidebar'
-            : sidebarMode === 'collapsed'
-              ? 'Hide sidebar'
-              : 'Show sidebar'
-        "
-        @click="toggleSidebar"
-      >
-        <!-- Expanded → collapse icon -->
-        <ChevronLeft
-          v-if="sidebarMode === 'expanded'"
-          class="w-5 h-5 text-gray-600 dark:text-dark-text-secondary"
-        />
-        <!-- Collapsed → hide icon -->
-        <X
-          v-else-if="sidebarMode === 'collapsed'"
-          class="w-5 h-5 text-gray-600 dark:text-dark-text-secondary"
-        />
-        <!-- Hidden → show icon -->
-        <Menu
-          v-else
-          class="w-5 h-5 text-gray-600 dark:text-dark-text-secondary"
-        />
-      </button>
-      <div
-        class="text-base sm:text-lg font-bold text-primary-700 dark:text-primary-400 cursor-pointer select-none hidden sm:block"
-        @click="goHome"
-      >
-        ERP Financial
-      </div>
+      <Breadcrumb class="hidden sm:flex min-w-0" />
     </div>
 
     <div class="flex items-center gap-1 sm:gap-2">

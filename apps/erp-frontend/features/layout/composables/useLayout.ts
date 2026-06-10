@@ -6,7 +6,7 @@ const sidebarMode = ref<SidebarMode>('expanded');
 const mobileSidebarOpen = ref(false);
 const sidebarTitle = ref('');
 
-const order: SidebarMode[] = ['expanded', 'collapsed', 'hidden'];
+const order: SidebarMode[] = ['expanded', 'collapsed'];
 
 export function useLayout() {
   const toggleSidebar = () => {

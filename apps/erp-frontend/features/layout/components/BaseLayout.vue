@@ -5,7 +5,6 @@ import { useLayout } from '../composables/useLayout';
 import AppHeader from './AppHeader.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppFooter from './AppFooter.vue';
-import Breadcrumb from '@/components/ui/Breadcrumb.vue';
 import { menuSections } from '@/config/menu.config';
 import type { MenuSection } from '@/config/menu.config';
 
@@ -39,9 +38,6 @@ const contentMargin = computed(() => {
       ]"
     >
       <main class="flex-1 p-4 sm:p-6 overflow-y-auto">
-        <div class="mb-4">
-          <Breadcrumb />
-        </div>
         <RouterView />
       </main>
       <AppFooter />

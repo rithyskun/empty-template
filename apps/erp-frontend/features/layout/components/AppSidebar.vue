@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuth } from '@features/auth/composables/useAuth';
 import { useLayout } from '../composables/useLayout';
-import { Clock, Zap } from 'lucide-vue-next';
+import { Clock, Zap, ChevronLeft } from 'lucide-vue-next';
 import type { MenuSection } from '@/config/menu.config';
 
 interface Props {
@@ -19,6 +19,7 @@ const {
   sidebarWidth,
   mobileSidebarOpen,
   closeMobileSidebar,
+  toggleSidebar,
 } = useLayout();
 const { user } = useAuth();
 
@@ -65,24 +66,36 @@ function navigate(path: string) {
     ]"
   >
     <!-- Logo -->
-    <div
+    <button
       :class="[
-        'shrink-0 h-14 sm:h-16 flex items-center border-b border-gray-200 dark:border-dark-border',
+        'shrink-0 h-14 sm:h-16 flex items-center border-b border-gray-200 dark:border-dark-border cursor-pointer w-full',
         sidebarCollapsed
           ? 'justify-center'
-          : 'gap-3 px-4 xl:px-5 2xl:px-6 3xl:px-6',
+          : 'justify-between px-4 xl:px-5 2xl:px-6 3xl:px-6',
       ]"
+      :title="sidebarCollapsed ? 'Expand sidebar' : undefined"
+      @click="sidebarCollapsed && toggleSidebar()"
     >
-      <Zap
-        class="w-8 h-8 text-primary-600 dark:text-primary-400 flex-shrink-0"
-      />
-      <span
+      <div class="flex items-center gap-3">
+        <Zap
+          class="w-8 h-8 text-primary-600 dark:text-primary-400 flex-shrink-0"
+        />
+        <span
+          v-if="!sidebarCollapsed"
+          class="text-base sm:text-lg xl:text-lg 2xl:text-xl 3xl:text-xl font-bold text-gray-900 dark:text-dark-text tracking-tight truncate"
+        >
+          ABA ERP
+        </span>
+      </div>
+      <button
         v-if="!sidebarCollapsed"
-        class="text-base sm:text-lg xl:text-lg 2xl:text-xl 3xl:text-xl font-bold text-gray-900 dark:text-dark-text tracking-tight truncate"
+        class="w-6 h-6 rounded-md flex items-center justify-center text-gray-500 dark:text-dark-text-tertiary hover:bg-gray-100 dark:hover:bg-dark-bg-hover transition-all duration-200 shrink-0"
+        title="Collapse sidebar"
+        @click.stop="toggleSidebar"
       >
-        ABA ERP
-      </span>
-    </div>
+        <ChevronLeft class="w-4 h-4" />
+      </button>
+    </button>
 
     <nav class="flex-1 overflow-y-auto py-4 sm:py-6">
       <div v-for="(section, sIdx) in props.sections" :key="sIdx" class="mb-6">
