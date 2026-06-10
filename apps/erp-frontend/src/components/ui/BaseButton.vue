@@ -48,7 +48,7 @@ const variantClasses = computed(() => {
     primary:
       'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700',
     secondary:
-      'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600',
+      'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500 dark:bg-dark-bg-tertiary dark:hover:bg-dark-bg-hover',
     success:
       'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500 dark:bg-green-600 dark:hover:bg-green-700',
     danger:
@@ -56,9 +56,9 @@ const variantClasses = computed(() => {
     warning:
       'bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500 dark:bg-yellow-600 dark:hover:bg-yellow-700',
     ghost:
-      'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500 dark:text-gray-300 dark:hover:bg-gray-800',
+      'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500 dark:text-dark-text-secondary dark:hover:bg-dark-bg-hover',
     outline:
-      'bg-transparent border-2 border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800',
+      'bg-transparent border-2 border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500 dark:border-dark-border-light dark:text-dark-text-secondary dark:hover:bg-dark-bg-hover',
   };
   return variants[props.variant];
 });

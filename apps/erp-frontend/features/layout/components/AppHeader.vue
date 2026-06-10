@@ -8,7 +8,19 @@ import ThemeToggle from '@/components/ThemeToggle.vue';
 
 const router = useRouter();
 const { user, logout } = useAuth();
-const { toggleSidebar, openMobileSidebar } = useLayout();
+const {
+  sidebarMode,
+  sidebarCollapsed,
+  sidebarHidden,
+  toggleSidebar,
+  openMobileSidebar,
+} = useLayout();
+
+const headerLeftClass = computed(() => {
+  if (sidebarHidden.value) return 'left-0';
+  if (sidebarCollapsed.value) return 'lg:left-16';
+  return 'lg:left-64';
+});
 
 const userInitials = computed(() => {
   if (!user.value) return 'U';
@@ -30,15 +42,18 @@ function goHome() {
 
 <template>
   <header
-    class="h-14 bg-white dark:bg-dark-bg-secondary border-b border-gray-200 dark:border-dark-border flex items-center justify-between px-4 fixed top-0 right-0 left-0 z-30"
+    :class="[
+      'h-14 bg-white dark:bg-dark-bg-secondary border-b border-gray-200 dark:border-dark-border flex items-center justify-between px-4 fixed top-0 right-0 z-30 transition-all duration-300',
+      headerLeftClass,
+    ]"
   >
     <div class="flex items-center gap-3">
       <button
-        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 lg:hidden"
+        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-bg-hover lg:hidden"
         @click="openMobileSidebar"
       >
         <svg
-          class="w-5 h-5 text-gray-600 dark:text-gray-300"
+          class="w-5 h-5 text-gray-600 dark:text-dark-text-secondary"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -52,19 +67,58 @@ function goHome() {
         </svg>
       </button>
       <button
-        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 hidden lg:block"
+        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-bg-hover hidden lg:block"
+        :title="
+          sidebarMode === 'expanded'
+            ? 'Collapse sidebar'
+            : sidebarMode === 'collapsed'
+              ? 'Hide sidebar'
+              : 'Show sidebar'
+        "
         @click="toggleSidebar"
       >
+        <!-- Expanded → collapse icon -->
         <svg
-          class="w-5 h-5 text-gray-600 dark:text-gray-300"
+          v-if="sidebarMode === 'expanded'"
+          class="w-5 h-5 text-gray-600 dark:text-dark-text-secondary"
           fill="none"
           stroke="currentColor"
+          stroke-width="2"
           viewBox="0 0 24 24"
         >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
-            stroke-width="2"
+            d="M11 17l-5-5 5-5M18 17l-5-5 5-5"
+          />
+        </svg>
+        <!-- Collapsed → hide icon -->
+        <svg
+          v-else-if="sidebarMode === 'collapsed'"
+          class="w-5 h-5 text-gray-600 dark:text-dark-text-secondary"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+        <!-- Hidden → show icon -->
+        <svg
+          v-else
+          class="w-5 h-5 text-gray-600 dark:text-dark-text-secondary"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
             d="M4 6h16M4 12h16M4 18h16"
           />
         </svg>
@@ -90,7 +144,7 @@ function goHome() {
         {{ userInitials }}
       </button>
       <button
-        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300"
+        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-bg-hover text-gray-600 dark:text-dark-text-secondary"
         title="Logout"
         @click="handleLogout"
       >

@@ -80,7 +80,7 @@ const handleKeyboardInput = (value: string | number): void => {
 };
 
 const baseClasses =
-  'block w-full border rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800 text-gray-900 dark:text-white';
+  'block w-full border rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-dark-bg-secondary text-gray-900 dark:text-dark-text';
 
 const sizeClasses = {
   sm: 'px-3 py-1.5 text-sm',
@@ -90,7 +90,7 @@ const sizeClasses = {
 
 const stateClasses = props.error
   ? 'border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500'
-  : 'border-gray-300 dark:border-gray-600';
+  : 'border-gray-300 dark:border-dark-border-light';
 
 const inputClasses = [
   baseClasses,
@@ -105,7 +105,7 @@ const inputClasses = [
     <label
       v-if="label"
       :for="inputId"
-      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+      class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-2"
     >
       {{ label }}
       <span v-if="required" class="text-red-500">*</span>
@@ -138,7 +138,7 @@ const inputClasses = [
         <button
           v-if="clearable && modelValue"
           type="button"
-          class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          class="text-gray-400 hover:text-gray-600 dark:hover:text-dark-text-secondary"
           @click="handleClear"
         >
           <svg
@@ -163,7 +163,7 @@ const inputClasses = [
             'transition-colors',
             showKeyboard
               ? 'text-blue-600 dark:text-blue-400'
-              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300',
+              : 'text-gray-400 hover:text-gray-600 dark:hover:text-dark-text-secondary',
           ]"
           @click="toggleKeyboard"
         >
@@ -176,7 +176,10 @@ const inputClasses = [
       {{ error }}
     </p>
 
-    <p v-else-if="hint" class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+    <p
+      v-else-if="hint"
+      class="mt-1 text-sm text-gray-500 dark:text-dark-text-tertiary"
+    >
       {{ hint }}
     </p>
 

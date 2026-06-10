@@ -10,7 +10,7 @@ import { menuSections } from '@/config/menu.config';
 import type { MenuSection } from '@/config/menu.config';
 
 const route = useRoute();
-const { sidebarCollapsed } = useLayout();
+const { sidebarCollapsed, sidebarHidden } = useLayout();
 
 const sidebarSections = computed<MenuSection[]>(() => {
   // If the current route meta defines a custom sidebar, use it
@@ -20,9 +20,11 @@ const sidebarSections = computed<MenuSection[]>(() => {
   return menuSections;
 });
 
-const contentMargin = computed(() =>
-  sidebarCollapsed.value ? 'ml-16' : 'ml-64',
-);
+const contentMargin = computed(() => {
+  if (sidebarHidden.value) return 'ml-0';
+  if (sidebarCollapsed.value) return 'ml-16';
+  return 'ml-64';
+});
 </script>
 
 <template>

@@ -1,12 +1,17 @@
 import { ref, computed } from 'vue';
 
-const sidebarCollapsed = ref(false);
+export type SidebarMode = 'expanded' | 'collapsed' | 'hidden';
+
+const sidebarMode = ref<SidebarMode>('expanded');
 const mobileSidebarOpen = ref(false);
 const sidebarTitle = ref('');
 
+const order: SidebarMode[] = ['expanded', 'collapsed', 'hidden'];
+
 export function useLayout() {
   const toggleSidebar = () => {
-    sidebarCollapsed.value = !sidebarCollapsed.value;
+    const currentIdx = order.indexOf(sidebarMode.value);
+    sidebarMode.value = order[(currentIdx + 1) % order.length];
   };
 
   const openMobileSidebar = () => {
@@ -21,12 +26,18 @@ export function useLayout() {
     sidebarTitle.value = title;
   };
 
-  const sidebarWidth = computed(() =>
-    sidebarCollapsed.value ? 'w-16' : 'w-64',
-  );
+  const sidebarWidth = computed(() => {
+    if (sidebarMode.value === 'collapsed') return 'w-16';
+    return 'w-64';
+  });
+
+  const sidebarCollapsed = computed(() => sidebarMode.value === 'collapsed');
+  const sidebarHidden = computed(() => sidebarMode.value === 'hidden');
 
   return {
+    sidebarMode,
     sidebarCollapsed,
+    sidebarHidden,
     mobileSidebarOpen,
     sidebarTitle,
     sidebarWidth,

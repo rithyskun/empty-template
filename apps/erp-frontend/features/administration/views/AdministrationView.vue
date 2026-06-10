@@ -47,10 +47,10 @@ function navigate(path: string) {
 <template>
   <div>
     <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-dark-text">
         Administration
       </h1>
-      <p class="text-gray-600 dark:text-gray-400 mt-1">
+      <p class="text-gray-600 dark:text-dark-text-secondary mt-1">
         System administration and access control
       </p>
     </div>
@@ -59,13 +59,13 @@ function navigate(path: string) {
       <button
         v-for="mod in modules"
         :key="mod.id"
-        class="group text-left rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-all duration-200 shadow-sm hover:shadow-md"
+        class="group text-left rounded-xl border border-gray-200 dark:border-dark-border p-6 transition-all duration-200 shadow-sm hover:shadow-md"
         :class="mod.bgColor"
         @click="navigate(mod.path)"
       >
         <div class="flex items-start justify-between mb-4">
           <div
-            class="w-12 h-12 rounded-lg flex items-center justify-center bg-white dark:bg-gray-800 shadow-sm"
+            class="w-12 h-12 rounded-lg flex items-center justify-center bg-white dark:bg-dark-bg-secondary shadow-sm"
           >
             <svg
               class="w-6 h-6"
@@ -83,7 +83,7 @@ function navigate(path: string) {
             </svg>
           </div>
           <svg
-            class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors"
+            class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-dark-text-secondary transition-colors"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -96,10 +96,12 @@ function navigate(path: string) {
             />
           </svg>
         </div>
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
+        <h3
+          class="text-lg font-semibold text-gray-900 dark:text-dark-text mb-1"
+        >
           {{ mod.label }}
         </h3>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
+        <p class="text-sm text-gray-600 dark:text-dark-text-secondary">
           {{ mod.description }}
         </p>
       </button>

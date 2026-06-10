@@ -75,7 +75,7 @@ const drawerClasses = computed(() => {
     'fixed top-0 bottom-0 z-50 w-full',
     sizeClasses.value,
     positionClasses.value,
-    'bg-white dark:bg-gray-900',
+    'bg-white dark:bg-dark-bg',
     'shadow-2xl',
     'flex flex-col',
   ].join(' ');
@@ -166,18 +166,18 @@ onUnmounted(() => {
         <!-- Header -->
         <div
           v-if="!hideHeader"
-          class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700"
+          class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-dark-border"
         >
           <div class="flex-1">
             <h2
               v-if="title"
-              class="text-xl font-semibold text-gray-900 dark:text-white"
+              class="text-xl font-semibold text-gray-900 dark:text-dark-text"
             >
               {{ title }}
             </h2>
             <p
               v-if="subtitle"
-              class="mt-1 text-sm text-gray-500 dark:text-gray-400"
+              class="mt-1 text-sm text-gray-500 dark:text-dark-text-tertiary"
             >
               {{ subtitle }}
             </p>
@@ -185,7 +185,7 @@ onUnmounted(() => {
           <button
             v-if="!hideClose"
             type="button"
-            class="ml-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            class="ml-4 text-gray-400 hover:text-gray-600 dark:hover:text-dark-text-secondary transition-colors"
             @click="close"
           >
             <X class="h-6 w-6" />
@@ -200,7 +200,7 @@ onUnmounted(() => {
         <!-- Footer -->
         <div
           v-if="$slots.footer"
-          class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50"
+          class="px-6 py-4 border-t border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-dark-bg-tertiary/50"
         >
           <slot name="footer"></slot>
         </div>

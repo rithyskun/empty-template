@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
@@ -35,20 +36,14 @@ export default {
         dark: {
           bg: '#0f172a',
           'bg-secondary': '#1e293b',
+          'bg-tertiary': '#334155',
+          'bg-hover': '#1e293b',
           text: '#f8fafc',
           'text-secondary': '#94a3b8',
+          'text-tertiary': '#64748b',
+          border: '#334155',
+          'border-light': '#475569',
         },
-      },
-      backgroundColor: {
-        dark: '#0f172a',
-        'dark-secondary': '#1e293b',
-      },
-      textColor: {
-        dark: '#f8fafc',
-        'dark-secondary': '#94a3b8',
-      },
-      borderColor: {
-        dark: '#334155',
       },
     },
   },

@@ -119,29 +119,31 @@ function copySecret() {
   <div class="max-w-4xl mx-auto">
     <!-- Profile Header -->
     <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-dark-text">
         My Profile
       </h1>
-      <p class="text-gray-600 dark:text-gray-400 mt-1">
+      <p class="text-gray-600 dark:text-dark-text-secondary mt-1">
         Manage your account and security settings
       </p>
     </div>
 
     <!-- User Info Card -->
     <div
-      class="bg-white dark:bg-dark-bg-secondary rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6"
+      class="bg-white dark:bg-dark-bg-secondary rounded-xl border border-gray-200 dark:border-dark-border p-6 mb-6"
     >
       <div class="flex items-start gap-6">
         <img
           :src="avatarUrl"
           :alt="fullName"
-          class="w-20 h-20 rounded-full border-2 border-gray-200 dark:border-gray-600"
+          class="w-20 h-20 rounded-full border-2 border-gray-200 dark:border-dark-border-light"
         />
         <div class="flex-1 min-w-0">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-dark-text">
             {{ fullName }}
           </h2>
-          <p class="text-gray-500 dark:text-gray-400">{{ user?.email }}</p>
+          <p class="text-gray-500 dark:text-dark-text-tertiary">
+            {{ user?.email }}
+          </p>
           <div class="flex flex-wrap gap-2 mt-3">
             <span
               v-for="role in user?.roles"
@@ -152,7 +154,7 @@ function copySecret() {
             </span>
           </div>
           <div
-            class="mt-3 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+            class="mt-3 flex items-center gap-2 text-sm text-gray-500 dark:text-dark-text-tertiary"
           >
             <User class="w-4 h-4" />
             <span>ID: {{ user?.id }}</span>
@@ -163,11 +165,11 @@ function copySecret() {
 
     <!-- Security / 2FA Section -->
     <div
-      class="bg-white dark:bg-dark-bg-secondary rounded-xl border border-gray-200 dark:border-gray-700 p-6"
+      class="bg-white dark:bg-dark-bg-secondary rounded-xl border border-gray-200 dark:border-dark-border p-6"
     >
       <div class="flex items-center gap-3 mb-4">
         <Shield class="w-6 h-6 text-primary-600 dark:text-primary-400" />
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-dark-text">
           Two-Factor Authentication
         </h3>
       </div>
@@ -178,8 +180,8 @@ function copySecret() {
           <span class="font-medium">2FA is enabled on your account</span>
         </div>
 
-        <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+        <div class="border-t border-gray-200 dark:border-dark-border pt-4">
+          <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-3">
             To disable 2FA, enter the current 6-digit code from your
             authenticator app.
           </p>
@@ -189,7 +191,7 @@ function copySecret() {
               type="text"
               maxlength="6"
               placeholder="000000"
-              class="w-full sm:w-40 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-center tracking-widest font-mono text-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              class="w-full sm:w-40 px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-center tracking-widest font-mono text-lg bg-white dark:bg-dark-bg-tertiary text-gray-900 dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             <button
               type="button"
@@ -206,7 +208,9 @@ function copySecret() {
       </div>
 
       <div v-else class="space-y-4">
-        <div class="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+        <div
+          class="flex items-center gap-2 text-gray-500 dark:text-dark-text-tertiary"
+        >
           <ShieldAlert class="w-5 h-5" />
           <span
             >2FA is not enabled. Add an extra layer of security to your
@@ -229,9 +233,9 @@ function copySecret() {
         <!-- 2FA Setup Flow -->
         <div
           v-if="showSetup"
-          class="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-4"
+          class="border-t border-gray-200 dark:border-dark-border pt-4 space-y-4"
         >
-          <p class="text-sm text-gray-600 dark:text-gray-400">
+          <p class="text-sm text-gray-600 dark:text-dark-text-secondary">
             Scan the QR code with your authenticator app (Google Authenticator,
             Authy, etc.), then enter the 6-digit verification code below.
           </p>
@@ -240,19 +244,19 @@ function copySecret() {
             <img
               :src="qrCodeUrl"
               alt="2FA QR Code"
-              class="rounded-lg border border-gray-200 dark:border-gray-700"
+              class="rounded-lg border border-gray-200 dark:border-dark-border"
             />
 
             <div
-              class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2"
+              class="flex items-center gap-2 bg-gray-100 dark:bg-dark-bg-tertiary rounded-lg px-3 py-2"
             >
               <span
-                class="font-mono text-sm text-gray-700 dark:text-gray-300"
+                class="font-mono text-sm text-gray-700 dark:text-dark-text-secondary"
                 >{{ secretKey }}</span
               >
               <button
                 type="button"
-                class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                class="p-1 rounded hover:bg-gray-200 dark:hover:bg-dark-bg-hover text-gray-500 dark:text-dark-text-tertiary"
                 :title="copied ? 'Copied!' : 'Copy secret'"
                 @click="copySecret"
               >
@@ -268,7 +272,7 @@ function copySecret() {
               type="text"
               maxlength="6"
               placeholder="000000"
-              class="w-full sm:w-40 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-center tracking-widest font-mono text-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              class="w-full sm:w-40 px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-center tracking-widest font-mono text-lg bg-white dark:bg-dark-bg-tertiary text-gray-900 dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             <button
               type="button"
@@ -282,7 +286,7 @@ function copySecret() {
             </button>
             <button
               type="button"
-              class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-bg-hover"
               @click="showSetup = false"
             >
               Cancel

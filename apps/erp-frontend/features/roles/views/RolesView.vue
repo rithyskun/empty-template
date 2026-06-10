@@ -415,7 +415,9 @@ onMounted(() => {
           >
             {{ t('roles.title') }}
           </h1>
-          <p class="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">
+          <p
+            class="text-gray-600 dark:text-dark-text-secondary mt-1 text-sm sm:text-base"
+          >
             {{ t('roles.subtitle') }}
           </p>
         </div>
@@ -432,7 +434,7 @@ onMounted(() => {
     <!-- Stats Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 sm:p-6 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
@@ -442,7 +444,7 @@ onMounted(() => {
           </div>
           <div class="ml-3 sm:ml-4">
             <p
-              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300"
+              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-dark-text-secondary"
             >
               {{ t('roles.totalRoles') }}
             </p>
@@ -456,7 +458,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 sm:p-6 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
@@ -466,7 +468,7 @@ onMounted(() => {
           </div>
           <div class="ml-3 sm:ml-4">
             <p
-              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300"
+              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-dark-text-secondary"
             >
               {{ t('roles.activeRoles') }}
             </p>
@@ -480,7 +482,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 sm:p-6 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
@@ -490,7 +492,7 @@ onMounted(() => {
           </div>
           <div class="ml-3 sm:ml-4">
             <p
-              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300"
+              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-dark-text-secondary"
             >
               {{ t('roles.inactiveRoles') }}
             </p>
@@ -504,7 +506,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 sm:p-6 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
@@ -514,7 +516,7 @@ onMounted(() => {
           </div>
           <div class="ml-3 sm:ml-4">
             <p
-              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300"
+              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-dark-text-secondary"
             >
               {{ t('common.permissions') }}
             </p>
@@ -530,7 +532,7 @@ onMounted(() => {
 
     <!-- Search and Filter -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6 transition-colors duration-200"
+      class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 mb-6 transition-colors duration-200"
     >
       <div class="flex flex-col sm:flex-row gap-4">
         <div class="relative flex-1">
@@ -541,13 +543,13 @@ onMounted(() => {
             v-model="searchQuery"
             type="text"
             :placeholder="t('roles.searchPlaceholder')"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             @input="applyFilters"
           />
         </div>
         <select
           v-model="statusFilter"
-          class="px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
+          class="px-3 py-2 pr-10 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
           @change="applyFilters"
         >
           <option value="">{{ t('roles.allStatus') }}</option>
@@ -582,7 +584,7 @@ onMounted(() => {
     <!-- Empty State -->
     <div
       v-else-if="roles.length === 0"
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-200"
+      class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-6 transition-colors duration-200"
     >
       <div class="text-center py-8 sm:py-12">
         <Shield
@@ -591,7 +593,7 @@ onMounted(() => {
         <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
           {{ t('roles.noRolesFound') }}
         </h3>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p class="mt-1 text-sm text-gray-500 dark:text-dark-text-tertiary">
           {{ t('roles.getStarted') }}
         </p>
       </div>
@@ -600,45 +602,47 @@ onMounted(() => {
     <!-- Desktop Table View -->
     <div
       v-else
-      class="hidden lg:block bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-200"
+      class="hidden lg:block bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-6 transition-colors duration-200"
     >
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <table
+          class="min-w-full divide-y divide-gray-200 dark:divide-dark-border"
+        >
           <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('common.role') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('auditLog.description') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('common.permissions') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('common.users') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('roles.created') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('common.status') }}
               </th>
@@ -651,12 +655,12 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody
-            class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700"
+            class="bg-white dark:bg-dark-bg-secondary divide-y divide-gray-200 dark:divide-dark-border"
           >
             <tr
               v-for="role in roles"
               :key="role.id"
-              class="hover:bg-gray-50 dark:hover:bg-gray-700"
+              class="hover:bg-gray-50 dark:hover:bg-dark-bg-hover"
             >
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
@@ -676,7 +680,7 @@ onMounted(() => {
                       {{ role.name }}
                     </div>
                     <div
-                      class="text-sm text-gray-500 dark:text-gray-400 text-wrap"
+                      class="text-sm text-gray-500 dark:text-dark-text-tertiary text-wrap"
                     >
                       ID: {{ role.id }}
                     </div>
@@ -684,7 +688,7 @@ onMounted(() => {
                 </div>
               </td>
               <td class="px-6 py-4">
-                <div class="text-sm text-gray-900 dark:text-gray-100">
+                <div class="text-sm text-gray-900 dark:text-dark-text">
                   {{ role.description }}
                 </div>
               </td>
@@ -699,19 +703,19 @@ onMounted(() => {
                   </span>
                   <span
                     v-if="role.permissionSlugs.length > 2"
-                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300"
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 dark:bg-dark-bg-secondary text-gray-800 dark:text-dark-text-secondary"
                   >
                     +{{ role.permissionSlugs.length - 2 }} {{ t('roles.more') }}
                   </span>
                 </div>
               </td>
               <td
-                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100"
+                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-dark-text"
               >
                 {{ role.userCount }}
               </td>
               <td
-                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
+                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-dark-text-tertiary"
               >
                 {{ formatDate(role.createdAt) }}
               </td>
@@ -779,7 +783,7 @@ onMounted(() => {
       <div
         v-for="role in roles"
         :key="role.id"
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 transition-colors duration-200"
       >
         <div class="flex items-start justify-between mb-3">
           <div class="flex items-center min-w-0 flex-1">
@@ -794,7 +798,7 @@ onMounted(() => {
               <h3 class="text-sm font-medium text-gray-900 dark:text-white">
                 {{ role.name }}
               </h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
+              <p class="text-xs text-gray-500 dark:text-dark-text-tertiary">
                 ID: {{ role.id }}
               </p>
             </div>
@@ -832,7 +836,7 @@ onMounted(() => {
         </div>
 
         <div class="mb-3">
-          <p class="text-sm text-gray-900 dark:text-gray-100">
+          <p class="text-sm text-gray-900 dark:text-dark-text">
             {{ role.description }}
           </p>
         </div>
@@ -847,7 +851,7 @@ onMounted(() => {
           </span>
           <span
             v-if="role.permissionSlugs.length > 3"
-            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300"
+            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 dark:bg-dark-bg-secondary text-gray-800 dark:text-dark-text-secondary"
           >
             +{{ role.permissionSlugs.length - 3 }} more
           </span>
@@ -855,7 +859,7 @@ onMounted(() => {
 
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <div class="text-sm text-gray-900 dark:text-gray-100">
+            <div class="text-sm text-gray-900 dark:text-dark-text">
               <span class="font-medium">{{ role.userCount }}</span> users
             </div>
             <span
@@ -873,7 +877,7 @@ onMounted(() => {
               }}
             </span>
           </div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">
+          <div class="text-xs text-gray-500 dark:text-dark-text-tertiary">
             {{ t('roles.created') }}: {{ formatDate(role.createdAt) }}
           </div>
         </div>
@@ -883,11 +887,11 @@ onMounted(() => {
     <!-- Pagination -->
     <div
       v-if="totalRoles > pageSize"
-      class="px-4 sm:px-6 py-4 border-t border-gray-200 dark:border-gray-700"
+      class="px-4 sm:px-6 py-4 border-t border-gray-200 dark:border-dark-border"
     >
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div
-          class="text-sm text-gray-700 dark:text-gray-300 text-center sm:text-left"
+          class="text-sm text-gray-700 dark:text-dark-text-secondary text-center sm:text-left"
         >
           {{ t('roles.showing') }} {{ (currentPage - 1) * pageSize + 1 }}
           {{ t('roles.to') }} {{ Math.min(currentPage * pageSize, totalRoles) }}
@@ -896,18 +900,20 @@ onMounted(() => {
         <div class="flex items-center gap-2 w-full sm:w-auto justify-center">
           <button
             :disabled="currentPage === 1"
-            class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+            class="px-3 py-1 border border-gray-300 dark:border-dark-border-light rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg-hover bg-white dark:bg-dark-bg-secondary text-gray-700 dark:text-dark-text-secondary"
             @click="goToPage(currentPage - 1)"
           >
             {{ t('common.previous') }}
           </button>
-          <span class="px-3 py-1 text-sm text-gray-700 dark:text-gray-300">
+          <span
+            class="px-3 py-1 text-sm text-gray-700 dark:text-dark-text-secondary"
+          >
             {{ t('roles.page') }} {{ currentPage }} {{ t('roles.of') }}
             {{ totalPages }}
           </span>
           <button
             :disabled="currentPage === totalPages"
-            class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+            class="px-3 py-1 border border-gray-300 dark:border-dark-border-light rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg-hover bg-white dark:bg-dark-bg-secondary text-gray-700 dark:text-dark-text-secondary"
             @click="goToPage(currentPage + 1)"
           >
             {{ t('common.next') }}
@@ -924,7 +930,7 @@ onMounted(() => {
     @click.self="closeModal"
   >
     <div
-      class="relative top-4 sm:top-20 mx-auto p-4 sm:p-5 border border-gray-200 dark:border-gray-600 w-full max-w-4xl shadow-lg rounded-md bg-white dark:bg-gray-800 m-4 transition-colors duration-200"
+      class="relative top-4 sm:top-20 mx-auto p-4 sm:p-5 border border-gray-200 dark:border-dark-border-light w-full max-w-4xl shadow-lg rounded-md bg-white dark:bg-dark-bg-secondary m-4 transition-colors duration-200"
     >
       <div class="mt-3">
         <div class="flex items-center justify-between mb-4">
@@ -965,41 +971,41 @@ onMounted(() => {
         <form class="space-y-4" @submit.prevent="saveRole()">
           <div>
             <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
               >{{ t('roles.roleName') }}</label
             >
             <input
               v-model="roleForm.name"
               type="text"
               required
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :placeholder="t('roles.enterRoleName')"
             />
           </div>
 
           <div>
             <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
               >{{ t('roles.roleSlug') }}</label
             >
             <input
               v-model="roleForm.slug"
               type="text"
               required
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :placeholder="t('roles.slugPlaceholder')"
             />
           </div>
 
           <div>
             <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
               >{{ t('auditLog.description') }}</label
             >
             <textarea
               v-model="roleForm.description"
               rows="3"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :placeholder="t('roles.enterDescription')"
             ></textarea>
           </div>
@@ -1009,14 +1015,16 @@ onMounted(() => {
               <input
                 v-model="roleForm.isActive"
                 type="checkbox"
-                class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 h-5 w-5"
+                class="rounded border-gray-300 dark:border-dark-border-light text-blue-600 focus:ring-blue-500 h-5 w-5"
               />
               <span
-                class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+                class="ml-2 text-sm font-medium text-gray-700 dark:text-dark-text-secondary"
               >
                 {{ t('roles.activeStatus') }}
               </span>
-              <span class="ml-2 text-xs text-gray-500 dark:text-gray-400">
+              <span
+                class="ml-2 text-xs text-gray-500 dark:text-dark-text-tertiary"
+              >
                 ({{
                   roleForm.isActive
                     ? t('roles.roleIsActive')
@@ -1029,7 +1037,7 @@ onMounted(() => {
           <div>
             <div class="flex items-center justify-between mb-2">
               <label
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary"
                 >{{ t('common.permissions') }} ({{
                   roleForm.permissions.length
                 }}
@@ -1045,7 +1053,7 @@ onMounted(() => {
                 </button>
                 <button
                   type="button"
-                  class="text-xs px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:text-white hover:bg-gray-600 dark:hover:bg-gray-500 border border-gray-300 dark:border-gray-600 rounded"
+                  class="text-xs px-3 py-1.5 text-gray-600 dark:text-dark-text-tertiary hover:text-white hover:bg-gray-600 dark:hover:bg-gray-500 border border-gray-300 dark:border-dark-border-light rounded"
                   @click="deselectAllPermissions"
                 >
                   {{ t('roles.deselectAll') }}
@@ -1063,14 +1071,14 @@ onMounted(() => {
                   v-model="permissionSearchQuery"
                   type="text"
                   placeholder="Search permissions by name, slug, or module..."
-                  class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                  class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                 />
               </div>
               <div
                 v-if="permissionSearchQuery"
                 class="flex items-center justify-between mt-2"
               >
-                <p class="text-xs text-gray-600 dark:text-gray-400">
+                <p class="text-xs text-gray-600 dark:text-dark-text-tertiary">
                   Showing {{ filteredPermissions.length }} of
                   {{ availablePermissions.length }} permissions
                 </p>
@@ -1084,7 +1092,7 @@ onMounted(() => {
                   </button>
                   <button
                     type="button"
-                    class="text-xs px-2 py-1 text-gray-600 dark:text-gray-400 hover:text-white hover:bg-gray-600 dark:hover:bg-gray-500 border border-gray-300 dark:border-gray-600 rounded"
+                    class="text-xs px-2 py-1 text-gray-600 dark:text-dark-text-tertiary hover:text-white hover:bg-gray-600 dark:hover:bg-gray-500 border border-gray-300 dark:border-dark-border-light rounded"
                     @click="deselectAllFilteredPermissions"
                   >
                     Deselect Filtered
@@ -1095,7 +1103,7 @@ onMounted(() => {
             <!-- Empty state -->
             <div
               v-if="sortedModuleNames.length === 0"
-              class="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400"
+              class="border border-gray-300 dark:border-dark-border-light rounded-lg px-4 py-8 text-center text-sm text-gray-500 dark:text-dark-text-tertiary"
             >
               No permissions found matching "{{ permissionSearchQuery }}"
             </div>
@@ -1103,18 +1111,20 @@ onMounted(() => {
             <!-- Module-grouped accordion -->
             <div
               v-else
-              class="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden max-h-96 overflow-y-auto"
+              class="border border-gray-300 dark:border-dark-border-light rounded-lg overflow-hidden max-h-96 overflow-y-auto"
             >
               <div
                 v-for="(moduleName, idx) in sortedModuleNames"
                 :key="moduleName"
                 :class="
-                  idx > 0 ? 'border-t border-gray-200 dark:border-gray-700' : ''
+                  idx > 0
+                    ? 'border-t border-gray-200 dark:border-dark-border'
+                    : ''
                 "
               >
                 <!-- Module header row -->
                 <div
-                  class="flex items-center gap-3 px-4 py-2.5 bg-gray-50 dark:bg-gray-900/50 cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700/60 transition-colors"
+                  class="flex items-center gap-3 px-4 py-2.5 bg-gray-50 dark:bg-gray-900/50 cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-dark-bg-hover/60 transition-colors"
                   @click="toggleModule(moduleName)"
                 >
                   <!-- Module checkbox -->
@@ -1122,7 +1132,7 @@ onMounted(() => {
                     type="checkbox"
                     :checked="isModuleFullySelected(moduleName)"
                     :indeterminate="isModulePartiallySelected(moduleName)"
-                    class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer"
+                    class="rounded border-gray-300 dark:border-dark-border-light text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer"
                     @click.stop
                     @change.stop="toggleModulePermissions(moduleName)"
                   />
@@ -1131,7 +1141,7 @@ onMounted(() => {
                     :is="
                       isModuleExpanded(moduleName) ? ChevronDown : ChevronRight
                     "
-                    class="h-4 w-4 text-gray-500 dark:text-gray-400 flex-shrink-0"
+                    class="h-4 w-4 text-gray-500 dark:text-dark-text-tertiary flex-shrink-0"
                   />
                   <!-- Module name -->
                   <span
@@ -1160,7 +1170,7 @@ onMounted(() => {
                     :class="[
                       'flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors',
                       pIdx < groupedPermissions[moduleName].length - 1
-                        ? 'border-b border-gray-100 dark:border-gray-700/50'
+                        ? 'border-b border-gray-100 dark:border-dark-border/50'
                         : '',
                     ]"
                     @click="togglePermission(permission.id)"
@@ -1171,7 +1181,7 @@ onMounted(() => {
                       v-model="roleForm.permissions"
                       type="checkbox"
                       :value="permission.id"
-                      class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer"
+                      class="rounded border-gray-300 dark:border-dark-border-light text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer"
                       @click.stop
                     />
                     <span
@@ -1196,7 +1206,7 @@ onMounted(() => {
             <button
               type="button"
               :disabled="isSaving"
-              class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm w-full sm:w-auto bg-white dark:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover text-sm w-full sm:w-auto bg-white dark:bg-dark-bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
               @click="closeModal()"
             >
               {{ t('common.cancel') }}
@@ -1247,7 +1257,7 @@ onMounted(() => {
     @click.self="closeDeleteModal"
   >
     <div
-      class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-gray-700"
+      class="relative bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-dark-border"
     >
       <div class="flex items-start gap-4">
         <div
@@ -1259,7 +1269,7 @@ onMounted(() => {
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             {{ t('roles.deleteRole') }}
           </h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+          <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">
             {{ t('roles.deleteConfirmation') }}
             <span class="font-semibold">{{ deletingRole?.name }}</span
             >?
@@ -1286,7 +1296,7 @@ onMounted(() => {
         <button
           type="button"
           :disabled="isDeleting"
-          class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          class="px-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           @click="closeDeleteModal"
         >
           {{ t('common.cancel') }}

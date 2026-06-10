@@ -501,7 +501,9 @@ onMounted(() => {
           >
             {{ $t('users.title') }}
           </h1>
-          <p class="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">
+          <p
+            class="text-gray-600 dark:text-dark-text-secondary mt-1 text-sm sm:text-base"
+          >
             {{ $t('users.subtitle') }}
           </p>
         </div>
@@ -519,7 +521,7 @@ onMounted(() => {
     <!-- Stats Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
@@ -528,7 +530,9 @@ onMounted(() => {
             />
           </div>
           <div class="ml-3">
-            <p class="text-xs font-medium text-gray-600 dark:text-gray-300">
+            <p
+              class="text-xs font-medium text-gray-600 dark:text-dark-text-secondary"
+            >
               {{ $t('users.totalUsers') }}
             </p>
             <p class="text-xl font-bold text-gray-900 dark:text-white">
@@ -539,7 +543,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
@@ -548,7 +552,9 @@ onMounted(() => {
             />
           </div>
           <div class="ml-3">
-            <p class="text-xs font-medium text-gray-600 dark:text-gray-300">
+            <p
+              class="text-xs font-medium text-gray-600 dark:text-dark-text-secondary"
+            >
               {{ $t('users.activeUsers') }}
             </p>
             <p class="text-xl font-bold text-gray-900 dark:text-white">
@@ -559,7 +565,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
@@ -568,7 +574,9 @@ onMounted(() => {
             />
           </div>
           <div class="ml-3">
-            <p class="text-xs font-medium text-gray-600 dark:text-gray-300">
+            <p
+              class="text-xs font-medium text-gray-600 dark:text-dark-text-secondary"
+            >
               {{ $t('users.inactiveUsers') }}
             </p>
             <p class="text-xl font-bold text-gray-900 dark:text-white">
@@ -579,7 +587,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
@@ -588,7 +596,9 @@ onMounted(() => {
             />
           </div>
           <div class="ml-3">
-            <p class="text-xs font-medium text-gray-600 dark:text-gray-300">
+            <p
+              class="text-xs font-medium text-gray-600 dark:text-dark-text-secondary"
+            >
               {{ $t('users.pendingUsers') }}
             </p>
             <p class="text-xl font-bold text-gray-900 dark:text-white">
@@ -599,7 +609,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
@@ -608,7 +618,9 @@ onMounted(() => {
             />
           </div>
           <div class="ml-3">
-            <p class="text-xs font-medium text-gray-600 dark:text-gray-300">
+            <p
+              class="text-xs font-medium text-gray-600 dark:text-dark-text-secondary"
+            >
               {{ $t('users.suspendedUsers') }}
             </p>
             <p class="text-xl font-bold text-gray-900 dark:text-white">
@@ -619,7 +631,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
@@ -628,7 +640,9 @@ onMounted(() => {
             />
           </div>
           <div class="ml-3">
-            <p class="text-xs font-medium text-gray-600 dark:text-gray-300">
+            <p
+              class="text-xs font-medium text-gray-600 dark:text-dark-text-secondary"
+            >
               {{ $t('users.lockedUsers') }}
             </p>
             <p class="text-xl font-bold text-gray-900 dark:text-white">
@@ -641,7 +655,7 @@ onMounted(() => {
 
     <!-- Search and Filter -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6 transition-colors duration-200"
+      class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 mb-6 transition-colors duration-200"
     >
       <div class="flex flex-col sm:flex-row gap-4">
         <div class="relative flex-1">
@@ -652,12 +666,12 @@ onMounted(() => {
             v-model="searchQuery"
             type="text"
             :placeholder="$t('users.searchUsers')"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
         </div>
         <select
           v-model="statusFilter"
-          class="px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
+          class="px-3 py-2 pr-10 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
         >
           <option value="">{{ $t('users.allStatus') }}</option>
           <option value="active">{{ $t('users.activeUsers') }}</option>
@@ -692,39 +706,41 @@ onMounted(() => {
 
     <div
       v-else
-      class="hidden lg:block bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-200"
+      class="hidden lg:block bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-6 transition-colors duration-200"
     >
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <table
+          class="min-w-full divide-y divide-gray-200 dark:divide-dark-border"
+        >
           <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ $t('users.user') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ $t('users.email') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ $t('users.role') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ $t('users.status') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ $t('users.joinedDate') }}
               </th>
@@ -737,12 +753,12 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody
-            class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700"
+            class="bg-white dark:bg-dark-bg-secondary divide-y divide-gray-200 dark:divide-dark-border"
           >
             <tr
               v-for="user in filteredUsers"
               :key="user.id"
-              class="hover:bg-gray-50 dark:hover:bg-gray-700"
+              class="hover:bg-gray-50 dark:hover:bg-dark-bg-hover"
             >
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
@@ -762,7 +778,9 @@ onMounted(() => {
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center gap-2">
-                  <div class="text-sm text-gray-900 dark:text-gray-400">
+                  <div
+                    class="text-sm text-gray-900 dark:text-dark-text-tertiary"
+                  >
                     {{ user.email }}
                   </div>
                   <MailCheck
@@ -792,7 +810,7 @@ onMounted(() => {
                 </span>
               </td>
               <td
-                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-400"
+                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-dark-text-tertiary"
               >
                 {{ user.joinedDate }}
               </td>
@@ -864,7 +882,7 @@ onMounted(() => {
       <div
         v-for="user in filteredUsers"
         :key="user.id"
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 transition-colors duration-200"
       >
         <div class="flex items-start justify-between mb-3">
           <div class="flex items-center min-w-0 flex-1">
@@ -888,7 +906,9 @@ onMounted(() => {
                   title="Email Verified"
                 />
               </div>
-              <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+              <p
+                class="text-xs text-gray-500 dark:text-dark-text-tertiary truncate"
+              >
                 {{ user.email }}
               </p>
             </div>
@@ -924,7 +944,7 @@ onMounted(() => {
         <div class="mt-4 grid grid-cols-2 gap-4">
           <div>
             <p
-              class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+              class="text-xs text-gray-500 dark:text-dark-text-tertiary uppercase tracking-wide"
             >
               {{ $t('users.role') }}
             </p>
@@ -936,7 +956,7 @@ onMounted(() => {
           </div>
           <div>
             <p
-              class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+              class="text-xs text-gray-500 dark:text-dark-text-tertiary uppercase tracking-wide"
             >
               {{ $t('users.status') }}
             </p>
@@ -948,8 +968,8 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <p class="text-xs text-gray-500 dark:text-gray-400">
+        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-dark-border">
+          <p class="text-xs text-gray-500 dark:text-dark-text-tertiary">
             {{ $t('users.joined') }} {{ user.joinedDate }}
           </p>
         </div>
@@ -959,10 +979,10 @@ onMounted(() => {
     <!-- Pagination -->
     <div
       v-if="!isLoading && !error"
-      class="flex flex-col sm:flex-row items-center justify-between mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 gap-4"
+      class="flex flex-col sm:flex-row items-center justify-between mt-6 pt-6 border-t border-gray-200 dark:border-dark-border gap-4"
     >
       <div
-        class="text-sm text-gray-700 dark:text-gray-300 text-center sm:text-left"
+        class="text-sm text-gray-700 dark:text-dark-text-secondary text-center sm:text-left"
       >
         {{ $t('roles.showing') }}
         <span class="font-medium">{{ (currentPage - 1) * pageSize + 1 }}</span>
@@ -977,7 +997,7 @@ onMounted(() => {
         <button
           type="button"
           :disabled="currentPage === 1"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800"
+          class="px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-sm font-medium text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-dark-bg-secondary"
           @click="goToPage(currentPage - 1)"
         >
           {{ $t('users.previous') }}
@@ -990,7 +1010,7 @@ onMounted(() => {
           :class="[
             currentPage === page
               ? 'bg-primary-600 text-white'
-              : 'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800',
+              : 'border border-gray-300 dark:border-dark-border-light text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover bg-white dark:bg-dark-bg-secondary',
           ]"
           @click="goToPage(page)"
         >
@@ -999,7 +1019,7 @@ onMounted(() => {
         <button
           type="button"
           :disabled="currentPage === totalPages"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800"
+          class="px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-sm font-medium text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-dark-bg-secondary"
           @click="goToPage(currentPage + 1)"
         >
           {{ $t('users.next') }}
@@ -1014,7 +1034,7 @@ onMounted(() => {
       @click.self="closeModal()"
     >
       <div
-        class="relative top-4 sm:top-20 mx-auto p-4 sm:p-6 border border-gray-200 dark:border-gray-600 w-full max-w-2xl shadow-lg rounded-lg bg-white dark:bg-gray-800 m-4 transition-colors duration-200"
+        class="relative top-4 sm:top-20 mx-auto p-4 sm:p-6 border border-gray-200 dark:border-dark-border-light w-full max-w-2xl shadow-lg rounded-lg bg-white dark:bg-dark-bg-secondary m-4 transition-colors duration-200"
       >
         <div class="mt-3">
           <div class="flex items-center justify-between mb-6">
@@ -1024,7 +1044,9 @@ onMounted(() => {
                   editingUser ? $t('users.editUser') : $t('users.createNewUser')
                 }}
               </h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <p
+                class="text-sm text-gray-500 dark:text-dark-text-tertiary mt-1"
+              >
                 {{
                   editingUser
                     ? $t('users.updateUserInfo')
@@ -1067,28 +1089,28 @@ onMounted(() => {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                   >{{ $t('users.firstName') }}</label
                 >
                 <input
                   v-model="userForm.firstName"
                   type="text"
                   required
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   :placeholder="$t('users.enterFirstName')"
                 />
               </div>
 
               <div>
                 <label
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                   >{{ $t('users.lastName') }}</label
                 >
                 <input
                   v-model="userForm.lastName"
                   type="text"
                   required
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   :placeholder="$t('users.enterLastName')"
                 />
               </div>
@@ -1096,32 +1118,34 @@ onMounted(() => {
 
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                 >{{ $t('users.email') }}</label
               >
               <input
                 v-model="userForm.email"
                 type="email"
                 required
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 :placeholder="$t('users.enterEmail')"
               />
             </div>
 
             <div v-if="!editingUser">
               <label
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                 >{{ $t('users.password') }} *</label
               >
               <input
                 v-model="userForm.password"
                 type="password"
                 :required="!editingUser"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 :placeholder="$t('users.enterPassword')"
                 minlength="8"
               />
-              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              <p
+                class="mt-1 text-xs text-gray-500 dark:text-dark-text-tertiary"
+              >
                 {{ $t('users.passwordRequirements') }}
               </p>
             </div>
@@ -1129,26 +1153,26 @@ onMounted(() => {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                   >{{ $t('users.phone') }} ({{ $t('users.optional') }})</label
                 >
                 <input
                   v-model="userForm.phone"
                   type="tel"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   placeholder="+1234567890"
                 />
               </div>
 
               <div>
                 <label
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                   >{{ $t('users.status') }} *</label
                 >
                 <select
                   v-model="userForm.status"
                   required
-                  class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
+                  class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
                 >
                   <option value="active">{{ $t('common.active') }}</option>
                   <option value="inactive">{{ $t('common.inactive') }}</option>
@@ -1160,29 +1184,31 @@ onMounted(() => {
 
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                 >{{ $t('users.avatarUrl') }} ({{ $t('users.optional') }})</label
               >
               <input
                 v-model="userForm.avatar"
                 type="url"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 placeholder="https://example.com/avatar.jpg"
               />
-              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              <p
+                class="mt-1 text-xs text-gray-500 dark:text-dark-text-tertiary"
+              >
                 {{ $t('users.avatarHint') }}
               </p>
             </div>
 
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                 >{{ $t('users.role') }} *</label
               >
               <select
                 v-model="userForm.roleId"
                 required
-                class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
+                class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
               >
                 <option value="">{{ $t('users.selectRole') }}</option>
                 <option
@@ -1209,12 +1235,12 @@ onMounted(() => {
             </div>
 
             <div
-              class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700"
+              class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-6 border-t border-gray-200 dark:border-dark-border"
             >
               <button
                 type="button"
                 :disabled="isSaving"
-                class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm w-full sm:w-auto bg-white dark:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="px-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover text-sm w-full sm:w-auto bg-white dark:bg-dark-bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
                 @click="closeModal()"
               >
                 {{ $t('common.cancel') }}
@@ -1265,7 +1291,7 @@ onMounted(() => {
       @click.self="closeConfirmationModal()"
     >
       <div
-        class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-gray-700"
+        class="relative bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-dark-border"
       >
         <div class="flex items-start gap-4">
           <div
@@ -1279,7 +1305,7 @@ onMounted(() => {
             >
               {{ $t('users.suspendUser') }}
             </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+            <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">
               {{ $t('users.suspendConfirmation') }}
               <span class="font-semibold">{{
                 selectedUserForAction?.name
@@ -1300,7 +1326,7 @@ onMounted(() => {
           <button
             type="button"
             :disabled="isProcessingAction"
-            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             @click="closeConfirmationModal()"
           >
             {{ $t('common.cancel') }}
@@ -1329,7 +1355,7 @@ onMounted(() => {
       @click.self="closeConfirmationModal()"
     >
       <div
-        class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-gray-700"
+        class="relative bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-dark-border"
       >
         <div class="flex items-start gap-4">
           <div
@@ -1343,7 +1369,7 @@ onMounted(() => {
             >
               {{ $t('users.deactivateUser') }}
             </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+            <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">
               {{ $t('users.deactivateConfirmation') }}
               <span class="font-semibold">{{
                 selectedUserForAction?.name
@@ -1364,7 +1390,7 @@ onMounted(() => {
           <button
             type="button"
             :disabled="isProcessingAction"
-            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             @click="closeConfirmationModal()"
           >
             {{ $t('common.cancel') }}
@@ -1393,7 +1419,7 @@ onMounted(() => {
       @click.self="closeConfirmationModal()"
     >
       <div
-        class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-gray-700"
+        class="relative bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-dark-border"
       >
         <div class="flex items-start gap-4">
           <div
@@ -1407,7 +1433,7 @@ onMounted(() => {
             >
               {{ $t('users.resetPassword') }}
             </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+            <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">
               {{ $t('users.resetPasswordFor') }}
               <span class="font-semibold">{{
                 selectedUserForAction?.name
@@ -1427,31 +1453,31 @@ onMounted(() => {
             <div class="space-y-3">
               <div>
                 <label
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                   >{{ $t('users.newPassword') }}</label
                 >
                 <input
                   v-model="resetPasswordForm.newPassword"
                   type="password"
                   minlength="8"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   :placeholder="$t('users.enterNewPassword')"
                 />
               </div>
               <div>
                 <label
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
                   >{{ $t('users.confirmNewPassword') }}</label
                 >
                 <input
                   v-model="resetPasswordForm.confirmPassword"
                   type="password"
                   minlength="8"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   :placeholder="$t('users.confirmNewPasswordPlaceholder')"
                 />
               </div>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
+              <p class="text-xs text-gray-500 dark:text-dark-text-tertiary">
                 {{ $t('users.passwordRequirements') }}
               </p>
             </div>
@@ -1461,7 +1487,7 @@ onMounted(() => {
           <button
             type="button"
             :disabled="isProcessingAction"
-            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             @click="closeConfirmationModal()"
           >
             {{ $t('common.cancel') }}
@@ -1494,7 +1520,7 @@ onMounted(() => {
       @click.self="closeConfirmationModal()"
     >
       <div
-        class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-gray-700"
+        class="relative bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-dark-border"
       >
         <div class="flex items-start gap-4">
           <div
@@ -1508,7 +1534,7 @@ onMounted(() => {
             >
               {{ $t('users.deleteUser') }}
             </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+            <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">
               {{ $t('users.deleteConfirmation') }}
               <span class="font-semibold">{{
                 selectedUserForAction?.name
@@ -1537,7 +1563,7 @@ onMounted(() => {
           <button
             type="button"
             :disabled="isProcessingAction"
-            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             @click="closeConfirmationModal()"
           >
             {{ $t('common.cancel') }}

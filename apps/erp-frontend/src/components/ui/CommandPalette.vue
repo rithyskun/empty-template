@@ -208,7 +208,7 @@ defineExpose({
       >
         <!-- Backdrop -->
         <div
-          class="fixed inset-0 bg-gray-900/50 dark:bg-gray-900/80 backdrop-blur-sm"
+          class="fixed inset-0 bg-gray-900/50 dark:bg-dark-bg-tertiary/80 backdrop-blur-sm"
         ></div>
 
         <!-- Command Palette -->
@@ -225,7 +225,7 @@ defineExpose({
           >
             <div
               v-if="isOpen"
-              class="relative w-full max-w-2xl transform rounded-xl bg-white dark:bg-gray-800 shadow-2xl ring-1 ring-black/5 dark:ring-white/10 transition-all"
+              class="relative w-full max-w-2xl transform rounded-xl bg-white dark:bg-dark-bg-secondary shadow-2xl ring-1 ring-black/5 dark:ring-white/10 transition-all"
               @click.stop
             >
               <!-- Search Input -->
@@ -238,7 +238,7 @@ defineExpose({
                   v-model="query"
                   type="text"
                   :placeholder="placeholder"
-                  class="h-14 w-full border-0 bg-transparent pl-12 pr-4 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+                  class="h-14 w-full border-0 bg-transparent pl-12 pr-4 text-gray-900 dark:text-dark-text placeholder:text-gray-400 focus:ring-0 sm:text-sm"
                   @keydown.down.prevent="highlightNext"
                   @keydown.up.prevent="highlightPrevious"
                   @keydown.enter.prevent="selectHighlighted"
@@ -249,7 +249,7 @@ defineExpose({
               <!-- Results -->
               <div
                 v-if="filteredCommands.length > 0"
-                class="max-h-96 scroll-py-2 overflow-y-auto border-t border-gray-200 dark:border-gray-700"
+                class="max-h-96 scroll-py-2 overflow-y-auto border-t border-gray-200 dark:border-dark-border"
               >
                 <div
                   v-for="(group, groupIndex) in groupedCommands"
@@ -258,7 +258,7 @@ defineExpose({
                 >
                   <h3
                     v-if="group.label"
-                    class="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                    class="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-dark-text-tertiary uppercase tracking-wider"
                   >
                     {{ group.label }}
                   </h3>
@@ -271,7 +271,7 @@ defineExpose({
                       highlightedIndex ===
                       getCommandGlobalIndex(groupIndex, commandIndex)
                         ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
-                        : 'text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700',
+                        : 'text-gray-900 dark:text-dark-text hover:bg-gray-50 dark:hover:bg-dark-bg-hover',
                     ]"
                     @click="selectCommand(command)"
                     @mouseenter="
@@ -301,7 +301,7 @@ defineExpose({
                       </div>
                       <p
                         v-if="command.description"
-                        class="text-sm text-gray-500 dark:text-gray-400 truncate"
+                        class="text-sm text-gray-500 dark:text-dark-text-tertiary truncate"
                       >
                         {{ command.description }}
                       </p>
@@ -314,7 +314,7 @@ defineExpose({
                       <kbd
                         v-for="(key, index) in command.shortcut"
                         :key="index"
-                        class="inline-flex items-center rounded border border-gray-200 dark:border-gray-600 px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400"
+                        class="inline-flex items-center rounded border border-gray-200 dark:border-dark-border-light px-2 py-1 text-xs font-medium text-gray-500 dark:text-dark-text-tertiary"
                       >
                         {{ key }}
                       </kbd>
@@ -326,13 +326,15 @@ defineExpose({
               <!-- Empty State -->
               <div
                 v-else-if="query"
-                class="border-t border-gray-200 dark:border-gray-700 px-6 py-14 text-center sm:px-14"
+                class="border-t border-gray-200 dark:border-dark-border px-6 py-14 text-center sm:px-14"
               >
                 <Search class="mx-auto h-12 w-12 text-gray-400" />
-                <p class="mt-4 text-sm text-gray-900 dark:text-white">
+                <p class="mt-4 text-sm text-gray-900 dark:text-dark-text">
                   No results found for "{{ query }}"
                 </p>
-                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                <p
+                  class="mt-2 text-sm text-gray-500 dark:text-dark-text-tertiary"
+                >
                   Try searching for something else
                 </p>
               </div>
@@ -340,9 +342,11 @@ defineExpose({
               <!-- Recent/Default Commands -->
               <div
                 v-else
-                class="border-t border-gray-200 dark:border-gray-700 px-6 py-4"
+                class="border-t border-gray-200 dark:border-dark-border px-6 py-4"
               >
-                <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                <p
+                  class="text-xs text-gray-500 dark:text-dark-text-tertiary mb-3"
+                >
                   {{ recentLabel }}
                 </p>
                 <div class="space-y-1">
@@ -353,7 +357,7 @@ defineExpose({
                     :class="[
                       highlightedIndex === index
                         ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
-                        : 'text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700',
+                        : 'text-gray-900 dark:text-dark-text hover:bg-gray-50 dark:hover:bg-dark-bg-hover',
                     ]"
                     @click="selectCommand(command)"
                     @mouseenter="highlightedIndex = index"
@@ -371,30 +375,30 @@ defineExpose({
               <!-- Footer -->
               <div
                 v-if="showFooter"
-                class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3 text-xs text-gray-500 dark:text-gray-400"
+                class="flex items-center justify-between border-t border-gray-200 dark:border-dark-border px-4 py-3 text-xs text-gray-500 dark:text-dark-text-tertiary"
               >
                 <div class="flex items-center gap-4">
                   <span class="flex items-center gap-1">
                     <kbd
-                      class="rounded border border-gray-200 dark:border-gray-600 px-1.5 py-0.5"
+                      class="rounded border border-gray-200 dark:border-dark-border-light px-1.5 py-0.5"
                       >↑</kbd
                     >
                     <kbd
-                      class="rounded border border-gray-200 dark:border-gray-600 px-1.5 py-0.5"
+                      class="rounded border border-gray-200 dark:border-dark-border-light px-1.5 py-0.5"
                       >↓</kbd
                     >
                     to navigate
                   </span>
                   <span class="flex items-center gap-1">
                     <kbd
-                      class="rounded border border-gray-200 dark:border-gray-600 px-1.5 py-0.5"
+                      class="rounded border border-gray-200 dark:border-dark-border-light px-1.5 py-0.5"
                       >↵</kbd
                     >
                     to select
                   </span>
                   <span class="flex items-center gap-1">
                     <kbd
-                      class="rounded border border-gray-200 dark:border-gray-600 px-1.5 py-0.5"
+                      class="rounded border border-gray-200 dark:border-dark-border-light px-1.5 py-0.5"
                       >esc</kbd
                     >
                     to close

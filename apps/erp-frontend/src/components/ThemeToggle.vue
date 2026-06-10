@@ -42,7 +42,7 @@ watch(open, (isOpen) => {
 <template>
   <div ref="dropdownRef" class="relative inline-block text-left">
     <button
-      class="inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
+      class="inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-bg-hover text-gray-600 dark:text-dark-text-secondary transition-colors"
       title="Theme"
       @click.stop="open = !open"
     >
@@ -92,8 +92,7 @@ watch(open, (isOpen) => {
 
     <div
       v-if="open"
-      v-click-outside="() => (open = false)"
-      class="absolute right-0 mt-2 w-36 bg-white dark:bg-dark-bg-secondary border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 overflow-hidden"
+      class="absolute right-0 mt-2 w-36 bg-white dark:bg-dark-bg-secondary border border-gray-200 dark:border-dark-border rounded-lg shadow-lg z-50 overflow-hidden"
     >
       <button
         v-for="opt in options"
@@ -102,7 +101,7 @@ watch(open, (isOpen) => {
           'flex items-center gap-2 w-full text-left px-4 py-2.5 text-sm transition-colors',
           theme === opt.value
             ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-medium'
-            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800',
+            : 'text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover',
         ]"
         @click="select(opt.value)"
       >

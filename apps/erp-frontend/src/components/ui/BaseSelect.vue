@@ -113,20 +113,20 @@ const handleClickOutside = (event: MouseEvent): void => {
 };
 
 const baseClasses =
-  'relative w-full cursor-pointer rounded-lg border bg-white dark:bg-gray-800 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+  'relative w-full cursor-pointer rounded-lg border bg-white dark:bg-dark-bg-secondary text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
 
 const stateClasses = computed(() => {
   if (props.error) {
     return 'border-red-300 dark:border-red-600';
   }
-  return 'border-gray-300 dark:border-gray-600';
+  return 'border-gray-300 dark:border-dark-border-light';
 });
 
 const selectClasses = computed(() => {
   return [
     baseClasses,
     stateClasses.value,
-    'px-4 py-2.5 pr-10 text-sm text-gray-900 dark:text-white',
+    'px-4 py-2.5 pr-10 text-sm text-gray-900 dark:text-dark-text',
   ].join(' ');
 });
 
@@ -154,7 +154,7 @@ onUnmounted(() => {
     <label
       v-if="label"
       :for="selectId"
-      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+      class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-2"
     >
       {{ label }}
       <span v-if="required" class="text-red-500">*</span>
@@ -190,12 +190,12 @@ onUnmounted(() => {
       >
         <div
           v-if="isOpen"
-          class="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto focus:outline-none"
+          class="absolute z-50 mt-1 w-full bg-white dark:bg-dark-bg-secondary border border-gray-300 dark:border-dark-border-light rounded-lg shadow-lg max-h-60 overflow-auto focus:outline-none"
         >
           <!-- Search in dropdown -->
           <div
             v-if="searchable"
-            class="p-2 border-b border-gray-200 dark:border-gray-700"
+            class="p-2 border-b border-gray-200 dark:border-dark-border"
           >
             <div class="relative">
               <Search
@@ -205,7 +205,7 @@ onUnmounted(() => {
                 v-model="searchQuery"
                 type="text"
                 placeholder="Search..."
-                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-dark-border-light rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-dark-bg-tertiary text-gray-900 dark:text-dark-text"
                 @click.stop
               />
             </div>
@@ -216,7 +216,7 @@ onUnmounted(() => {
             <div
               v-for="option in filteredOptions"
               :key="getOptionValue(option)"
-              class="px-3 py-2 cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+              class="px-3 py-2 cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-dark-bg-hover"
               :class="{
                 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400':
                   isSelected(option),
@@ -225,7 +225,7 @@ onUnmounted(() => {
             >
               <div class="flex items-center justify-between">
                 <span
-                  class="block truncate text-sm text-gray-900 dark:text-white"
+                  class="block truncate text-sm text-gray-900 dark:text-dark-text"
                 >
                   {{ getOptionLabel(option) }}
                 </span>
@@ -238,7 +238,7 @@ onUnmounted(() => {
 
             <div
               v-if="filteredOptions?.length === 0"
-              class="px-3 py-2 text-sm text-gray-500 dark:text-gray-400 text-center"
+              class="px-3 py-2 text-sm text-gray-500 dark:text-dark-text-tertiary text-center"
             >
               No options found
             </div>
@@ -251,7 +251,10 @@ onUnmounted(() => {
       {{ error }}
     </p>
 
-    <p v-else-if="hint" class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+    <p
+      v-else-if="hint"
+      class="mt-1 text-sm text-gray-500 dark:text-dark-text-tertiary"
+    >
       {{ hint }}
     </p>
   </div>

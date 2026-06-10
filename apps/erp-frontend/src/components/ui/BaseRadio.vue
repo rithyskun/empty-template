@@ -76,8 +76,8 @@ const containerClasses = computed(() => {
 
 const itemClasses = computed(() => {
   return props.layout === 'horizontal'
-    ? 'px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
-    : 'px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
+    ? 'px-4 py-3 border border-gray-200 dark:border-dark-border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
+    : 'px-4 py-3 border border-gray-200 dark:border-dark-border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors';
 });
 </script>
 

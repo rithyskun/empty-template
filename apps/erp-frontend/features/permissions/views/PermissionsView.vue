@@ -298,7 +298,9 @@ onMounted(() => {
           >
             {{ t('permissions.title') }}
           </h1>
-          <p class="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">
+          <p
+            class="text-gray-600 dark:text-dark-text-secondary mt-1 text-sm sm:text-base"
+          >
             {{ t('permissions.subtitle') }}
           </p>
         </div>
@@ -315,7 +317,7 @@ onMounted(() => {
     <!-- Stats Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 sm:p-6 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
@@ -325,7 +327,7 @@ onMounted(() => {
           </div>
           <div class="ml-3 sm:ml-4">
             <p
-              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300"
+              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-dark-text-secondary"
             >
               {{ t('permissions.totalPermissions') }}
             </p>
@@ -339,7 +341,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 sm:p-6 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
@@ -349,7 +351,7 @@ onMounted(() => {
           </div>
           <div class="ml-3 sm:ml-4">
             <p
-              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300"
+              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-dark-text-secondary"
             >
               {{ t('permissions.systemPermissions') }}
             </p>
@@ -363,7 +365,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 sm:p-6 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
@@ -373,7 +375,7 @@ onMounted(() => {
           </div>
           <div class="ml-3 sm:ml-4">
             <p
-              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300"
+              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-dark-text-secondary"
             >
               {{ t('permissions.userPermissions') }}
             </p>
@@ -387,7 +389,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 sm:p-6 transition-colors duration-200"
       >
         <div class="flex items-center">
           <div class="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
@@ -397,7 +399,7 @@ onMounted(() => {
           </div>
           <div class="ml-3 sm:ml-4">
             <p
-              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300"
+              class="text-xs sm:text-sm font-medium text-gray-600 dark:text-dark-text-secondary"
             >
               {{ t('permissions.rolePermissions') }}
             </p>
@@ -413,7 +415,7 @@ onMounted(() => {
 
     <!-- Search and Filter -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6 transition-colors duration-200"
+      class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 mb-6 transition-colors duration-200"
     >
       <div class="flex flex-col sm:flex-row gap-4">
         <div class="relative flex-1">
@@ -424,13 +426,13 @@ onMounted(() => {
             v-model="searchQuery"
             type="text"
             :placeholder="t('permissions.searchPlaceholder')"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             @input="applyFilters"
           />
         </div>
         <select
           v-model="moduleFilter"
-          class="px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
+          class="px-3 py-2 pr-10 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
           @change="applyFilters"
         >
           <option value="">{{ t('permissions.allModules') }}</option>
@@ -443,7 +445,7 @@ onMounted(() => {
         </select>
         <select
           v-model="actionFilter"
-          class="px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
+          class="px-3 py-2 pr-10 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
           @change="applyFilters"
         >
           <option value="">{{ t('permissions.allActions') }}</option>
@@ -480,7 +482,7 @@ onMounted(() => {
     <!-- Empty State -->
     <div
       v-else-if="permissions.length === 0"
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-200"
+      class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-6 transition-colors duration-200"
     >
       <div class="text-center py-8 sm:py-12">
         <Key
@@ -489,7 +491,7 @@ onMounted(() => {
         <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
           {{ t('permissions.noPermissionsFound') }}
         </h3>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p class="mt-1 text-sm text-gray-500 dark:text-dark-text-tertiary">
           {{ t('permissions.getStarted') }}
         </p>
       </div>
@@ -498,39 +500,41 @@ onMounted(() => {
     <!-- Desktop Table View -->
     <div
       v-else
-      class="hidden lg:block bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-200"
+      class="hidden lg:block bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-6 transition-colors duration-200"
     >
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <table
+          class="min-w-full divide-y divide-gray-200 dark:divide-dark-border"
+        >
           <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('common.permission') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('roles.module') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('roles.slug') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('auditLog.description') }}
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider"
               >
                 {{ t('permissions.rolesUsing') }}
               </th>
@@ -543,12 +547,12 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody
-            class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700"
+            class="bg-white dark:bg-dark-bg-secondary divide-y divide-gray-200 dark:divide-dark-border"
           >
             <tr
               v-for="permission in permissions"
               :key="permission.id"
-              class="hover:bg-gray-50 dark:hover:bg-gray-700"
+              class="hover:bg-gray-50 dark:hover:bg-dark-bg-hover"
             >
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
@@ -566,7 +570,7 @@ onMounted(() => {
                       {{ permission.name }}
                     </div>
                     <div
-                      class="text-sm text-gray-500 dark:text-gray-400 text-wrap"
+                      class="text-sm text-gray-500 dark:text-dark-text-tertiary text-wrap"
                     >
                       ID: {{ permission.id }}
                     </div>
@@ -588,12 +592,12 @@ onMounted(() => {
                 </span>
               </td>
               <td class="px-6 py-4">
-                <div class="text-sm text-gray-900 dark:text-gray-100">
+                <div class="text-sm text-gray-900 dark:text-dark-text">
                   {{ permission.description }}
                 </div>
               </td>
               <td
-                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100"
+                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-dark-text"
               >
                 {{ permission.rolesCount }}
               </td>
@@ -628,7 +632,7 @@ onMounted(() => {
       <div
         v-for="permission in permissions"
         :key="permission.id"
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-200"
+        class="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4 transition-colors duration-200"
       >
         <div class="flex items-start justify-between mb-3">
           <div class="flex items-center min-w-0 flex-1">
@@ -643,7 +647,7 @@ onMounted(() => {
               <h3 class="text-sm font-medium text-gray-900 dark:text-white">
                 {{ permission.name }}
               </h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
+              <p class="text-xs text-gray-500 dark:text-dark-text-tertiary">
                 ID: {{ permission.id }}
               </p>
             </div>
@@ -668,7 +672,7 @@ onMounted(() => {
         </div>
 
         <div class="mb-3">
-          <p class="text-sm text-gray-900 dark:text-gray-100">
+          <p class="text-sm text-gray-900 dark:text-dark-text">
             {{ permission.description }}
           </p>
         </div>
@@ -687,7 +691,7 @@ onMounted(() => {
         </div>
 
         <div class="flex items-center justify-between">
-          <div class="text-sm text-gray-900 dark:text-gray-100">
+          <div class="text-sm text-gray-900 dark:text-dark-text">
             <span class="font-medium">{{ permission.rolesCount }}</span>
             {{ t('permissions.rolesUsing') }}
           </div>
@@ -698,11 +702,11 @@ onMounted(() => {
     <!-- Pagination -->
     <div
       v-if="totalPermissions > pageSize"
-      class="px-4 sm:px-6 py-4 border-t border-gray-200 dark:border-gray-700"
+      class="px-4 sm:px-6 py-4 border-t border-gray-200 dark:border-dark-border"
     >
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div
-          class="text-sm text-gray-700 dark:text-gray-300 text-center sm:text-left"
+          class="text-sm text-gray-700 dark:text-dark-text-secondary text-center sm:text-left"
         >
           {{ t('roles.showing') }} {{ (currentPage - 1) * pageSize + 1 }}
           {{ t('roles.to') }}
@@ -713,19 +717,21 @@ onMounted(() => {
           <button
             type="button"
             :disabled="currentPage === 1"
-            class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+            class="px-3 py-1 border border-gray-300 dark:border-dark-border-light rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg-hover bg-white dark:bg-dark-bg-secondary text-gray-700 dark:text-dark-text-secondary"
             @click="goToPage(currentPage - 1)"
           >
             {{ t('common.previous') }}
           </button>
-          <span class="px-3 py-1 text-sm text-gray-700 dark:text-gray-300">
+          <span
+            class="px-3 py-1 text-sm text-gray-700 dark:text-dark-text-secondary"
+          >
             {{ t('roles.page') }} {{ currentPage }} {{ t('roles.of') }}
             {{ totalPages }}
           </span>
           <button
             type="button"
             :disabled="currentPage === totalPages"
-            class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+            class="px-3 py-1 border border-gray-300 dark:border-dark-border-light rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg-hover bg-white dark:bg-dark-bg-secondary text-gray-700 dark:text-dark-text-secondary"
             @click="goToPage(currentPage + 1)"
           >
             {{ t('common.next') }}
@@ -742,7 +748,7 @@ onMounted(() => {
     @click.self="closeModal"
   >
     <div
-      class="relative top-4 sm:top-20 mx-auto p-4 sm:p-5 border border-gray-200 dark:border-gray-600 w-full max-w-md sm:w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-gray-800 m-4 transition-colors duration-200"
+      class="relative top-4 sm:top-20 mx-auto p-4 sm:p-5 border border-gray-200 dark:border-dark-border-light w-full max-w-md sm:w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-dark-bg-secondary m-4 transition-colors duration-200"
     >
       <div class="mt-3">
         <div class="flex items-center justify-between mb-4">
@@ -786,41 +792,41 @@ onMounted(() => {
         <form class="space-y-4" @submit.prevent="savePermission">
           <div>
             <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
               >{{ t('roles.permissionName') }}</label
             >
             <input
               v-model="permissionForm.name"
               type="text"
               required
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :placeholder="t('permissions.namePlaceholder')"
             />
           </div>
 
           <div>
             <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
               >{{ t('permissions.permissionSlug') }}</label
             >
             <input
               v-model="permissionForm.slug"
               type="text"
               required
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :placeholder="t('permissions.slugPlaceholder')"
             />
           </div>
 
           <div>
             <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
               >{{ t('roles.module') }}</label
             >
             <select
               v-model="permissionForm.module"
               required
-              class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
+              class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5em_1.5em] bg-[right_0.5rem_center] bg-no-repeat"
             >
               <option value="">{{ t('permissions.selectModule') }}</option>
               <option value="users">{{ t('common.users') }}</option>
@@ -843,13 +849,13 @@ onMounted(() => {
 
           <div>
             <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              class="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1"
               >{{ t('auditLog.description') }}</label
             >
             <textarea
               v-model="permissionForm.description"
               rows="3"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :placeholder="t('permissions.descriptionPlaceholder')"
             ></textarea>
           </div>
@@ -860,7 +866,7 @@ onMounted(() => {
             <button
               type="button"
               :disabled="isSaving"
-              class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm w-full sm:w-auto bg-white dark:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover text-sm w-full sm:w-auto bg-white dark:bg-dark-bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
               @click="closeModal"
             >
               {{ t('common.cancel') }}
@@ -911,7 +917,7 @@ onMounted(() => {
     @click.self="closeDeleteModal"
   >
     <div
-      class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-gray-700"
+      class="relative bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200 dark:border-dark-border"
     >
       <div class="flex items-start gap-4">
         <div
@@ -923,7 +929,7 @@ onMounted(() => {
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             {{ t('permissions.deletePermission') }}
           </h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+          <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">
             {{ t('permissions.deleteConfirmation') }}
             <span class="font-semibold">{{ deletingPermission?.name }}</span
             >?
@@ -950,7 +956,7 @@ onMounted(() => {
         <button
           type="button"
           :disabled="isDeleting"
-          class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          class="px-4 py-2 border border-gray-300 dark:border-dark-border-light rounded-lg text-gray-700 dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-dark-bg-hover text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           @click="closeDeleteModal"
         >
           {{ t('common.cancel') }}

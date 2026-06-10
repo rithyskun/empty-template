@@ -1,7 +1,110 @@
+@font-face {
+  font-family: 'Noto Sans Khmer';
+  src: url('/assets/fonts/NotoSansKhmer-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: 'Noto Sans Khmer';
+  src: url('/assets/fonts/NotoSansKhmer-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: 'Noto Sans Khmer';
+  src: url('/assets/fonts/NotoSansKhmer-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: 'App Font';
+  src: local('Work Sans Regular');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+    U+FFFD;
+}
+
+@font-face {
+  font-family: 'App Font';
+  src: local('Work Sans Bold');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+    U+FFFD;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-#app {
-  min-height: 100vh;
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+    font-family: 'Work Sans', 'Noto Sans Khmer', 'Leelawadee UI', sans-serif;
+  }
+
+  /* Ensure Khmer text renders at proper size and uses appropriate fonts */
+  [lang='km'],
+  :lang(km) {
+    font-size: 1.05em;
+    font-family: 'Noto Sans Khmer', 'Leelawadee UI', sans-serif;
+    line-height: 1.6;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6;
+  }
+
+  .btn {
+    @apply font-medium px-4 py-2 rounded-lg transition-colors inline-flex items-center justify-center;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium px-4 py-2 rounded-lg transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium px-4 py-2 rounded-lg transition-colors;
+  }
+
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors;
+  }
+
+  .input:disabled {
+    @apply bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60;
+  }
+
+  /* Shimmer animation for progress bars */
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
 }
