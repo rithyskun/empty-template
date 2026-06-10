@@ -5,8 +5,6 @@ import { IdentityCoreModule } from '@erp/identity-core';
 import { AuthModule as ErpAuthModule } from '@erp/auth';
 import { MailModule } from '@erp/mail';
 import { BullMQRoot } from '@erp/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -19,7 +17,7 @@ import { AuthModule } from './auth/auth.module';
     MailModule,
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

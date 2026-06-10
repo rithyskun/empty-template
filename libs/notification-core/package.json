@@ -13,7 +13,10 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "notification-core"
+    "name": "notification-core",
+    "tags": [
+      "type:lib"
+    ]
   },
   "dependencies": {
     "@erp/common": "*",

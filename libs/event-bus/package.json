@@ -13,7 +13,11 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "event-bus"
+    "name": "event-bus",
+    "tags": [
+      "type:lib",
+      "scope:shared"
+    ]
   },
   "dependencies": {}
 }

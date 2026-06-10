@@ -13,7 +13,11 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "enums"
+    "name": "enums",
+    "tags": [
+      "type:lib",
+      "scope:shared"
+    ]
   },
   "dependencies": {}
 }

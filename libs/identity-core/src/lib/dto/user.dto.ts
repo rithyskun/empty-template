@@ -1,3 +1,5 @@
+import { UserStatus } from '@erp/enums';
+
 export interface CreateUserDto {
   email: string;
   password: string;
@@ -8,6 +10,7 @@ export interface CreateUserDto {
   companyId?: string;
   branchId?: string;
   isActive?: boolean;
+  status?: UserStatus;
   roleIds?: string[];
 }
 
@@ -16,6 +19,7 @@ export interface UpdateUserDto {
   lastName?: string;
   phone?: string;
   isActive?: boolean;
+  status?: UserStatus;
   branchId?: string;
 }
 
@@ -26,6 +30,7 @@ export interface UserResponseDto {
   lastName: string;
   phone?: string;
   isActive: boolean;
+  status: UserStatus;
   tenantId?: string;
   companyId?: string;
   branchId?: string;

@@ -1,112 +1,156 @@
-# New Nx Repository
+# ERP Financial Platform
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Enterprise Resource Planning (ERP) financial platform built as an Nx monorepo with NestJS microservices, Vue.js frontend, and PostgreSQL.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Tech Stack
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- **Monorepo:** [Nx](https://nx.dev) 22.7.5 with npm workspaces
+- **Backend:** NestJS 11, TypeORM, PostgreSQL, Redis, BullMQ
+- **Frontend:** Vue.js 3, Vite, TailwindCSS, Pinia
+- **Observability:** OpenTelemetry, Prometheus
+- **Testing:** Jest 30, `@swc/jest`
+- **Build:** Webpack (services), Vite (frontend)
 
-<!-- BEGIN: nx-cloud -->
-
-## Try the full Nx platform
-
-🚀 If you haven't connected to Nx Cloud yet, [complete your setup here](https://cloud.nx.app/setup/connect-workspace/guide). Get faster builds with remote caching, distributed task execution, and self-healing CI. [See how your workspace can benefit](#nx-cloud).
-
-<!-- END: nx-cloud -->
-
-## Generate a library
-
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
-```
-
-## Run tasks
-
-To build the library use:
-
-```sh
-npx nx build pkg1
-```
-
-To run any task with Nx use:
-
-```sh
-npx nx <target> <project-name>
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Versioning and releasing
-
-To version and release the library use
+## Project Structure
 
 ```
-npx nx release
+apps/                         # Microservices & applications
+├── api-gateway/              # API Gateway (entry point, routing)
+├── auth-service/             # Authentication (login, MFA, tokens)
+├── identity-service/         # Identity (users, roles, permissions)
+├── workflow-service/         # Workflow engine (Maker → Checker → Authorizer)
+├── payment-service/          # Payment request lifecycle
+├── settlement-service/       # Settlement batches & scheduling
+├── reconciliation-service/  # Bank reconciliation & matching
+├── advance-service/          # Salary advance requests
+├── audit-log-service/        # Centralized audit logging
+├── report-service/           # Cross-domain reporting
+├── scheduler-service/        # Cron jobs & recurring tasks
+├── notification-service/    # Email, SMS, push notifications
+├── notification-worker/      # BullMQ: notification processing
+├── payment-worker/           # BullMQ: payment execution
+├── settlement-worker/        # BullMQ: settlement processing
+└── erp-frontend/             # Vue.js admin dashboard
+
+libs/                         # Shared libraries
+├── auth/                     # JWT strategy, guards, decorators
+├── cache/                    # Redis config & cache service
+├── common/                   # Base entity, pagination, exceptions
+├── constants/                # Platform constants & queue names
+├── database/                 # TypeORM config & migrations
+├── enums/                    # All platform enums
+├── event-bus/                # Domain events & outbox pattern
+├── mail/                     # Mail service & queue processors
+├── security/                 # Security utilities
+├── telemetry/                # OpenTelemetry setup
+├── audit-core/               # Audit log domain types
+├── identity-core/            # Identity domain (users, roles)
+├── payment-core/             # Payment domain types & adapters
+├── settlement-core/          # Settlement calculation engine
+├── advance-core/             # Advance eligibility & recovery
+├── reconciliation-core/      # Match algorithms
+├── workflow-core/            # State machine & stage definitions
+├── notification-core/       # Notification templates
+├── multi-tenancy/            # Tenant isolation helpers
+└── ...
 ```
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+## Quick Start
 
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Prerequisites
 
-## Keep TypeScript project references up to date
+- Node.js 20+
+- Docker & Docker Compose
 
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
+### Install dependencies
 
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
+```bash
+npm install
+```
 
-```sh
+### Start infrastructure
+
+```bash
+npm run dev:infra   # postgres + redis
+```
+
+### Run all core services
+
+```bash
+npm run dev:core    # gateway, identity, auth, payment, settlement, audit
+```
+
+### Run individual services
+
+```bash
+npx nx serve <service-name>
+# e.g. npx nx serve payment-service
+```
+
+### Run the frontend
+
+```bash
+npx nx serve erp-frontend
+```
+
+## Available Scripts
+
+| Script                | Description                                      |
+| --------------------- | ------------------------------------------------ |
+| `npm run dev`         | Gateway + identity + auth + payment + settlement |
+| `npm run dev:all`     | All services + workers                           |
+| `npm run dev:core`    | Core services only                               |
+| `npm run dev:workers` | BullMQ workers only                              |
+| `npm run dev:infra`   | Docker compose up postgres + redis               |
+| `npm run build`       | Build all projects                               |
+| `npm run test`        | Test all projects                                |
+| `npm run lint`        | Lint all projects                                |
+| `npm run typecheck`   | TypeScript type-check                            |
+
+## Nx Commands
+
+```bash
+# List all projects
+npx nx show projects
+
+# Build a specific project
+npx nx build payment-service
+
+# Test a specific project
+npx nx test mail
+
+# Run lint on everything
+npx nx run-many -t lint --all
+
+# Check affected projects
+npx nx affected -t build
+
+# View project graph
+npx nx graph
+
+# Sync TypeScript project references
 npx nx sync
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+## Architecture
 
-```sh
-npx nx sync:check
-```
+- **Event-Driven:** Cross-domain communication via `DomainEvent` + outbox pattern
+- **Workflow Engine:** Every financial mutation goes through Maker → Checker → Authorizer
+- **Multi-Tenant:** All entities carry `tenantId`, `companyId`, `branchId`
+- **Financial Integrity:** Double-entry accounting, idempotency keys, soft deletes only
+- **Queue Processing:** BullMQ workers for async payment, settlement, and notification jobs
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+## Documentation
 
-## Nx Cloud
+- [Unit Testing Guide](docs/unit-testing.md) — test setup, patterns, and coverage status
+- [Architecture & Standards](SKILL.md) — full platform architecture, DDD, CQRS, event design
 
-Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+## Contributing
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- Every `libs/*` project must have unit tests. See [docs/unit-testing.md](docs/unit-testing.md).
+- Follow the [Nx conventions](https://nx.dev) for generators and task running.
+- Never bypass the workflow engine for financial mutations.
 
-### Set up CI (non-Github Actions CI)
+---
 
-**Note:** This is only required if your CI provider is not GitHub Actions.
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+_This project uses [Nx](https://nx.dev) for monorepo management._

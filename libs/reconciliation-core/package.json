@@ -13,7 +13,10 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "reconciliation-core"
+    "name": "reconciliation-core",
+    "tags": [
+      "type:lib"
+    ]
   },
   "dependencies": {}
 }

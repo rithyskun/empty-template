@@ -13,7 +13,10 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "advance-core"
+    "name": "advance-core",
+    "tags": [
+      "type:lib"
+    ]
   },
   "dependencies": {
     "@erp/common": "*",

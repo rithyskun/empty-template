@@ -7,6 +7,7 @@ import { UserRole } from '../entities/user-role.entity';
 import { Role } from '../entities/role.entity';
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '../dto/user.dto';
 import { DomainException } from '@erp/common';
+import { UserStatus } from '@erp/enums';
 
 @Injectable()
 export class UserService {
@@ -57,6 +58,7 @@ export class UserService {
       companyId: dto.companyId,
       branchId: dto.branchId,
       isActive: dto.isActive ?? true,
+      status: dto.status ?? UserStatus.ACTIVE,
     });
 
     const saved = await this.userRepo.save(user);
@@ -128,6 +130,7 @@ export class UserService {
       lastName: user.lastName,
       phone: user.phone,
       isActive: user.isActive,
+      status: user.status,
       tenantId: user.tenantId,
       companyId: user.companyId,
       branchId: user.branchId,
@@ -140,5 +143,37 @@ export class UserService {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
+  }
+
+  async approveUser(id: string, approvedBy?: string): Promise<UserResponseDto> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new DomainException('User not found', 'USER_NOT_FOUND');
+    if (user.status !== UserStatus.PENDING) {
+      throw new DomainException(
+        'Only pending users can be approved',
+        'INVALID_STATUS',
+      );
+    }
+    user.status = UserStatus.ACTIVE;
+    user.isActive = true;
+    if (approvedBy) user.updatedBy = approvedBy;
+    const saved = await this.userRepo.save(user);
+    return this.toResponse(saved);
+  }
+
+  async rejectUser(id: string, rejectedBy?: string): Promise<UserResponseDto> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new DomainException('User not found', 'USER_NOT_FOUND');
+    if (user.status !== UserStatus.PENDING) {
+      throw new DomainException(
+        'Only pending users can be rejected',
+        'INVALID_STATUS',
+      );
+    }
+    user.status = UserStatus.REJECTED;
+    user.isActive = false;
+    if (rejectedBy) user.updatedBy = rejectedBy;
+    const saved = await this.userRepo.save(user);
+    return this.toResponse(saved);
   }
 }

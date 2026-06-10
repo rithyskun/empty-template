@@ -2,6 +2,7 @@ export interface LoginDto {
   email: string;
   password: string;
   provider?: 'local' | 'ldap';
+  payload?: string; // RSA-encrypted JSON blob containing all fields
 }
 
 export interface RegisterDto {

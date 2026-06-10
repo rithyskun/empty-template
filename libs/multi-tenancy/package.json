@@ -13,7 +13,11 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "multi-tenancy"
+    "name": "multi-tenancy",
+    "tags": [
+      "type:lib",
+      "scope:shared"
+    ]
   },
   "dependencies": {}
 }

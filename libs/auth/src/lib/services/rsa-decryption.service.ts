@@ -67,18 +67,30 @@ export class RsaDecryptionService implements OnModuleInit {
   }
 
   /**
-   * Decrypts a base64-encoded encrypted string using the RSA private key
+   * Decrypts a base64-encoded encrypted string using the RSA private key.
+   * Supports JSON-wrapped payload: {"p": "<encrypted>", "k": "<keyId>"}
    */
   decrypt(encryptedData: string): string {
     if (!this.enabled) {
       return encryptedData;
     }
 
+    let payload = encryptedData;
+    try {
+      const parsed = JSON.parse(encryptedData);
+      if (parsed && typeof parsed.p === 'string') {
+        payload = parsed.p;
+        this.logger.debug(`Using key identifier: ${parsed.k || 'default'}`);
+      }
+    } catch {
+      // Not JSON-wrapped, treat as raw encrypted string
+    }
+
     try {
       this.logger.debug(
         'Attempting RSA private-key decryption of login payload',
       );
-      const buffer = Buffer.from(encryptedData, 'base64');
+      const buffer = Buffer.from(payload, 'base64');
       const decrypted = crypto.privateDecrypt(
         {
           key: this.privateKey,

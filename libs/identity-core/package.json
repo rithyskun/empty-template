@@ -13,7 +13,10 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "identity-core"
+    "name": "identity-core",
+    "tags": [
+      "type:lib"
+    ]
   },
   "dependencies": {}
 }

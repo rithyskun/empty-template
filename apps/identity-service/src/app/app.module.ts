@@ -6,10 +6,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersController } from './users/users.controller';
 import { RolesController } from './roles/roles.controller';
+import { PermissionsController } from './permissions/permissions.controller';
 
 @Module({
   imports: [DatabaseModule.forRoot(), SecurityModule, IdentityCoreModule],
-  controllers: [AppController, UsersController, RolesController],
+  controllers: [
+    AppController,
+    UsersController,
+    RolesController,
+    PermissionsController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}

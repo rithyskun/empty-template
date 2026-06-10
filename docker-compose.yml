@@ -90,16 +90,15 @@ services:
       args:
         APP: api-gateway
     ports:
-      - '3000:3000'
+      - '8000:8000'
     environment:
       NODE_ENV: development
-      API_GATEWAY_PORT: 3000
-      AUTH_SERVICE_URL: http://auth-service:3001
-      IDENTITY_SERVICE_URL: http://identity-service:3002
-      PAYMENT_SERVICE_URL: http://payment-service:3005
-      SETTLEMENT_SERVICE_URL: http://settlement-service:3006
-      ACCOUNTING_SERVICE_URL: http://accounting-service:3007
-      AUDIT_SERVICE_URL: http://audit-log-service:3021
+      API_GATEWAY_PORT: 8000
+      AUTH_SERVICE_URL: http://auth-service:8001
+      IDENTITY_SERVICE_URL: http://identity-service:8002
+      PAYMENT_SERVICE_URL: http://payment-service:8005
+      SETTLEMENT_SERVICE_URL: http://settlement-service:8006
+      AUDIT_SERVICE_URL: http://audit-log-service:8021
       REDIS_HOST: redis
       JWT_SECRET: local-dev-secret
     depends_on:
@@ -161,15 +160,6 @@ services:
       args:
         APP: settlement-service
 
-  accounting-service:
-    <<: *service-defaults
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: runner
-      args:
-        APP: accounting-service
-
   reconciliation-service:
     <<: *service-defaults
     build:
@@ -179,15 +169,6 @@ services:
       args:
         APP: reconciliation-service
 
-  payroll-service:
-    <<: *service-defaults
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: runner
-      args:
-        APP: payroll-service
-
   advance-service:
     <<: *service-defaults
     build:
@@ -196,60 +177,6 @@ services:
       target: runner
       args:
         APP: advance-service
-
-  loan-service:
-    <<: *service-defaults
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: runner
-      args:
-        APP: loan-service
-
-  inventory-service:
-    <<: *service-defaults
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: runner
-      args:
-        APP: inventory-service
-
-  purchase-service:
-    <<: *service-defaults
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: runner
-      args:
-        APP: purchase-service
-
-  sales-service:
-    <<: *service-defaults
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: runner
-      args:
-        APP: sales-service
-
-  pos-service:
-    <<: *service-defaults
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: runner
-      args:
-        APP: pos-service
-
-  treasury-service:
-    <<: *service-defaults
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: runner
-      args:
-        APP: treasury-service
 
   notification-service:
     <<: *service-defaults
@@ -320,15 +247,6 @@ services:
       target: runner
       args:
         APP: settlement-worker
-
-  accounting-worker:
-    <<: *worker-defaults
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: runner
-      args:
-        APP: accounting-worker
 
   notification-worker:
     <<: *worker-defaults

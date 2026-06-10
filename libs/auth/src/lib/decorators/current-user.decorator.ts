@@ -5,6 +5,7 @@ export interface UserPayload {
   tenantId: string;
   companyId: string;
   roles: string[];
+  permissions?: string[];
   email?: string;
 }
 

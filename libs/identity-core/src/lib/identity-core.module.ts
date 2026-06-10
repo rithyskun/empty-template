@@ -7,8 +7,11 @@ import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
 import { Permission } from './entities/permission.entity';
 import { UserRole } from './entities/user-role.entity';
+import { ActiveDirectoryUser } from './entities/active-directory-user.entity';
 import { UserService } from './services/user.service';
 import { RoleService } from './services/role.service';
+import { PermissionService } from './services/permission.service';
+import { ActiveDirectoryUserService } from './services/active-directory-user.service';
 import { MailModule } from '@erp/mail';
 
 @Global()
@@ -22,10 +25,23 @@ import { MailModule } from '@erp/mail';
       Role,
       Permission,
       UserRole,
+      ActiveDirectoryUser,
     ]),
     MailModule,
   ],
-  providers: [UserService, RoleService],
-  exports: [UserService, RoleService, MailModule, TypeOrmModule],
+  providers: [
+    UserService,
+    RoleService,
+    PermissionService,
+    ActiveDirectoryUserService,
+  ],
+  exports: [
+    UserService,
+    RoleService,
+    PermissionService,
+    ActiveDirectoryUserService,
+    MailModule,
+    TypeOrmModule,
+  ],
 })
 export class IdentityCoreModule {}

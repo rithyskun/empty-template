@@ -13,7 +13,11 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "database"
+    "name": "database",
+    "tags": [
+      "type:lib",
+      "scope:shared"
+    ]
   },
   "dependencies": {}
 }

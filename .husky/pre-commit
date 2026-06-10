@@ -1,11 +1,13 @@
 echo "🛡️ Running pre-commit quality gates..."
 
-# 1. Format check
-echo "✨ Checking code formatting..."
-npm run format:check || {
-  echo "❌ Formatting check failed! Please run 'npm run format' to auto-format your files before committing."
+# 1. Auto-format staged files
+echo "✨ Auto-formatting code..."
+npm run format || {
+  echo "❌ Formatting failed!"
   exit 1
 }
+# Re-stage any files that were modified by the formatter so they are included in the commit
+git add -A
 
 # 2. TypeScript compilation check
 echo "⚙️ Checking TypeScript compilation..."

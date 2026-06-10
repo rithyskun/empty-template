@@ -1,5 +1,6 @@
 import { Entity, Column } from 'typeorm';
 import { AuditableEntity } from '@erp/common';
+import { UserStatus } from '@erp/enums';
 
 @Entity('users')
 export class User extends AuditableEntity {
@@ -20,6 +21,13 @@ export class User extends AuditableEntity {
 
   @Column({ name: 'is_active', default: true })
   isActive!: boolean;
+
+  @Column({
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.ACTIVE,
+  })
+  status!: UserStatus;
 
   @Column({ name: 'must_change_pwd', default: false })
   mustChangePwd!: boolean;

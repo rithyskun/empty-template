@@ -1,12 +1,18 @@
-import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  Logger,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import Redis from 'ioredis';
 
-interface RateLimitEntry {
-  count: number;
-  resetAt: number;
+interface RateLimitConfig {
+  windowMs: number;
+  max: number;
 }
 
-const RATE_LIMITS: Record<string, { windowMs: number; max: number }> = {
+const RATE_LIMITS: Record<string, RateLimitConfig> = {
   auth: { windowMs: 60_000, max: 10 },
   read: { windowMs: 60_000, max: 300 },
   write: { windowMs: 60_000, max: 60 },
@@ -15,33 +21,40 @@ const RATE_LIMITS: Record<string, { windowMs: number; max: number }> = {
 };
 
 @Injectable()
-export class RateLimitMiddleware implements NestMiddleware {
+export class RateLimitMiddleware implements NestMiddleware, OnModuleDestroy {
   private readonly logger = new Logger(RateLimitMiddleware.name);
-  private store = new Map<string, RateLimitEntry>();
+  private readonly redis: Redis;
 
-  use(req: Request, res: Response, next: NextFunction): void {
-    const key = req.ip || 'unknown';
-    const tier = this.resolveTier(req.path, req.method);
+  constructor() {
+    this.redis = new Redis({
+      host: process.env.REDIS_HOST || 'localhost',
+      port: Number(process.env.REDIS_PORT) || 6379,
+      db: 1, // use separate db for rate limits
+    });
+  }
+
+  async use(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const path = req.originalUrl || req.path;
+    const tier = this.resolveTier(path, req.method);
     const config = RATE_LIMITS[tier];
 
-    const now = Date.now();
-    let entry = this.store.get(key);
+    const identifier = this.resolveIdentifier(req);
+    const key = `ratelimit:${tier}:${identifier}`;
 
-    if (!entry || now > entry.resetAt) {
-      entry = { count: 0, resetAt: now + config.windowMs };
-      this.store.set(key, entry);
+    const count = await this.redis.incr(key);
+    if (count === 1) {
+      await this.redis.pexpire(key, config.windowMs);
     }
 
-    entry.count++;
-    res.setHeader('X-RateLimit-Limit', config.max);
-    res.setHeader(
-      'X-RateLimit-Remaining',
-      Math.max(0, config.max - entry.count),
-    );
-    res.setHeader('X-RateLimit-Reset', Math.ceil(entry.resetAt / 1000));
+    const ttl = await this.redis.pttl(key);
+    const resetAt = Date.now() + Math.max(0, ttl);
 
-    if (entry.count > config.max) {
-      this.logger.warn(`Rate limit exceeded for ${key} on ${req.path}`);
+    res.setHeader('X-RateLimit-Limit', config.max);
+    res.setHeader('X-RateLimit-Remaining', Math.max(0, config.max - count));
+    res.setHeader('X-RateLimit-Reset', Math.ceil(resetAt / 1000));
+
+    if (count > config.max) {
+      this.logger.warn(`Rate limit exceeded for ${identifier} on ${req.path}`);
       res.status(429).json({ success: false, message: 'Too many requests' });
       return;
     }
@@ -49,10 +62,21 @@ export class RateLimitMiddleware implements NestMiddleware {
     next();
   }
 
+  onModuleDestroy(): void {
+    this.redis.disconnect();
+  }
+
   private resolveTier(path: string, method: string): string {
     if (path.startsWith('/api/v1/auth')) return 'auth';
     if (path.startsWith('/api/v1/payments')) return 'payment';
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) return 'write';
     return 'read';
+  }
+
+  private resolveIdentifier(req: Request): string {
+    const userId = (req as Request & { user?: { userId?: string } }).user
+      ?.userId;
+    if (userId) return `user:${userId}`;
+    return `ip:${req.ip || 'unknown'}`;
   }
 }

@@ -9,6 +9,7 @@ export class AuthService {
     userId: string;
     tenantId: string;
     roles: string[];
+    permissions?: string[];
   }): Promise<string> {
     return this.jwtService.signAsync(payload);
   }
@@ -17,6 +18,7 @@ export class AuthService {
     userId: string;
     tenantId: string;
     roles: string[];
+    permissions?: string[];
   }): Promise<string> {
     const expiresInMs = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
     const numeric = parseInt(expiresInMs, 10);
@@ -28,9 +30,12 @@ export class AuthService {
     });
   }
 
-  async verifyRefreshToken(
-    token: string,
-  ): Promise<{ userId: string; tenantId: string; roles: string[] }> {
+  async verifyRefreshToken(token: string): Promise<{
+    userId: string;
+    tenantId: string;
+    roles: string[];
+    permissions?: string[];
+  }> {
     return this.jwtService.verifyAsync(token, {
       secret: process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
     });

@@ -6,6 +6,26 @@ export interface LdapUserResult {
   firstName: string;
   lastName: string;
   groups: string[];
+  /** AD object identifier (SID or objectGUID) */
+  adObjectId?: string;
+  /** LDAP distinguished name (e.g., CN=John,OU=Users,DC=erp,DC=local) */
+  distinguishedName?: string;
+  /** sAMAccountName from AD */
+  sAMAccountName?: string;
+  /** AD domain (e.g., erp.local) */
+  domain?: string;
+  /** Raw AD entry attributes */
+  adAttributes?: Record<string, unknown>;
+}
+
+interface MockLdapUser {
+  password: string;
+  dn: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  sAMAccountName: string;
+  groups?: string[];
 }
 
 @Injectable()
@@ -17,6 +37,7 @@ export class LdapService {
   private readonly searchBase: string;
   private readonly bindDn: string;
   private readonly groupMapping: Record<string, string[]>;
+  private readonly mockUsers: Record<string, MockLdapUser>;
 
   constructor() {
     this.enabled = process.env.LDAP_ENABLED === 'true';
@@ -29,12 +50,30 @@ export class LdapService {
       this.groupMapping = JSON.parse(
         process.env.LDAP_GROUP_TO_ROLE_MAPPING || '{}',
       );
-    } catch (e) {
+    } catch {
       this.logger.error(
         'Failed to parse LDAP_GROUP_TO_ROLE_MAPPING JSON, defaulting to empty mapping',
       );
       this.groupMapping = {};
     }
+
+    // Parse mock LDAP users for local dev (bypasses real LDAP server)
+    try {
+      this.mockUsers = JSON.parse(process.env.LDAP_MOCK_USERS || '{}');
+    } catch {
+      this.logger.error(
+        'Failed to parse LDAP_MOCK_USERS JSON, defaulting to empty',
+      );
+      this.mockUsers = {};
+    }
+  }
+
+  private extractDomain(dn: string): string {
+    const dcMatch = dn.match(/DC=([^,]+)/gi);
+    if (dcMatch && dcMatch.length > 0) {
+      return dcMatch.map((m) => m.replace('DC=', '')).join('.');
+    }
+    return process.env.LDAP_DOMAIN || 'erp.local';
   }
 
   /**
@@ -48,6 +87,11 @@ export class LdapService {
     if (!this.enabled) {
       // Offline/local AD Simulation for testing
       return this.simulateLdapAuth(username, password);
+    }
+
+    // If mock users are configured, bypass real LDAP server (useful for local dev)
+    if (Object.keys(this.mockUsers).length > 0) {
+      return this.mockLdapAuth(username, password);
     }
 
     this.logger.log(
@@ -108,22 +152,38 @@ export class LdapService {
         this.logger.warn(
           `LDAP credential verification failed for user: ${username} - ${(bindErr as Error).message}`,
         );
-        await userClient.unbind();
-        await client.unbind();
+        try {
+          await userClient.unbind();
+        } catch {
+          /* ignore */
+        }
+        try {
+          await client.unbind();
+        } catch {
+          /* ignore */
+        }
         return null;
       }
 
       // 4. Resolve Groups (via 'memberOf' property or direct group search)
       let groups: string[] = [];
       if (Array.isArray(userEntry.memberOf)) {
-        groups = userEntry.memberOf.map((g: any) => String(g));
+        groups = userEntry.memberOf.map((g: unknown) => String(g));
       } else if (userEntry.memberOf) {
         groups = [String(userEntry.memberOf)];
       }
 
       // 5. Clean up connections
-      await userClient.unbind();
-      await client.unbind();
+      try {
+        await userClient.unbind();
+      } catch {
+        /* ignore */
+      }
+      try {
+        await client.unbind();
+      } catch {
+        /* ignore */
+      }
 
       return {
         username: String(userEntry.sAMAccountName || username),
@@ -131,6 +191,15 @@ export class LdapService {
         firstName: String(userEntry.givenName || username),
         lastName: String(userEntry.sn || 'LDAP-User'),
         groups,
+        adObjectId: userEntry.objectGUID || userEntry.objectSid || undefined,
+        distinguishedName: userDn,
+        sAMAccountName: String(userEntry.sAMAccountName || username),
+        domain: this.extractDomain(userDn),
+        adAttributes: Object.fromEntries(
+          Object.entries(userEntry).filter(
+            ([k]) => !['userPassword', 'unicodePwd'].includes(k),
+          ),
+        ),
       };
     } catch (err) {
       this.logger.error(
@@ -159,6 +228,42 @@ export class LdapService {
     }
 
     return Array.from(roles);
+  }
+
+  /**
+   * Authenticates against the in-memory mock user list (LDAP_MOCK_USERS env).
+   * This bypasses the real LDAP server for local development.
+   */
+  private mockLdapAuth(
+    username: string,
+    password: string,
+  ): LdapUserResult | null {
+    this.logger.log(
+      `LDAP_MOCK_USERS is set. Authenticating ${username} against mock user list.`,
+    );
+
+    const mockUser = this.mockUsers[username];
+    if (!mockUser) {
+      this.logger.warn(`Mock LDAP user not found: ${username}`);
+      return null;
+    }
+
+    if (mockUser.password !== password) {
+      this.logger.warn(`Mock LDAP password mismatch for: ${username}`);
+      return null;
+    }
+
+    this.logger.log(`Mock LDAP authentication succeeded for: ${username}`);
+    return {
+      username: mockUser.sAMAccountName || username,
+      email: mockUser.email || `${username}@erp.local`,
+      firstName: mockUser.firstName || username,
+      lastName: mockUser.lastName || 'LDAP-User',
+      groups: mockUser.groups || [],
+      distinguishedName: mockUser.dn,
+      sAMAccountName: mockUser.sAMAccountName || username,
+      domain: this.extractDomain(mockUser.dn),
+    };
   }
 
   /**

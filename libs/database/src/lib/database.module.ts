@@ -1,5 +1,6 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { loadDatabaseConfig, buildTypeOrmOptions } from './database-config';
 
 @Module({})
 export class DatabaseModule {
@@ -8,18 +9,40 @@ export class DatabaseModule {
       module: DatabaseModule,
       imports: [
         TypeOrmModule.forRootAsync({
-          useFactory: (): Record<string, unknown> => ({
-            type: 'postgres',
-            host: process.env.DB_HOST || 'localhost',
-            port: Number(process.env.DB_PORT) || 5432,
-            username: process.env.DB_USERNAME || 'postgres',
-            password: process.env.DB_PASSWORD || 'postgres',
-            database: process.env.DB_DATABASE || 'erp_financial',
-            autoLoadEntities: true,
-            synchronize: process.env.NODE_ENV !== 'production',
-            logging: process.env.NODE_ENV !== 'production',
-            ...options,
-          }),
+          useFactory: (): TypeOrmModuleOptions => {
+            const config = loadDatabaseConfig();
+            const typeOrmOptions = buildTypeOrmOptions(config);
+            return { ...typeOrmOptions, ...options } as TypeOrmModuleOptions;
+          },
+        }),
+      ],
+    };
+  }
+
+  /**
+   * Creates a TypeORM connection for an external database (e.g., reporting,
+   * legacy integration). The caller provides a unique connection name.
+   */
+  static forExternal(
+    name: string,
+    overrides?: Partial<TypeOrmModuleOptions>,
+  ): DynamicModule {
+    return {
+      module: DatabaseModule,
+      imports: [
+        TypeOrmModule.forRootAsync({
+          name,
+          useFactory: (): TypeOrmModuleOptions => {
+            const config = loadDatabaseConfig();
+            const typeOrmOptions = buildTypeOrmOptions(config);
+            return {
+              ...typeOrmOptions,
+              name,
+              autoLoadEntities: false, // external DBs must provide entities explicitly
+              synchronize: false, // never auto-sync external DBs
+              ...overrides,
+            } as TypeOrmModuleOptions;
+          },
         }),
       ],
     };

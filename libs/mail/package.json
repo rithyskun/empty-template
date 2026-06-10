@@ -13,7 +13,11 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "mail"
+    "name": "mail",
+    "tags": [
+      "type:lib",
+      "scope:shared"
+    ]
   },
   "dependencies": {}
 }

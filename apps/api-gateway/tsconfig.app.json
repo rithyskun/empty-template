@@ -17,6 +17,9 @@
   "exclude": [],
   "references": [
     {
+      "path": "../../libs/constants/tsconfig.lib.json"
+    },
+    {
       "path": "../../libs/auth/tsconfig.lib.json"
     }
   ]

@@ -70,4 +70,18 @@ export class UsersController {
     await this.userService.delete(id, user.userId);
     return { data: { id }, message: 'User deleted' };
   }
+
+  @Post(':id/approve')
+  @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  async approve(@Param('id') id: string, @CurrentUser() user: UserPayload) {
+    const result = await this.userService.approveUser(id, user.userId);
+    return { data: result, message: 'User approved successfully' };
+  }
+
+  @Post(':id/reject')
+  @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  async reject(@Param('id') id: string, @CurrentUser() user: UserPayload) {
+    const result = await this.userService.rejectUser(id, user.userId);
+    return { data: result, message: 'User rejected successfully' };
+  }
 }

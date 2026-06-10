@@ -5,8 +5,7 @@
   "nx": {
     "name": "audit-log-service",
     "tags": [
-      "type:app",
-      "scope:audit"
+      "type:app"
     ],
     "implicitDependencies": [
       "audit-core",

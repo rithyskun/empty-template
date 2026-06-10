@@ -15,8 +15,7 @@
   "nx": {
     "name": "audit-core",
     "tags": [
-      "type:core",
-      "scope:audit"
+      "type:lib"
     ],
     "implicitDependencies": [
       "common",

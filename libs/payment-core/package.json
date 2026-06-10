@@ -13,7 +13,10 @@
     "./package.json": "./package.json"
   },
   "nx": {
-    "name": "payment-core"
+    "name": "payment-core",
+    "tags": [
+      "type:lib"
+    ]
   },
   "dependencies": {
     "@erp/common": "*",

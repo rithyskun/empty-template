@@ -25,7 +25,10 @@ import {
   User,
   UserService,
   RoleService,
+  PermissionService,
+  ActiveDirectoryUserService,
 } from '@erp/identity-core';
+import { UserStatus } from '@erp/enums';
 import { MailService, MailQueueService } from '@erp/mail';
 import type {
   LoginDto,
@@ -39,6 +42,8 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly roleService: RoleService,
+    private readonly permissionService: PermissionService,
+    private readonly adUserService: ActiveDirectoryUserService,
     private readonly ldapService: LdapService,
     private readonly rsaService: RsaDecryptionService,
     private readonly totpService: TotpService,
@@ -71,9 +76,27 @@ export class AuthController {
     let user;
     let roles: string[] = [];
 
+    let payloadDecrypted = false;
+
+    // If payload is present, decrypt the full JSON blob and extract fields
+    if (dto.payload && this.rsaService.isEnabled()) {
+      try {
+        const decrypted = this.rsaService.decrypt(dto.payload);
+        const parsed = JSON.parse(decrypted);
+        dto = { ...dto, ...parsed };
+        payloadDecrypted = true;
+      } catch {
+        return {
+          statusCode: 400,
+          message: 'Invalid encrypted credentials payload',
+        };
+      }
+    }
+
     // Decrypt the password using RSA Private Key if enabled
+    // Skip when payload mode was used — the password inside the payload JSON is already plaintext
     let decryptedPassword = dto.password;
-    if (this.rsaService.isEnabled()) {
+    if (this.rsaService.isEnabled() && !payloadDecrypted) {
       try {
         decryptedPassword = this.rsaService.decrypt(dto.password);
       } catch {
@@ -108,7 +131,8 @@ export class AuthController {
           firstName: ldapUser.firstName,
           lastName: ldapUser.lastName,
           tenantId,
-          isActive: true,
+          isActive: false,
+          status: UserStatus.PENDING,
         });
         user = await this.userService.findById(newUserResponse.id);
       }
@@ -139,6 +163,18 @@ export class AuthController {
           (r) => r.code,
         );
       }
+
+      // Record AD first-seen / sync data
+      if (user && ldapUser.distinguishedName) {
+        await this.adUserService.recordFirstSeen({
+          userId: user.id,
+          adObjectId: ldapUser.adObjectId,
+          dn: ldapUser.distinguishedName,
+          sAMAccountName: ldapUser.sAMAccountName || ldapUser.username,
+          domain: ldapUser.domain || 'erp.local',
+          adAttributes: ldapUser.adAttributes,
+        });
+      }
     } else {
       // Local authentication flow
       user = await this.userService.findByEmail(dto.email);
@@ -153,6 +189,26 @@ export class AuthController {
     }
 
     if (!user) return { statusCode: 401, message: 'Authentication failed' };
+
+    if (user.status === UserStatus.PENDING) {
+      return {
+        statusCode: 403,
+        message:
+          'Your account is pending approval. Please contact an administrator.',
+      };
+    }
+
+    if (user.status === UserStatus.REJECTED) {
+      return {
+        statusCode: 403,
+        message:
+          'Your account has been rejected. Please contact an administrator.',
+      };
+    }
+
+    const permissions = await this.permissionService.getUserPermissions(
+      user.id,
+    );
 
     // Two-Factor Authentication Check
     if (user.isTwoFactorEnabled) {
@@ -195,7 +251,12 @@ export class AuthController {
       };
     }
 
-    const payload = { userId: user.id, tenantId: user.tenantId || '', roles };
+    const payload = {
+      userId: user.id,
+      tenantId: user.tenantId || '',
+      roles,
+      permissions,
+    };
     const accessToken = await this.authService.generateToken(payload);
     const refreshToken = await this.authService.generateRefreshToken(payload);
 
@@ -209,6 +270,7 @@ export class AuthController {
         firstName: user.firstName,
         lastName: user.lastName,
         roles,
+        permissions,
         tenantId: user.tenantId,
         companyId: user.companyId,
         branchId: user.branchId,
@@ -234,10 +296,14 @@ export class AuthController {
       const roles = await this.roleService
         .getUserRoles(payload.userId)
         .then((r) => r.map((r) => r.code));
+      const permissions = await this.permissionService.getUserPermissions(
+        payload.userId,
+      );
       const newPayload = {
         userId: payload.userId,
         tenantId: payload.tenantId || '',
         roles,
+        permissions,
       };
       const accessToken = await this.authService.generateToken(newPayload);
       const refreshToken =
@@ -350,10 +416,14 @@ export class AuthController {
         throw new UnauthorizedException('Failed to provision SSO user');
       }
 
+      const permissions = await this.permissionService.getUserPermissions(
+        user.id,
+      );
       const payload = {
         userId: user.id,
         tenantId: user.tenantId || '',
         roles,
+        permissions,
       };
       const accessToken = await this.authService.generateToken(payload);
       const refreshToken = await this.authService.generateRefreshToken(payload);
@@ -368,6 +438,7 @@ export class AuthController {
           firstName: user.firstName,
           lastName: user.lastName,
           roles,
+          permissions,
           tenantId: user.tenantId,
         },
       };
@@ -521,10 +592,14 @@ export class AuthController {
       const roles = (await this.roleService.getUserRoles(user.id)).map(
         (r) => r.code,
       );
+      const permissions = await this.permissionService.getUserPermissions(
+        user.id,
+      );
       const tokenPayload = {
         userId: user.id,
         tenantId: user.tenantId || '',
         roles,
+        permissions,
       };
 
       const accessToken = await this.authService.generateToken(tokenPayload);
@@ -541,6 +616,7 @@ export class AuthController {
           firstName: user.firstName,
           lastName: user.lastName,
           roles,
+          permissions,
           tenantId: user.tenantId,
           companyId: user.companyId,
           branchId: user.branchId,
