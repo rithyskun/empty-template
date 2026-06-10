@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Keyboard } from 'lucide-vue-next';
+import { Keyboard, X } from 'lucide-vue-next';
 import VirtualKeyboard from './VirtualKeyboard.vue';
 
 interface Props {
@@ -141,19 +141,7 @@ const inputClasses = [
           class="text-gray-400 hover:text-gray-600 dark:hover:text-dark-text-secondary"
           @click="handleClear"
         >
-          <svg
-            class="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+          <X class="h-5 w-5" />
         </button>
 
         <button

@@ -22,6 +22,43 @@
 
 <!-- nx configuration end-->
 
+## Frontend Design Principles
+
+### Dark / Light Mode Support (Mandatory)
+
+**Every UI component, view, and page must support both dark and light mode.** There are no exceptions.
+
+**Rules:**
+
+- Always use `dark:` prefixed Tailwind classes alongside light-mode classes
+- Never hardcode colors that only work in one mode (e.g., `text-gray-900` without `dark:text-dark-text`)
+- Always test visually in both modes before considering UI work complete
+- Use the custom dark palette tokens (e.g., `dark:bg-dark-bg-secondary`, `dark:text-dark-text-secondary`) — never arbitrary dark colors
+
+**Minimal example:**
+
+```vue
+<div
+  class="bg-white dark:bg-dark-bg-secondary text-gray-900 dark:text-dark-text"
+>
+  <p class="text-gray-600 dark:text-dark-text-secondary">
+    This text adapts to both modes
+  </p>
+</div>
+```
+
+**Common patterns:**
+| Element | Light Mode | Dark Mode |
+| ------- | ---------- | --------- |
+| Card background | `bg-white` | `dark:bg-dark-bg-secondary` |
+| Page background | `bg-gray-50` | `dark:bg-dark-bg` |
+| Primary text | `text-gray-900` | `dark:text-dark-text` |
+| Secondary text | `text-gray-600` | `dark:text-dark-text-secondary` |
+| Border | `border-gray-200` | `dark:border-dark-border` |
+| Hover state | `hover:bg-gray-100` | `dark:hover:bg-dark-bg-hover` |
+
+**If a component does not have dark mode classes, it is a bug.** Fix it before submitting.
+
 ## Unit Testing
 
 - **Every `libs/*` project must have unit tests.** When you add or modify a
@@ -587,3 +624,145 @@ export const userRoutes: RouteRecordRaw[] = [
   { path: '/users', name: 'users', component: UsersView, meta: { requiresAuth: true } },
 ]
 ```
+
+## Frontend Layout System
+
+The `apps/erp-frontend` application uses a three-piece layout architecture:
+
+### Components
+
+| Component      | Path                                        | Responsibility                                                                       |
+| -------------- | ------------------------------------------- | ------------------------------------------------------------------------------------ |
+| **BaseLayout** | `features/layout/components/BaseLayout.vue` | Shell wrapper — positions header, sidebar, and main content area                     |
+| **AppHeader**  | `features/layout/components/AppHeader.vue`  | Fixed top bar — sidebar toggle, brand, theme switcher, language, user avatar, logout |
+| **AppSidebar** | `features/layout/components/AppSidebar.vue` | Fixed left sidebar — navigation sections with icons, last login info                 |
+
+### State Management
+
+`useLayout()` (`features/layout/composables/useLayout.ts`) manages sidebar state:
+
+- `sidebarMode`: `'expanded'` | `'collapsed'` | `'hidden'` — cycles on toggle
+- `sidebarWidth`: computed Tailwind classes — `w-64` (lg), `w-72` (xl), `w-80` (2xl/3xl), or `w-16` collapsed
+- `mobileSidebarOpen`: boolean — controls mobile overlay sidebar
+
+### Responsive Behavior
+
+**Mobile (< 1024px):**
+
+- Sidebar is hidden off-canvas (`-translate-x-full`)
+- Header spans full width (`left-0 right-0`)
+- Main content has no left margin (`ml-0`)
+- Hamburger button opens mobile sidebar overlay with backdrop
+
+**Desktop (≥ 1024px):**
+
+- Sidebar is always visible (`lg:translate-x-0`)
+- Header left position matches sidebar width (`lg:left-64`, etc.)
+- Main content left margin matches sidebar width (`lg:ml-64`, etc.)
+- Desktop toggle button cycles through expanded → collapsed → hidden
+
+### Content Area
+
+`BaseLayout` applies responsive top padding (`pt-14 sm:pt-16`) to clear the fixed header, and responsive content padding (`p-4 sm:p-6`) on the `<main>` element.
+
+## Responsive Breakpoints
+
+Custom Tailwind breakpoints defined in `tailwind.config.js`:
+
+| Breakpoint | Width  | Target Device                      |
+| ---------- | ------ | ---------------------------------- |
+| `sm`       | 640px  | Mobile landscape                   |
+| `md`       | 768px  | Tablets                            |
+| `lg`       | 1024px | Small laptops (sidebar breakpoint) |
+| `xl`       | 1280px | Desktops                           |
+| `2xl`      | 1440px | Large desktops                     |
+| `3xl`      | 1920px | Ultra-wide / 4K                    |
+
+**Usage rules:**
+
+- Use `lg:` as the primary breakpoint for layout changes (sidebar visibility, header positioning)
+- Use `sm:` for minor adjustments on small screens (padding, gaps, text size)
+- Use `xl:`, `2xl:`, `3xl:` for progressive enhancement on large monitors
+
+## Icon System
+
+All icons use **`lucide-vue-next`** (imported as Vue components).
+
+**Never use inline SVGs.** If you see an inline `<svg>` in a component, replace it with the appropriate Lucide icon.
+
+### Common Icons
+
+| Purpose          | Icon                             | Import            |
+| ---------------- | -------------------------------- | ----------------- |
+| Menu / hamburger | `Menu`                           | `lucide-vue-next` |
+| Close / dismiss  | `X`                              | `lucide-vue-next` |
+| Collapse sidebar | `ChevronLeft`                    | `lucide-vue-next` |
+| Expand sidebar   | `ChevronRight`                   | `lucide-vue-next` |
+| Loading spinner  | `Loader2` (with `animate-spin`)  | `lucide-vue-next` |
+| Error / alert    | `AlertCircle` or `AlertTriangle` | `lucide-vue-next` |
+| Password show    | `Eye`                            | `lucide-vue-next` |
+| Password hide    | `EyeOff`                         | `lucide-vue-next` |
+| Empty state      | `Inbox`                          | `lucide-vue-next` |
+| Theme light      | `Sun`                            | `lucide-vue-next` |
+| Theme dark       | `Moon`                           | `lucide-vue-next` |
+| Theme system     | `Monitor`                        | `lucide-vue-next` |
+| Logout           | `LogOut`                         | `lucide-vue-next` |
+| Clock / time     | `Clock`                          | `lucide-vue-next` |
+| Logo / brand     | `Zap`                            | `lucide-vue-next` |
+
+### Config Icons
+
+Menu configs (`menu.config.ts`, `sidebar.config.ts`, `features.config.ts`) use icon **components** (not SVG path strings):
+
+```typescript
+import { Home, Users, Shield, Key } from 'lucide-vue-next';
+
+export const menuItems = [
+  { label: 'Dashboard', path: '/dashboard', icon: Home },
+  { label: 'Users', path: '/users', icon: Users },
+];
+```
+
+The sidebar renders them dynamically via `<component :is="item.icon" />`.
+
+## Base UI Components
+
+Shared UI components live in `src/components/ui/`. All components support dark mode via Tailwind `dark:` classes and use the custom dark color palette.
+
+### Dark Mode Color Palette
+
+Defined in `tailwind.config.js` under `theme.extend.colors.dark`:
+
+| Token                 | Hex       | Usage                   |
+| --------------------- | --------- | ----------------------- |
+| `dark-bg`             | `#0f172a` | Primary background      |
+| `dark-bg-secondary`   | `#1e293b` | Card/surface background |
+| `dark-bg-tertiary`    | `#334155` | Elevated surface        |
+| `dark-bg-hover`       | `#1e293b` | Hover state background  |
+| `dark-text`           | `#f8fafc` | Primary text            |
+| `dark-text-secondary` | `#94a3b8` | Secondary/muted text    |
+| `dark-text-tertiary`  | `#64748b` | Tertiary/subtle text    |
+| `dark-border`         | `#334155` | Borders                 |
+| `dark-border-light`   | `#475569` | Lighter borders         |
+
+### Component List
+
+| Component          | Path                                  | Notes                                            |
+| ------------------ | ------------------------------------- | ------------------------------------------------ |
+| `BaseButton`       | `src/components/ui/BaseButton.vue`    | Supports loading state with `Loader2` spinner    |
+| `BaseInput`        | `src/components/ui/BaseInput.vue`     | Clear button uses `X` icon                       |
+| `BaseSelect`       | `src/components/ui/BaseSelect.vue`    | Custom dropdown with dark mode                   |
+| `DataTable`        | `src/components/ui/DataTable.vue`     | Loading uses `Loader2`, empty state uses `Inbox` |
+| `BaseDrawer`       | `src/components/ui/BaseDrawer.vue`    | Slide-out panel                                  |
+| `BaseModal`        | `src/components/ui/BaseModal.vue`     | Dialog overlay                                   |
+| `ConfirmModal`     | `src/components/ui/ConfirmModal.vue`  | Confirmation dialogs                             |
+| `ThemeToggle`      | `src/components/ThemeToggle.vue`      | Dropdown with `Sun`/`Moon`/`Monitor` icons       |
+| `LanguageSwitcher` | `src/components/LanguageSwitcher.vue` | Locale selector                                  |
+| `Breadcrumb`       | `src/components/ui/Breadcrumb.vue`    | Navigation trail                                 |
+
+### Dark Mode Implementation
+
+- `darkMode: 'class'` strategy in Tailwind config
+- `useTheme()` composable manages `light` | `dark` | `system` preference
+- `html.dark` class toggled based on preference or system setting
+- All components use `dark:` prefixed Tailwind classes for dark styles

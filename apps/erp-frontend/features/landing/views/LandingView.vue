@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '@features/auth/composables/useAuth';
+import { ChevronRight, Inbox } from 'lucide-vue-next';
 import { featureTiles } from '../config/features.config';
 
 const router = useRouter();
@@ -49,34 +50,11 @@ function navigateToFeature(path: string) {
           <div
             class="w-10 h-10 rounded-lg flex items-center justify-center bg-white dark:bg-dark-bg-secondary shadow-sm"
           >
-            <svg
-              class="w-5 h-5"
-              :class="tile.color"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                :d="tile.icon"
-              />
-            </svg>
+            <component :is="tile.icon" class="w-5 h-5" :class="tile.color" />
           </div>
-          <svg
+          <ChevronRight
             class="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+          />
         </div>
         <h3
           class="text-base font-semibold text-gray-900 dark:text-dark-text mb-0.5"
@@ -95,19 +73,7 @@ function navigateToFeature(path: string) {
       <div
         class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-dark-bg-secondary flex items-center justify-center"
       >
-        <svg
-          class="w-8 h-8 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-          />
-        </svg>
+        <Inbox class="w-8 h-8 text-gray-400" />
       </div>
       <h3 class="text-lg font-medium text-gray-900 dark:text-dark-text">
         No modules available

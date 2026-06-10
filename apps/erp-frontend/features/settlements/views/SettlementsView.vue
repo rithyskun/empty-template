@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useLayout } from '@features/layout/composables/useLayout';
+import { CheckCircle } from 'lucide-vue-next';
 
 const { setSidebarTitle } = useLayout();
 setSidebarTitle('Settlements');
@@ -22,19 +23,7 @@ setSidebarTitle('Settlements');
       <div
         class="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"
       >
-        <svg
-          class="w-8 h-8 text-blue-600 dark:text-blue-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0zm3-10v4m0 0H4m15 0h-6"
-          />
-        </svg>
+        <CheckCircle class="w-8 h-8 text-blue-600 dark:text-blue-400" />
       </div>
       <h3 class="text-lg font-medium text-gray-900 dark:text-dark-text">
         Settlements Module

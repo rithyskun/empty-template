@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuth } from '@features/auth/composables/useAuth';
 import { useLayout } from '../composables/useLayout';
+import { Clock, Zap } from 'lucide-vue-next';
 import type { MenuSection } from '@/config/menu.config';
 
 interface Props {
@@ -67,66 +68,17 @@ function navigate(path: string) {
     <div
       :class="[
         'shrink-0 flex items-center border-b border-gray-200 dark:border-dark-border',
-        sidebarCollapsed ? 'justify-center py-3' : 'gap-3 px-4 py-3',
+        sidebarCollapsed
+          ? 'justify-center py-3'
+          : 'gap-3 px-4 py-3 xl:px-5 2xl:px-6 3xl:px-6',
       ]"
     >
-      <svg
+      <Zap
         class="w-8 h-8 text-primary-600 dark:text-primary-400 flex-shrink-0"
-        viewBox="0 0 32 32"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <rect
-          x="6"
-          y="10"
-          width="20"
-          height="16"
-          rx="2"
-          fill="currentColor"
-          fill-opacity="0.15"
-          stroke="currentColor"
-          stroke-width="1.5"
-        />
-        <rect
-          x="10"
-          y="14"
-          width="3"
-          height="3"
-          rx="0.5"
-          fill="currentColor"
-          fill-opacity="0.5"
-        />
-        <rect
-          x="14.5"
-          y="14"
-          width="3"
-          height="3"
-          rx="0.5"
-          fill="currentColor"
-          fill-opacity="0.5"
-        />
-        <rect
-          x="19"
-          y="14"
-          width="3"
-          height="3"
-          rx="0.5"
-          fill="currentColor"
-          fill-opacity="0.5"
-        />
-        <path
-          d="M4 10 L16 3 L28 10"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          fill="none"
-        />
-        <circle cx="16" cy="7" r="1.5" fill="currentColor" />
-      </svg>
+      />
       <span
         v-if="!sidebarCollapsed"
-        class="text-lg font-bold text-gray-900 dark:text-dark-text tracking-tight truncate"
+        class="text-base sm:text-lg xl:text-lg 2xl:text-xl 3xl:text-xl font-bold text-gray-900 dark:text-dark-text tracking-tight truncate"
       >
         ABA ERP
       </span>
@@ -136,7 +88,7 @@ function navigate(path: string) {
       <div v-for="(section, sIdx) in props.sections" :key="sIdx" class="mb-6">
         <h3
           v-if="!sidebarCollapsed"
-          class="px-4 text-xs font-semibold text-gray-400 dark:text-dark-text-tertiary uppercase tracking-wider mb-2"
+          class="px-4 xl:px-5 2xl:px-6 3xl:px-6 text-xs font-semibold text-gray-400 dark:text-dark-text-tertiary uppercase tracking-wider mb-2"
         >
           {{ section.title }}
         </h3>
@@ -153,34 +105,12 @@ function navigate(path: string) {
               :title="sidebarCollapsed ? item.label : undefined"
               @click="navigate(item.path)"
             >
-              <svg
+              <component
                 v-if="item.icon"
+                :is="item.icon"
                 class="flex-shrink-0 w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  :d="item.icon"
-                />
-              </svg>
-              <svg
-                v-else
-                class="flex-shrink-0 w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
+              />
+              <Zap v-else class="flex-shrink-0 w-5 h-5" />
               <span v-if="!sidebarCollapsed" class="truncate">{{
                 item.label
               }}</span>
@@ -199,24 +129,12 @@ function navigate(path: string) {
     <!-- Last Login -->
     <div
       v-if="!sidebarCollapsed"
-      class="border-t border-gray-200 dark:border-dark-border px-4 py-3 shrink-0"
+      class="border-t border-gray-200 dark:border-dark-border px-4 py-3 xl:px-5 2xl:px-6 3xl:px-6 shrink-0"
     >
       <div
         class="flex items-center gap-2 text-xs text-gray-500 dark:text-dark-text-tertiary"
       >
-        <svg
-          class="w-3.5 h-3.5 flex-shrink-0"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
+        <Clock class="w-3.5 h-3.5 flex-shrink-0" />
         <div class="truncate">
           <span class="font-medium">Last login</span>
           <span class="block">{{ lastLoginText }}</span>

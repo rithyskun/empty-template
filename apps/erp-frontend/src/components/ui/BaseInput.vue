@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useSlots } from 'vue';
+import { X } from 'lucide-vue-next';
 
 interface Props {
   modelValue?: string | number;
@@ -151,19 +152,7 @@ const inputClasses = computed(() => {
           class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           @click="handleClear"
         >
-          <svg
-            class="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+          <X class="h-5 w-5" />
         </button>
         <slot v-else name="icon-right"></slot>
       </div>

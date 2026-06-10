@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useLayout } from '@features/layout/composables/useLayout';
+import { Zap } from 'lucide-vue-next';
 
 const { setSidebarTitle } = useLayout();
 setSidebarTitle('Workflows');
@@ -22,19 +23,7 @@ setSidebarTitle('Workflows');
       <div
         class="w-16 h-16 mx-auto mb-4 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center"
       >
-        <svg
-          class="w-8 h-8 text-cyan-600 dark:text-cyan-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M13 10V3L4 14h7v7l9-11h-7z"
-          />
-        </svg>
+        <Zap class="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
       </div>
       <h3 class="text-lg font-medium text-gray-900 dark:text-dark-text">
         Workflows Module

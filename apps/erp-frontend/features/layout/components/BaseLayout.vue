@@ -22,8 +22,8 @@ const sidebarSections = computed<MenuSection[]>(() => {
 
 const contentMargin = computed(() => {
   if (sidebarHidden.value) return 'ml-0';
-  if (sidebarCollapsed.value) return 'ml-16';
-  return 'ml-64';
+  if (sidebarCollapsed.value) return 'lg:ml-16';
+  return 'lg:ml-64 xl:ml-72 2xl:ml-80 3xl:ml-80';
 });
 </script>
 
@@ -34,11 +34,11 @@ const contentMargin = computed(() => {
 
     <div
       :class="[
-        'flex-1 flex flex-col pt-14 transition-all duration-300',
+        'flex-1 flex flex-col pt-14 sm:pt-16 transition-all duration-300',
         contentMargin,
       ]"
     >
-      <main class="flex-1 p-6 overflow-y-auto">
+      <main class="flex-1 p-4 sm:p-6 overflow-y-auto">
         <div class="mb-4">
           <Breadcrumb />
         </div>

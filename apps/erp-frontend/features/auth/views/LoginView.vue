@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import LoginForm from '../components/LoginForm.vue';
+import { Zap } from 'lucide-vue-next';
 </script>
 
 <template>
@@ -321,19 +322,7 @@ import LoginForm from '../components/LoginForm.vue';
           <div
             class="w-16 h-16 mx-auto mb-4 rounded-xl bg-primary-600 flex items-center justify-center"
           >
-            <svg
-              class="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
+            <Zap class="w-8 h-8 text-white" />
           </div>
           <h1 class="text-2xl font-bold text-gray-900 dark:text-dark-text">
             ERP Financial

@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useTheme, type Theme } from '@/composables/useTheme';
+import { Sun, Moon, Monitor } from 'lucide-vue-next';
 
 const { theme, setTheme } = useTheme();
 const open = ref(false);
 const dropdownRef = ref<HTMLElement | null>(null);
 
 const options = [
-  { value: 'light' as Theme, label: 'Light' },
-  { value: 'dark' as Theme, label: 'Dark' },
-  { value: 'system' as Theme, label: 'System' },
+  { value: 'light' as Theme, label: 'Light', icon: Sun },
+  { value: 'dark' as Theme, label: 'Dark', icon: Moon },
+  { value: 'system' as Theme, label: 'System', icon: Monitor },
 ];
 
 const currentIcon = computed(() => {
-  if (theme.value === 'light') return 'sun';
-  if (theme.value === 'dark') return 'moon';
-  return 'monitor';
+  if (theme.value === 'light') return Sun;
+  if (theme.value === 'dark') return Moon;
+  return Monitor;
 });
 
 function select(value: Theme) {
@@ -46,48 +47,7 @@ watch(open, (isOpen) => {
       title="Theme"
       @click.stop="open = !open"
     >
-      <svg
-        v-if="currentIcon === 'sun'"
-        class="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-        />
-      </svg>
-      <svg
-        v-else-if="currentIcon === 'moon'"
-        class="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-        />
-      </svg>
-      <svg
-        v-else
-        class="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-        />
-      </svg>
+      <component :is="currentIcon" class="w-5 h-5" />
     </button>
 
     <div
@@ -105,48 +65,7 @@ watch(open, (isOpen) => {
         ]"
         @click="select(opt.value)"
       >
-        <svg
-          v-if="opt.value === 'light'"
-          class="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-          />
-        </svg>
-        <svg
-          v-else-if="opt.value === 'dark'"
-          class="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-          />
-        </svg>
-        <svg
-          v-else
-          class="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-          />
-        </svg>
+        <component :is="opt.icon" class="w-4 h-4" />
         {{ opt.label }}
       </button>
     </div>
