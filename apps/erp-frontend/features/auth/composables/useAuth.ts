@@ -30,8 +30,9 @@ export function useAuth() {
   const loading = ref(false);
 
   function setSession(u: User, token: string) {
-    user.value = u;
-    localStorage.setItem(USER_KEY, JSON.stringify(u));
+    const enriched = { ...u, lastLoginAt: new Date().toISOString() };
+    user.value = enriched;
+    localStorage.setItem(USER_KEY, JSON.stringify(enriched));
     localStorage.setItem(ACCESS_TOKEN_KEY, token);
   }
 
@@ -82,7 +83,7 @@ export function useAuth() {
 
       if (response.data.user && response.data.accessToken) {
         setSession(response.data.user, response.data.accessToken);
-        await router.push('/');
+        await router.push('/dashboard');
       }
     } catch (err) {
       const statusCode = (err as Error & { statusCode?: number }).statusCode;
@@ -113,7 +114,7 @@ export function useAuth() {
         requiresTwoFactor.value = false;
         twoFactorMethods.value = [];
         tempToken.value = null;
-        await router.push('/');
+        await router.push('/dashboard');
       }
     } catch (err) {
       error.value =
@@ -136,8 +137,13 @@ export function useAuth() {
     try {
       const { fetchApi } = useFetchApi();
       const currentUser = await fetchApi<User>('/api/v1/auth/me');
-      user.value = currentUser.data;
-      localStorage.setItem(USER_KEY, JSON.stringify(currentUser.data));
+      // Preserve existing lastLoginAt from localStorage
+      const existing = loadStoredUser();
+      const enriched = existing?.lastLoginAt
+        ? { ...currentUser.data, lastLoginAt: existing.lastLoginAt }
+        : currentUser.data;
+      user.value = enriched;
+      localStorage.setItem(USER_KEY, JSON.stringify(enriched));
     } catch {
       clearSession();
     }

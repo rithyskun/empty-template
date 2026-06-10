@@ -1,51 +1,10 @@
-<template>
-  <div class="relative inline-block text-left">
-    <button
-      @click="open = !open"
-      class="inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-    >
-      <span class="mr-1">{{ currentLabel }}</span>
-      <svg
-        class="w-4 h-4"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"
-        />
-      </svg>
-    </button>
-    <div
-      v-if="open"
-      class="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-50"
-    >
-      <button
-        v-for="opt in options"
-        :key="opt.value"
-        @click="select(opt.value)"
-        :class="[
-          'block w-full text-left px-4 py-2 text-sm hover:bg-gray-100',
-          locale === opt.value
-            ? 'bg-blue-50 text-blue-700 font-medium'
-            : 'text-gray-700',
-        ]"
-      >
-        {{ opt.label }}
-      </button>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useLocale } from '../composables/useLocale';
-import type { Locale } from '../i18n';
+import { ref, computed, watch } from 'vue';
+import { useLocale } from '@/composables/useLocale';
+import type { Locale } from '@/i18n';
 
 const open = ref(false);
+const dropdownRef = ref<HTMLElement | null>(null);
 const { locale, setLocale } = useLocale();
 
 const options = [
@@ -54,11 +13,57 @@ const options = [
 ];
 
 const currentLabel = computed(() => {
-  return options.find((o) => o.value === locale.value)?.label ?? 'English';
+  return options.find((o) => o.value === locale.value)?.label ?? 'EN';
 });
 
 function select(value: Locale) {
   setLocale(value);
   open.value = false;
 }
+
+function handleClickOutside(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (dropdownRef.value && !dropdownRef.value.contains(target)) {
+    open.value = false;
+  }
+}
+
+watch(open, (isOpen) => {
+  if (isOpen) {
+    document.addEventListener('click', handleClickOutside);
+  } else {
+    document.removeEventListener('click', handleClickOutside);
+  }
+});
 </script>
+
+<template>
+  <div ref="dropdownRef" class="relative inline-block text-left">
+    <button
+      class="inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
+      :title="currentLabel"
+      @click.stop="open = !open"
+    >
+      <span class="text-xs font-bold">{{ locale.toUpperCase() }}</span>
+    </button>
+
+    <div
+      v-if="open"
+      class="absolute right-0 mt-2 w-36 bg-white dark:bg-dark-bg-secondary border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 overflow-hidden"
+    >
+      <button
+        v-for="opt in options"
+        :key="opt.value"
+        :class="[
+          'flex items-center gap-2 w-full text-left px-4 py-2.5 text-sm transition-colors',
+          locale === opt.value
+            ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-medium'
+            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800',
+        ]"
+        @click="select(opt.value)"
+      >
+        {{ opt.label }}
+      </button>
+    </div>
+  </div>
+</template>

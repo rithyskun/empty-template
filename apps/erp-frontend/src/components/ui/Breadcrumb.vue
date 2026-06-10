@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n';
 import { Home, ChevronRight } from 'lucide-vue-next';
 
 const { t } = useI18n();
+const route = useRoute();
 
 interface BreadcrumbItem {
   label: string;
@@ -12,18 +13,14 @@ interface BreadcrumbItem {
   clickable: boolean;
 }
 
-const route = useRoute();
-
 const breadcrumbs = computed<BreadcrumbItem[]>(() => {
   const pathArray = route.path.split('/').filter((p) => p);
   const crumbs: BreadcrumbItem[] = [];
 
-  // Build breadcrumbs from path segments
   let currentPath = '';
   pathArray.forEach((segment, index) => {
     currentPath += `/${segment}`;
 
-    // Get label from route meta or format segment
     const routeRecord = route.matched[index + 1];
     const breadcrumbKey = routeRecord?.meta?.breadcrumb as string;
     const label = breadcrumbKey ? t(breadcrumbKey) : formatSegment(segment);

@@ -7,6 +7,8 @@ export interface User {
   tenantId?: string;
   companyId?: string;
   branchId?: string;
+  lastLoginAt?: string;
+  isTwoFactorEnabled?: boolean;
 }
 
 export type AuthProvider = 'local' | 'ldap';
