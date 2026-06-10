@@ -70,7 +70,7 @@ onBeforeUnmount(() => {
 <template>
   <header
     :class="[
-      'h-14 sm:h-16 bg-white dark:bg-dark-bg-secondary border-b border-gray-200 dark:border-dark-border flex items-center justify-between px-3 sm:px-4 md:px-6 fixed top-0 left-0 right-0 z-30 transition-all duration-300',
+      'h-14 sm:h-16 bg-gray-50/80 dark:bg-dark-bg/80 backdrop-blur-md backdrop-saturate-150 flex items-center justify-between px-3 sm:px-4 md:px-6 fixed top-0 left-0 right-0 z-30 transition-all duration-300',
       headerLeftClass,
     ]"
   >
@@ -132,26 +132,31 @@ onBeforeUnmount(() => {
 
         <div
           v-show="dropdownOpen"
-          class="absolute right-0 mt-2 w-40 bg-white dark:bg-dark-bg-secondary border border-gray-200 dark:border-dark-border rounded-lg shadow-lg py-1 z-50"
+          class="absolute right-0 mt-2 w-44 bg-white dark:bg-dark-bg-secondary border border-gray-200 dark:border-dark-border rounded-lg shadow-lg py-1 z-50 overflow-hidden"
         >
           <button
-            class="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-bg-hover transition-colors"
+            class="group w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-bg-hover hover:text-gray-900 dark:hover:text-dark-text transition-colors"
             @click="
               closeDropdown();
               router.push('/profile');
             "
           >
-            <User class="w-4 h-4" />
+            <User
+              class="w-4 h-4 text-gray-500 dark:text-dark-text-tertiary group-hover:text-gray-700 dark:group-hover:text-dark-text-secondary transition-colors"
+            />
             Profile
           </button>
+          <div class="mx-3 border-t border-gray-100 dark:border-dark-border" />
           <button
-            class="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-bg-hover transition-colors"
+            class="group w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-bg-hover hover:text-gray-900 dark:hover:text-dark-text transition-colors"
             @click="
               closeDropdown();
               handleLogout();
             "
           >
-            <LogOut class="w-4 h-4" />
+            <LogOut
+              class="w-4 h-4 text-gray-500 dark:text-dark-text-tertiary group-hover:text-gray-700 dark:group-hover:text-dark-text-secondary transition-colors"
+            />
             Logout
           </button>
         </div>

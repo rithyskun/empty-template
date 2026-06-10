@@ -67,10 +67,10 @@ function navigate(path: string) {
     <!-- Logo -->
     <div
       :class="[
-        'shrink-0 flex items-center border-b border-gray-200 dark:border-dark-border',
+        'shrink-0 h-14 sm:h-16 flex items-center border-b border-gray-200 dark:border-dark-border',
         sidebarCollapsed
-          ? 'justify-center py-3'
-          : 'gap-3 px-4 py-3 xl:px-5 2xl:px-6 3xl:px-6',
+          ? 'justify-center'
+          : 'gap-3 px-4 xl:px-5 2xl:px-6 3xl:px-6',
       ]"
     >
       <Zap
@@ -84,7 +84,7 @@ function navigate(path: string) {
       </span>
     </div>
 
-    <nav class="flex-1 overflow-y-auto py-4">
+    <nav class="flex-1 overflow-y-auto py-4 sm:py-6">
       <div v-for="(section, sIdx) in props.sections" :key="sIdx" class="mb-6">
         <h3
           v-if="!sidebarCollapsed"
@@ -129,15 +129,15 @@ function navigate(path: string) {
     <!-- Last Login -->
     <div
       v-if="!sidebarCollapsed"
-      class="border-t border-gray-200 dark:border-dark-border px-4 py-3 xl:px-5 2xl:px-6 3xl:px-6 shrink-0"
+      class="border-t border-gray-200 dark:border-dark-border h-10 flex items-center px-4 xl:px-5 2xl:px-6 3xl:px-6 shrink-0"
     >
       <div
-        class="flex items-center gap-2 text-xs text-gray-500 dark:text-dark-text-tertiary"
+        class="flex items-center gap-2 text-xs text-gray-500 dark:text-dark-text-tertiary w-full min-w-0"
       >
         <Clock class="w-3.5 h-3.5 flex-shrink-0" />
         <div class="truncate">
           <span class="font-medium">Last login</span>
-          <span class="block">{{ lastLoginText }}</span>
+          <span class="block leading-none">{{ lastLoginText }}</span>
         </div>
       </div>
     </div>

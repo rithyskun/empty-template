@@ -8,6 +8,12 @@ export default defineConfig(({ mode }) => ({
   plugins: [vue()],
   server: {
     port: 5173,
+    hmr: {
+      overlay: false,
+    },
+    watch: {
+      ignored: ['**/node_modules/**', '**/dist/**', '**/.git/**'],
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:8000',

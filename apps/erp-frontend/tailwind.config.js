@@ -45,7 +45,7 @@ export default {
           bg: '#0f172a',
           'bg-secondary': '#1e293b',
           'bg-tertiary': '#334155',
-          'bg-hover': '#1e293b',
+          'bg-hover': '#475569',
           text: '#f8fafc',
           'text-secondary': '#94a3b8',
           'text-tertiary': '#64748b',
