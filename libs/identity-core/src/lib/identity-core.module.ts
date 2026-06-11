@@ -12,6 +12,7 @@ import { UserService } from './services/user.service';
 import { RoleService } from './services/role.service';
 import { PermissionService } from './services/permission.service';
 import { ActiveDirectoryUserService } from './services/active-directory-user.service';
+import { SeedService } from './services/seed.service';
 import { MailModule } from '@erp/mail';
 
 @Global()
@@ -34,12 +35,14 @@ import { MailModule } from '@erp/mail';
     RoleService,
     PermissionService,
     ActiveDirectoryUserService,
+    SeedService,
   ],
   exports: [
     UserService,
     RoleService,
     PermissionService,
     ActiveDirectoryUserService,
+    SeedService,
     MailModule,
     TypeOrmModule,
   ],

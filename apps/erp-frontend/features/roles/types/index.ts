@@ -1,4 +1,4 @@
-import type { Permission } from '@/composables/useAuth';
+import type { Permission } from '@features/auth/types';
 
 export interface RoleListItem {
   id: string;

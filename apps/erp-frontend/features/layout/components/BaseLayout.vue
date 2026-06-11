@@ -5,18 +5,24 @@ import { useLayout } from '../composables/useLayout';
 import AppHeader from './AppHeader.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppFooter from './AppFooter.vue';
-import { menuSections } from '@/config/menu.config';
+import { menuSections, filterMenuSections } from '@/config/menu.config';
 import type { MenuSection } from '@/config/menu.config';
+import { useAuth } from '@features/auth/composables/useAuth';
 
 const route = useRoute();
 const { sidebarCollapsed, sidebarHidden } = useLayout();
+const { user } = useAuth();
 
 const sidebarSections = computed<MenuSection[]>(() => {
   // If the current route meta defines a custom sidebar, use it
   const custom = route.meta.sidebarSections as MenuSection[] | undefined;
-  if (custom && custom.length > 0) return custom;
-  // Otherwise fall back to the default main menu
-  return menuSections;
+  const sections = custom && custom.length > 0 ? custom : menuSections;
+  // Filter by user permissions and roles
+  return filterMenuSections(
+    sections,
+    user.value?.permissions ?? [],
+    user.value?.roles ?? [],
+  );
 });
 
 const contentMargin = computed(() => {

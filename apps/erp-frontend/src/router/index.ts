@@ -16,6 +16,43 @@ function isAuthenticated(): boolean {
   return !!localStorage.getItem('accessToken');
 }
 
+function getStoredUser(): { roles?: string[]; permissions?: string[] } | null {
+  const raw = localStorage.getItem('user');
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as { roles?: string[]; permissions?: string[] };
+  } catch {
+    return null;
+  }
+}
+
+function canAccess(
+  requiredRoles?: string[],
+  requiredPermissions?: string[],
+): boolean {
+  const user = getStoredUser();
+  if (!user) return false;
+
+  const roles = user.roles ?? [];
+  const permissions = user.permissions ?? [];
+
+  const isSuperAdmin =
+    roles.includes('SUPER_ADMIN') || permissions.includes('all:all');
+  if (isSuperAdmin) return true;
+
+  if (requiredRoles && requiredRoles.length > 0) {
+    const hasRole = requiredRoles.some((r) => roles.includes(r));
+    if (!hasRole) return false;
+  }
+
+  if (requiredPermissions && requiredPermissions.length > 0) {
+    const hasPerm = requiredPermissions.some((p) => permissions.includes(p));
+    if (!hasPerm) return false;
+  }
+
+  return true;
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -52,6 +89,20 @@ router.beforeEach((to) => {
   }
   if (to.meta.guestOnly && isAuthenticated()) {
     return { name: 'dashboard' };
+  }
+
+  const requiredRoles = to.meta.requiresRoles as string[] | undefined;
+  const requiredPermissions = to.meta.requiresPermissions as
+    | string[]
+    | undefined;
+
+  if (
+    (requiredRoles && requiredRoles.length > 0) ||
+    (requiredPermissions && requiredPermissions.length > 0)
+  ) {
+    if (!canAccess(requiredRoles, requiredPermissions)) {
+      return { name: 'dashboard' };
+    }
   }
 });
 

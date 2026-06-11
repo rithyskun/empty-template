@@ -14,7 +14,7 @@ import {
   X,
 } from 'lucide-vue-next';
 import { useFetchApi } from '@/composables/useFetchApi';
-import type { Permission } from '@/composables/useAuth';
+import type { Permission } from '@features/auth/types';
 import type { PermissionListItem } from '../types';
 
 const { t } = useI18n();

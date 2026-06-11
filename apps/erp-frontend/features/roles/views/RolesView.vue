@@ -16,7 +16,7 @@ import {
   X,
 } from 'lucide-vue-next';
 import { useFetchApi } from '@/composables/useFetchApi';
-import type { Role, Permission } from '@/composables/useAuth';
+import type { Role, Permission } from '@features/auth/types';
 import type { RoleListItem } from '../types';
 
 const { t } = useI18n();

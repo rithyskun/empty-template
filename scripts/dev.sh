@@ -42,8 +42,7 @@ case "$PROFILE" in
       "npx nx serve identity-service" \
       "npx nx serve auth-service" \
       "npx nx serve payment-service" \
-      "npx nx serve settlement-service" \
-      "npx nx serve erp-frontend"
+      "npx nx serve settlement-service"
     ;;
 
   all)

@@ -15,17 +15,25 @@ import type {
   UpdatePermissionDto,
   SetRolePermissionsDto,
 } from '@erp/identity-core';
-import { JwtAuthGuard, RolesGuard, Roles, CurrentUser } from '@erp/auth';
+import {
+  JwtAuthGuard,
+  RolesGuard,
+  Roles,
+  PermissionsGuard,
+  Permissions,
+  CurrentUser,
+} from '@erp/auth';
 import type { UserPayload } from '@erp/auth';
 import { PlatformRole } from '@erp/enums';
 
 @Controller('permissions')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class PermissionsController {
   constructor(private readonly permissionService: PermissionService) {}
 
   @Post()
   @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('permissions:create')
   async create(
     @Body() dto: CreatePermissionDto,
     @CurrentUser() user: UserPayload,
@@ -40,6 +48,7 @@ export class PermissionsController {
     PlatformRole.TENANT_ADMIN,
     PlatformRole.VIEWER,
   )
+  @Permissions('permissions:read')
   async list(
     @Query('roleId') roleId?: string,
     @Query('page') page?: string,
@@ -61,6 +70,7 @@ export class PermissionsController {
     PlatformRole.TENANT_ADMIN,
     PlatformRole.VIEWER,
   )
+  @Permissions('permissions:read')
   async getRolePermissions(@Param('roleId') roleId: string) {
     const perms = await this.permissionService.getRolePermissions(roleId);
     return { data: perms };
@@ -72,6 +82,7 @@ export class PermissionsController {
     PlatformRole.TENANT_ADMIN,
     PlatformRole.VIEWER,
   )
+  @Permissions('permissions:read')
   async getUserPermissions(@Param('userId') userId: string) {
     const perms = await this.permissionService.getUserPermissions(userId);
     return { data: perms };
@@ -83,6 +94,7 @@ export class PermissionsController {
     PlatformRole.TENANT_ADMIN,
     PlatformRole.VIEWER,
   )
+  @Permissions('permissions:read')
   async findOne(@Param('id') id: string) {
     const perm = await this.permissionService.findById(id);
     if (!perm) return { statusCode: 404, message: 'Permission not found' };
@@ -91,12 +103,14 @@ export class PermissionsController {
 
   @Patch(':id')
   @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('permissions:update')
   async update(@Param('id') id: string, @Body() dto: UpdatePermissionDto) {
     return { data: await this.permissionService.update(id, dto) };
   }
 
   @Delete(':id')
   @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('permissions:delete')
   async remove(@Param('id') id: string) {
     await this.permissionService.delete(id);
     return { data: { id }, message: 'Permission deleted' };
@@ -104,6 +118,7 @@ export class PermissionsController {
 
   @Post('role')
   @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('permissions:assign')
   async setRolePermissions(@Body() dto: SetRolePermissionsDto) {
     const perms = await this.permissionService.setRolePermissions(
       dto.roleId,

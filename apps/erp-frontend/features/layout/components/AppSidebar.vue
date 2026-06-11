@@ -80,12 +80,23 @@ function navigate(path: string) {
         <Zap
           class="w-8 h-8 text-primary-600 dark:text-primary-400 flex-shrink-0"
         />
-        <span
-          v-if="!sidebarCollapsed"
-          class="text-base sm:text-lg xl:text-lg 2xl:text-xl 3xl:text-xl font-bold text-gray-900 dark:text-dark-text tracking-tight truncate"
-        >
-          ABA ERP
-        </span>
+        <div v-if="!sidebarCollapsed" class="inline-flex items-center">
+          <span
+            class="text-brand font-extrabold text-logo tracking-[0.04em] dark:text-[#80cbc4]"
+          >
+            ABA
+          </span>
+          <span
+            class="text-[1.6rem] font-extrabold text-accent relative -top-0.5"
+          >
+            '
+          </span>
+          <span
+            class="text-brand font-semibold text-branch tracking-[-0.01em] ml-1.5 dark:text-[#4fc3f7]"
+          >
+            Financial
+          </span>
+        </div>
       </div>
       <button
         v-if="!sidebarCollapsed"

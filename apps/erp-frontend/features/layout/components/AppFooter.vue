@@ -8,7 +8,7 @@ const version =
   <footer
     class="h-10 bg-gray-50 dark:bg-dark-bg flex items-center justify-between px-4 text-xs text-gray-500 dark:text-dark-text-tertiary"
   >
-    <span>ERP Financial &copy; {{ year }}</span>
+    <span>ABA Financial &copy; {{ year }}</span>
     <span>v{{ version }}</span>
   </footer>
 </template>

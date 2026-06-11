@@ -10,6 +10,7 @@ interface UserPayload {
   tenantId?: string;
   companyId?: string;
   roles?: string[];
+  permissions?: string[];
 }
 
 interface GatewayRequest extends Request {

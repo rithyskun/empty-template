@@ -19,7 +19,7 @@ import {
 } from 'lucide-vue-next';
 import { useFetchApi } from '@/composables/useFetchApi';
 import { useToast } from '@/composables/useToast';
-import type { ApiUser } from '@/composables/useAuth';
+import type { ApiUser } from '@features/auth/types';
 import type { UserListItem } from '../types';
 
 // Props for detail view

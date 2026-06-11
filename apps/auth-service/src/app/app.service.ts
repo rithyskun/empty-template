@@ -16,6 +16,6 @@ export class AppService implements OnModuleInit {
   }
 
   getData(): { message: string } {
-    return { message: 'Identity Service is running' };
+    return { message: 'Auth Service is running' };
   }
 }

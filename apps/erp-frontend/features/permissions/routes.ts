@@ -9,6 +9,7 @@ export const permissionRoutes: RouteRecordRaw[] = [
     component: PermissionsView,
     meta: {
       requiresAuth: true,
+      requiresRoles: ['SUPER_ADMIN', 'TENANT_ADMIN'],
       sidebarSections: administrationSidebar,
       breadcrumb: 'Permissions',
     },

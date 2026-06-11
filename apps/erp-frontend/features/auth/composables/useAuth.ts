@@ -30,7 +30,11 @@ export function useAuth() {
   const loading = ref(false);
 
   function setSession(u: User, token: string) {
-    const enriched = { ...u, lastLoginAt: new Date().toISOString() };
+    const enriched = {
+      ...u,
+      permissions: u.permissions ?? [],
+      lastLoginAt: new Date().toISOString(),
+    };
     user.value = enriched;
     localStorage.setItem(USER_KEY, JSON.stringify(enriched));
     localStorage.setItem(ACCESS_TOKEN_KEY, token);
@@ -139,9 +143,11 @@ export function useAuth() {
       const currentUser = await fetchApi<User>('/api/v1/auth/me');
       // Preserve existing lastLoginAt from localStorage
       const existing = loadStoredUser();
-      const enriched = existing?.lastLoginAt
-        ? { ...currentUser.data, lastLoginAt: existing.lastLoginAt }
-        : currentUser.data;
+      const enriched: User = {
+        ...currentUser.data,
+        permissions: currentUser.data.permissions ?? [],
+        lastLoginAt: existing?.lastLoginAt ?? new Date().toISOString(),
+      };
       user.value = enriched;
       localStorage.setItem(USER_KEY, JSON.stringify(enriched));
     } catch {

@@ -4,6 +4,7 @@ export interface User {
   firstName: string;
   lastName: string;
   roles: string[];
+  permissions: string[];
   tenantId?: string;
   companyId?: string;
   branchId?: string;
@@ -42,4 +43,44 @@ export interface AuthState {
   twoFactorMethods: Array<'totp' | 'sms' | 'email'>;
   tempToken: string | null;
   pendingApproval: boolean;
+}
+
+// Permission type used by permissions and roles views
+export interface Permission {
+  id: string;
+  name: string;
+  slug: string;
+  module?: string;
+  description?: string;
+  createdAt?: string;
+}
+
+// Role type used by roles view
+export interface Role {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  isActive?: boolean;
+  userCount?: number;
+  createdAt?: string;
+  permissions?: Permission[];
+}
+
+// ApiUser type used by users view
+export interface ApiUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatar?: string;
+  role?: { name: string; slug: string };
+  roleId?: string;
+  status?: string;
+  createdAt?: string;
+  phone?: string;
+  isEmailVerified?: boolean;
+  lastLoginAt?: string;
+  loginAttempts?: number;
+  lockoutUntil?: string | null;
 }

@@ -15,23 +15,32 @@ import type {
   UpdateRoleDto,
   AssignRoleDto,
 } from '@erp/identity-core';
-import { JwtAuthGuard, RolesGuard, Roles, CurrentUser } from '@erp/auth';
+import {
+  JwtAuthGuard,
+  RolesGuard,
+  Roles,
+  PermissionsGuard,
+  Permissions,
+  CurrentUser,
+} from '@erp/auth';
 import type { UserPayload } from '@erp/auth';
 import { PlatformRole } from '@erp/enums';
 
 @Controller('roles')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class RolesController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post()
   @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('roles:create')
   async create(@Body() dto: CreateRoleDto, @CurrentUser() user: UserPayload) {
     if (!dto.tenantId) dto.tenantId = user.tenantId;
     return { data: await this.roleService.create(dto) };
   }
 
   @Get()
+  @Permissions('roles:read')
   async list(
     @Query('page') page?: string,
     @Query('limit') limit?: string,
@@ -46,6 +55,7 @@ export class RolesController {
   }
 
   @Get(':id')
+  @Permissions('roles:read')
   async findOne(@Param('id') id: string) {
     const role = await this.roleService.findById(id);
     if (!role) return { statusCode: 404, message: 'Role not found' };
@@ -54,12 +64,14 @@ export class RolesController {
 
   @Patch(':id')
   @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('roles:update')
   async update(@Param('id') id: string, @Body() dto: UpdateRoleDto) {
     return { data: await this.roleService.update(id, dto) };
   }
 
   @Delete(':id')
   @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('roles:delete')
   async remove(@Param('id') id: string) {
     await this.roleService.delete(id);
     return { data: { id }, message: 'Role deleted' };
@@ -67,6 +79,7 @@ export class RolesController {
 
   @Post('assign')
   @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('roles:assign')
   async assignRole(
     @Body() dto: AssignRoleDto,
     @CurrentUser() user: UserPayload,
@@ -82,6 +95,7 @@ export class RolesController {
 
   @Delete('assign/:userId/:roleId')
   @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('roles:unassign')
   async unassignRole(
     @Param('userId') userId: string,
     @Param('roleId') roleId: string,
@@ -91,6 +105,7 @@ export class RolesController {
   }
 
   @Get('user/:userId')
+  @Permissions('roles:read')
   async getUserRoles(@Param('userId') userId: string) {
     const roles = await this.roleService.getUserRoles(userId);
     return { data: roles };

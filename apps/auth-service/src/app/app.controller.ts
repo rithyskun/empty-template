@@ -17,7 +17,7 @@ export class AppController {
   health() {
     return {
       status: 'ok',
-      service: 'identity-service',
+      service: 'auth-service',
       timestamp: new Date().toISOString(),
     };
   }

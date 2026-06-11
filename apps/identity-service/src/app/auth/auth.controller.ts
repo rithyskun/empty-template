@@ -318,7 +318,21 @@ export class AuthController {
   async me(@CurrentUser() currentUser: UserPayload) {
     const user = await this.userService.findById(currentUser.userId);
     if (!user) return { statusCode: 404, message: 'User not found' };
-    return { data: user };
+
+    const roles = (await this.roleService.getUserRoles(user.id)).map(
+      (r) => r.code,
+    );
+    const permissions = await this.permissionService.getUserPermissions(
+      user.id,
+    );
+
+    return {
+      data: {
+        ...user,
+        roles,
+        permissions,
+      },
+    };
   }
 
   @Get('sso/login')

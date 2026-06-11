@@ -15,6 +15,7 @@ interface GatewayRequest extends Request {
     tenantId?: string;
     companyId?: string;
     roles?: string[];
+    permissions?: string[];
   };
   internalService?: string;
   correlationId?: string;
@@ -78,6 +79,10 @@ export class ProxyService {
               proxyReq.setHeader(
                 'X-User-Roles',
                 JSON.stringify(gReq.user.roles || []),
+              );
+              proxyReq.setHeader(
+                'X-User-Permissions',
+                JSON.stringify(gReq.user.permissions || []),
               );
             }
             if (gReq.internalService) {
