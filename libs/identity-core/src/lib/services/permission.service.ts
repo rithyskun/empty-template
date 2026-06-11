@@ -2,13 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { Permission } from '../entities/permission.entity';
+import { RolePermission } from '../entities/role-permission.entity';
 import { Role } from '../entities/role.entity';
 import { UserRole } from '../entities/user-role.entity';
 import {
   CreatePermissionDto,
   UpdatePermissionDto,
   PermissionResponseDto,
-  RolePermissionDto,
+  PermissionStatsDto,
+  PermissionUsageDto,
 } from '../dto/permission.dto';
 import { DomainException } from '@erp/common';
 
@@ -17,6 +19,8 @@ export class PermissionService {
   constructor(
     @InjectRepository(Permission)
     private readonly permissionRepo: Repository<Permission>,
+    @InjectRepository(RolePermission)
+    private readonly rolePermissionRepo: Repository<RolePermission>,
     @InjectRepository(Role)
     private readonly roleRepo: Repository<Role>,
     @InjectRepository(UserRole)
@@ -24,28 +28,24 @@ export class PermissionService {
   ) {}
 
   async create(dto: CreatePermissionDto): Promise<PermissionResponseDto> {
-    const role = await this.roleRepo.findOne({ where: { id: dto.roleId } });
-    if (!role) throw new DomainException('Role not found', 'ROLE_NOT_FOUND');
-
     const existing = await this.permissionRepo.findOne({
-      where: {
-        roleId: dto.roleId,
-        resource: dto.resource,
-        action: dto.action,
-      },
+      where: { slug: dto.slug },
     });
     if (existing) {
       throw new DomainException(
-        'Permission already exists for this role',
+        'Permission slug already exists',
         'PERMISSION_EXISTS',
       );
     }
 
     const perm = this.permissionRepo.create({
-      roleId: dto.roleId,
-      resource: dto.resource,
+      name: dto.name,
+      slug: dto.slug,
+      module: dto.module,
       action: dto.action,
+      description: dto.description,
       tenantId: dto.tenantId,
+      isSystem: dto.isSystem ?? false,
     });
     const saved = await this.permissionRepo.save(perm);
     return this.toResponse(saved);
@@ -59,6 +59,18 @@ export class PermissionService {
     if (!perm)
       throw new DomainException('Permission not found', 'PERMISSION_NOT_FOUND');
 
+    if (dto.slug && dto.slug !== perm.slug) {
+      const existing = await this.permissionRepo.findOne({
+        where: { slug: dto.slug },
+      });
+      if (existing) {
+        throw new DomainException(
+          'Permission slug already exists',
+          'PERMISSION_EXISTS',
+        );
+      }
+    }
+
     Object.assign(perm, dto);
     const saved = await this.permissionRepo.save(perm);
     return this.toResponse(saved);
@@ -68,65 +80,95 @@ export class PermissionService {
     const perm = await this.permissionRepo.findOne({ where: { id } });
     if (!perm)
       throw new DomainException('Permission not found', 'PERMISSION_NOT_FOUND');
+    await this.rolePermissionRepo.delete({ permissionId: id });
     await this.permissionRepo.remove(perm);
   }
 
   async list(params: {
-    roleId?: string;
     tenantId?: string;
     page?: number;
     limit?: number;
+    search?: string;
+    module?: string;
   }): Promise<{ data: PermissionResponseDto[]; total: number }> {
     const page = params.page || 1;
     const limit = params.limit || 20;
-    const where: Record<string, unknown> = {};
-    if (params.roleId) where['roleId'] = params.roleId;
-    if (params.tenantId) where['tenantId'] = params.tenantId;
 
-    const [data, total] = await this.permissionRepo.findAndCount({
-      where,
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { createdAt: 'DESC' },
-    });
+    const qb = this.permissionRepo.createQueryBuilder('p');
 
-    return { data: data.map((p) => this.toResponse(p)), total };
+    if (params.tenantId) {
+      qb.andWhere('p.tenantId = :tenantId', { tenantId: params.tenantId });
+    }
+    if (params.search) {
+      qb.andWhere(
+        '(p.name LIKE :search OR p.slug LIKE :search OR p.module LIKE :search)',
+        { search: `%${params.search}%` },
+      );
+    }
+    if (params.module) {
+      qb.andWhere('p.module = :module', { module: params.module });
+    }
+
+    const [data, total] = await qb
+      .skip((page - 1) * limit)
+      .take(limit)
+      .orderBy('p.createdAt', 'DESC')
+      .getManyAndCount();
+
+    const enriched = await Promise.all(
+      data.map(async (p) => this.toResponseWithCount(p)),
+    );
+    return { data: enriched, total };
   }
 
   async findById(id: string): Promise<PermissionResponseDto | null> {
     const perm = await this.permissionRepo.findOne({ where: { id } });
     if (!perm) return null;
-    return this.toResponse(perm);
+    return this.toResponseWithCount(perm);
   }
 
   async getRolePermissions(roleId: string): Promise<PermissionResponseDto[]> {
-    const perms = await this.permissionRepo.find({
+    const links = await this.rolePermissionRepo.find({
       where: { roleId },
-      order: { resource: 'ASC', action: 'ASC' },
+      select: { permissionId: true },
+    });
+    if (!links.length) return [];
+
+    const permIds = links.map((l) => l.permissionId);
+    const perms = await this.permissionRepo.find({
+      where: { id: In(permIds) },
+      order: { module: 'ASC', action: 'ASC' },
     });
     return perms.map((p) => this.toResponse(p));
   }
 
   async setRolePermissions(
     roleId: string,
-    permissions: RolePermissionDto[],
+    permissionIds: string[],
   ): Promise<PermissionResponseDto[]> {
     const role = await this.roleRepo.findOne({ where: { id: roleId } });
     if (!role) throw new DomainException('Role not found', 'ROLE_NOT_FOUND');
 
-    await this.permissionRepo.delete({ roleId });
+    await this.rolePermissionRepo.delete({ roleId });
 
-    if (!permissions.length) return [];
+    if (!permissionIds.length) return [];
 
-    const entities = permissions.map((p) =>
-      this.permissionRepo.create({
-        roleId,
-        resource: p.resource,
-        action: p.action,
-      }),
+    const validPerms = await this.permissionRepo.findBy({
+      id: In(permissionIds),
+    });
+    if (validPerms.length !== permissionIds.length) {
+      throw new DomainException(
+        'One or more permissions not found',
+        'PERMISSION_NOT_FOUND',
+      );
+    }
+
+    const links = permissionIds.map((id) =>
+      this.rolePermissionRepo.create({ roleId, permissionId: id }),
     );
-    const saved = await this.permissionRepo.save(entities);
-    return saved.map((p) => this.toResponse(p));
+    await this.rolePermissionRepo.save(links);
+
+    return validPerms.map((p: Permission) => this.toResponse(p));
   }
 
   async getUserPermissions(userId: string): Promise<string[]> {
@@ -137,13 +179,19 @@ export class PermissionService {
     if (!userRoles.length) return [];
 
     const roleIds = userRoles.map((ur) => ur.roleId);
-    const perms = await this.permissionRepo.find({
+    const links = await this.rolePermissionRepo.find({
       where: { roleId: In(roleIds) },
-      select: { resource: true, action: true },
+      select: { permissionId: true },
+    });
+    if (!links.length) return [];
+
+    const permIds = [...new Set(links.map((l) => l.permissionId))];
+    const perms = await this.permissionRepo.find({
+      where: { id: In(permIds) },
+      select: { slug: true },
     });
 
-    const unique = new Set(perms.map((p) => `${p.resource}:${p.action}`));
-    return Array.from(unique);
+    return [...new Set(perms.map((p) => p.slug))];
   }
 
   async hasPermission(
@@ -155,15 +203,67 @@ export class PermissionService {
     return perms.includes(`${resource}:${action}`) || perms.includes('all:all');
   }
 
+  async getPermissionStats(): Promise<PermissionStatsDto> {
+    const total = await this.permissionRepo.count();
+    const system = await this.permissionRepo.count({
+      where: { isSystem: true },
+    });
+    const roleCount = await this.rolePermissionRepo.count();
+
+    const usedPermIds = await this.rolePermissionRepo
+      .createQueryBuilder('rp')
+      .select('DISTINCT rp.permissionId', 'id')
+      .getRawMany();
+
+    return {
+      total,
+      system,
+      user: 0, // placeholder if needed later
+      role: roleCount,
+      permission: total,
+      unused: total - usedPermIds.length,
+    };
+  }
+
+  async getPermissionUsage(): Promise<PermissionUsageDto[]> {
+    const allPerms = await this.permissionRepo.find({
+      order: { module: 'ASC', action: 'ASC' },
+    });
+
+    const result: PermissionUsageDto[] = [];
+    for (const perm of allPerms) {
+      const roleCount = await this.rolePermissionRepo.count({
+        where: { permissionId: perm.id },
+      });
+      result.push({
+        permission: this.toResponse(perm),
+        roleCount,
+      });
+    }
+    return result;
+  }
+
   private toResponse(perm: Permission): PermissionResponseDto {
     return {
       id: perm.id,
-      roleId: perm.roleId,
-      resource: perm.resource,
+      name: perm.name,
+      slug: perm.slug,
+      module: perm.module,
       action: perm.action,
+      description: perm.description,
+      isSystem: perm.isSystem,
       tenantId: perm.tenantId,
       createdAt: perm.createdAt,
       updatedAt: perm.updatedAt,
     };
+  }
+
+  private async toResponseWithCount(
+    perm: Permission,
+  ): Promise<PermissionResponseDto> {
+    const rolesCount = await this.rolePermissionRepo.count({
+      where: { permissionId: perm.id },
+    });
+    return { ...this.toResponse(perm), rolesCount };
   }
 }

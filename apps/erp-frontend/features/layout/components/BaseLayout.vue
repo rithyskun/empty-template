@@ -27,7 +27,7 @@ const sidebarSections = computed<MenuSection[]>(() => {
 
 const contentMargin = computed(() => {
   if (sidebarHidden.value) return 'ml-0';
-  if (sidebarCollapsed.value) return 'lg:ml-16';
+  if (sidebarCollapsed.value) return 'lg:ml-20';
   return 'lg:ml-64 xl:ml-72 2xl:ml-80 3xl:ml-80';
 });
 </script>

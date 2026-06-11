@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Tenant } from '../entities/tenant.entity';
 import { Role } from '../entities/role.entity';
 import { Permission } from '../entities/permission.entity';
+import { RolePermission } from '../entities/role-permission.entity';
 import { UserService } from './user.service';
 import { RoleService } from './role.service';
 
@@ -18,6 +19,8 @@ export class SeedService {
     private readonly roleRepo: Repository<Role>,
     @InjectRepository(Permission)
     private readonly permissionRepo: Repository<Permission>,
+    @InjectRepository(RolePermission)
+    private readonly rolePermissionRepo: Repository<RolePermission>,
     private readonly userService: UserService,
     private readonly roleService: RoleService,
   ) {}
@@ -83,16 +86,32 @@ export class SeedService {
     // 3. Seed Permissions for SUPER_ADMIN
     const superAdminRole = seededRoles['SUPER_ADMIN'];
     const existingPerm = await this.permissionRepo.findOne({
-      where: { roleId: superAdminRole.id, resource: 'all', action: 'all' },
+      where: { slug: 'super-admin-all', module: 'all', action: 'all' },
     });
-    if (!existingPerm) {
-      const perm = this.permissionRepo.create({
-        roleId: superAdminRole.id,
-        resource: 'all',
+    let perm: Permission | null = existingPerm ?? null;
+    if (!perm) {
+      perm = this.permissionRepo.create({
+        name: 'Super Admin All Access',
+        slug: 'super-admin-all',
+        module: 'all',
         action: 'all',
+        description: 'Full system access for SUPER_ADMIN',
+        isSystem: true,
+      });
+      perm = await this.permissionRepo.save(perm);
+      this.logger.log('Created all-access permission');
+    }
+    // Link permission to SUPER_ADMIN role
+    const existingLink = await this.rolePermissionRepo.findOne({
+      where: { roleId: superAdminRole.id, permissionId: perm.id },
+    });
+    if (!existingLink) {
+      const link = this.rolePermissionRepo.create({
+        roleId: superAdminRole.id,
+        permissionId: perm.id,
         tenantId: tenant.id,
       });
-      await this.permissionRepo.save(perm);
+      await this.rolePermissionRepo.save(link);
       this.logger.log('Granted all permissions to SUPER_ADMIN');
     }
 

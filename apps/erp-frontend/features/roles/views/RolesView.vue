@@ -114,7 +114,7 @@ const fetchRoles = async () => {
     }
 
     const response = await api.fetchApi<{ data: Role[]; total: number }>(
-      '/roles',
+      '/api/v1/identity/roles',
       {
         params,
       },
@@ -138,7 +138,7 @@ const fetchRoleStats = async () => {
       active: number;
       inactive: number;
       withPermissions: number;
-    }>('/roles/stats');
+    }>('/api/v1/identity/roles/stats');
     roleStats.value = {
       totalRoles: response.data.total,
       activeRoles: response.data.active,
@@ -274,7 +274,7 @@ const deleteRole = async () => {
   isDeleting.value = true;
   deleteError.value = null;
   try {
-    await api.deleteApi(`/roles/${deletingRole.value.id}`);
+    await api.deleteApi(`/api/v1/identity/roles/${deletingRole.value.id}`);
     showDeleteModal.value = false;
     deletingRole.value = null;
     await fetchRoles();
@@ -296,7 +296,7 @@ const closeDeleteModal = () => {
 const toggleRoleStatus = async (role: RoleListItem) => {
   try {
     const newStatus = role.status === 'active' ? 'inactive' : 'active';
-    await api.putApi(`/roles/${role.id}`, {
+    await api.putApi(`/api/v1/identity/roles/${role.id}`, {
       isActive: newStatus === 'active',
     });
     role.status = newStatus;
@@ -315,7 +315,7 @@ const saveRole = async () => {
   try {
     if (editingRole.value) {
       // Update existing role
-      await api.putApi(`/roles/${editingRole.value.id}`, {
+      await api.putApi(`/api/v1/identity/roles/${editingRole.value.id}`, {
         name: roleForm.value.name,
         slug: roleForm.value.slug,
         description: roleForm.value.description,
@@ -324,7 +324,7 @@ const saveRole = async () => {
       });
     } else {
       // Create new role
-      await api.postApi('/roles', {
+      await api.postApi('/api/v1/identity/roles', {
         name: roleForm.value.name,
         slug: roleForm.value.slug,
         description: roleForm.value.description,

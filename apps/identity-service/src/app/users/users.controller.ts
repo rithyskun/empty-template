@@ -10,7 +10,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from '@erp/identity-core';
-import type { CreateUserDto, UpdateUserDto } from '@erp/identity-core';
+import type {
+  CreateUserDto,
+  UpdateUserDto,
+  ResetPasswordDto,
+} from '@erp/identity-core';
 import {
   JwtAuthGuard,
   RolesGuard,
@@ -20,7 +24,7 @@ import {
   CurrentUser,
 } from '@erp/auth';
 import type { UserPayload } from '@erp/auth';
-import { PlatformRole } from '@erp/enums';
+import { PlatformRole, UserStatus } from '@erp/enums';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
@@ -45,14 +49,29 @@ export class UsersController {
   async list(
     @Query('page') page?: string,
     @Query('limit') limit?: string,
+    @Query('search') search?: string,
+    @Query('status') status?: string,
     @CurrentUser() user?: UserPayload,
   ) {
     const result = await this.userService.list({
       tenantId: user?.tenantId,
       page: page ? Number(page) : 1,
       limit: limit ? Number(limit) : 20,
+      search,
+      status: status as UserStatus,
     });
     return { data: result.data, total: result.total };
+  }
+
+  @Get('stats')
+  @Roles(
+    PlatformRole.SUPER_ADMIN,
+    PlatformRole.TENANT_ADMIN,
+    PlatformRole.VIEWER,
+  )
+  @Permissions('users:read')
+  async stats() {
+    return { data: await this.userService.getUserStats() };
   }
 
   @Get(':id')
@@ -81,6 +100,38 @@ export class UsersController {
   async remove(@Param('id') id: string, @CurrentUser() user: UserPayload) {
     await this.userService.delete(id, user.userId);
     return { data: { id }, message: 'User deleted' };
+  }
+
+  @Post(':id/activate')
+  @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('users:update')
+  async activate(@Param('id') id: string, @CurrentUser() user: UserPayload) {
+    const result = await this.userService.activateUser(id, user.userId);
+    return { data: result, message: 'User activated successfully' };
+  }
+
+  @Post(':id/deactivate')
+  @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('users:update')
+  async deactivate(@Param('id') id: string, @CurrentUser() user: UserPayload) {
+    const result = await this.userService.deactivateUser(id, user.userId);
+    return { data: result, message: 'User deactivated successfully' };
+  }
+
+  @Post(':id/suspend')
+  @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('users:update')
+  async suspend(@Param('id') id: string, @CurrentUser() user: UserPayload) {
+    const result = await this.userService.suspendUser(id, user.userId);
+    return { data: result, message: 'User suspended successfully' };
+  }
+
+  @Post(':id/reset-password')
+  @Roles(PlatformRole.SUPER_ADMIN, PlatformRole.TENANT_ADMIN)
+  @Permissions('users:update')
+  async resetPassword(@Param('id') id: string, @Body() dto: ResetPasswordDto) {
+    await this.userService.resetPassword(id, dto.newPassword);
+    return { message: 'Password reset successfully' };
   }
 
   @Post(':id/approve')

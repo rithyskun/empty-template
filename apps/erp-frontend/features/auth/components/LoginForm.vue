@@ -104,7 +104,7 @@ async function handleSubmit() {
       class="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-500"
     >
       <span class="w-8 h-px bg-gray-200 dark:bg-gray-700" />
-      <span>LDAP Authentication</span>
+      <span>AD Authentication</span>
       <span class="w-8 h-px bg-gray-200 dark:bg-gray-700" />
     </div>
   </form>

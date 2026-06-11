@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository } from 'typeorm';
 import * as crypto from 'crypto';
 import { User } from '../entities/user.entity';
 import { UserRole } from '../entities/user-role.entity';
 import { Role } from '../entities/role.entity';
-import { CreateUserDto, UpdateUserDto, UserResponseDto } from '../dto/user.dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  UserResponseDto,
+  UserStatsDto,
+} from '../dto/user.dto';
 import { DomainException } from '@erp/common';
 import { UserStatus } from '@erp/enums';
 
@@ -54,6 +59,7 @@ export class UserService {
       firstName: dto.firstName,
       lastName: dto.lastName,
       phone: dto.phone,
+      avatar: dto.avatar,
       tenantId: dto.tenantId,
       companyId: dto.companyId,
       branchId: dto.branchId,
@@ -63,17 +69,17 @@ export class UserService {
 
     const saved = await this.userRepo.save(user);
 
-    if (dto.roleIds?.length) {
-      const roles = await this.roleRepo.findBy({ id: In(dto.roleIds) });
-      await this.userRoleRepo.save(
-        roles.map((r: Role) =>
+    if (dto.roleId) {
+      const role = await this.roleRepo.findOne({ where: { id: dto.roleId } });
+      if (role) {
+        await this.userRoleRepo.save(
           this.userRoleRepo.create({
             userId: saved.id,
-            roleId: r.id,
+            roleId: role.id,
             tenantId: dto.tenantId,
           }),
-        ),
-      );
+        );
+      }
     }
 
     return this.toResponse(saved);
@@ -85,6 +91,19 @@ export class UserService {
 
     Object.assign(user, dto);
     const saved = await this.userRepo.save(user);
+
+    if (dto.roleId !== undefined) {
+      await this.userRoleRepo.delete({ userId: id });
+      if (dto.roleId) {
+        const role = await this.roleRepo.findOne({ where: { id: dto.roleId } });
+        if (role) {
+          await this.userRoleRepo.save(
+            this.userRoleRepo.create({ userId: id, roleId: role.id }),
+          );
+        }
+      }
+    }
+
     return this.toResponse(saved);
   }
 
@@ -100,18 +119,33 @@ export class UserService {
     tenantId?: string;
     page?: number;
     limit?: number;
+    search?: string;
+    status?: UserStatus;
   }): Promise<{ data: UserResponseDto[]; total: number }> {
     const page = params.page || 1;
     const limit = params.limit || 20;
-    const where: Record<string, unknown> = { isDeleted: false };
-    if (params.tenantId) where['tenantId'] = params.tenantId;
 
-    const [users, total] = await this.userRepo.findAndCount({
-      where,
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { createdAt: 'DESC' },
-    });
+    const qb = this.userRepo.createQueryBuilder('u');
+    qb.where('u.isDeleted = :isDeleted', { isDeleted: false });
+
+    if (params.tenantId) {
+      qb.andWhere('u.tenantId = :tenantId', { tenantId: params.tenantId });
+    }
+    if (params.search) {
+      qb.andWhere(
+        '(u.firstName LIKE :search OR u.lastName LIKE :search OR u.email LIKE :search)',
+        { search: `%${params.search}%` },
+      );
+    }
+    if (params.status) {
+      qb.andWhere('u.status = :status', { status: params.status });
+    }
+
+    const [users, total] = await qb
+      .skip((page - 1) * limit)
+      .take(limit)
+      .orderBy('u.createdAt', 'DESC')
+      .getManyAndCount();
 
     const data = await Promise.all(users.map((u) => this.toResponse(u)));
     return { data, total };
@@ -123,26 +157,109 @@ export class UserService {
       relations: { role: true },
     });
 
+    const primaryRole = userRoles[0];
+
     return {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
       phone: user.phone,
+      avatar: user.avatar,
       isActive: user.isActive,
       status: user.status,
       tenantId: user.tenantId,
       companyId: user.companyId,
       branchId: user.branchId,
       lastLoginAt: user.lastLoginAt,
+      roleId: primaryRole?.role.id,
+      role: primaryRole
+        ? {
+            id: primaryRole.role.id,
+            name: primaryRole.role.name,
+            code: primaryRole.role.code,
+            slug: primaryRole.role.slug,
+          }
+        : undefined,
       roles: userRoles.map((ur) => ({
         id: ur.role.id,
         name: ur.role.name,
         code: ur.role.code,
+        slug: ur.role.slug,
       })),
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
+  }
+
+  async activateUser(id: string, updatedBy?: string): Promise<UserResponseDto> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new DomainException('User not found', 'USER_NOT_FOUND');
+    user.status = UserStatus.ACTIVE;
+    user.isActive = true;
+    if (updatedBy) user.updatedBy = updatedBy;
+    const saved = await this.userRepo.save(user);
+    return this.toResponse(saved);
+  }
+
+  async deactivateUser(
+    id: string,
+    updatedBy?: string,
+  ): Promise<UserResponseDto> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new DomainException('User not found', 'USER_NOT_FOUND');
+    user.status = UserStatus.INACTIVE;
+    user.isActive = false;
+    if (updatedBy) user.updatedBy = updatedBy;
+    const saved = await this.userRepo.save(user);
+    return this.toResponse(saved);
+  }
+
+  async suspendUser(id: string, updatedBy?: string): Promise<UserResponseDto> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new DomainException('User not found', 'USER_NOT_FOUND');
+    user.status = UserStatus.SUSPENDED;
+    user.isActive = false;
+    if (updatedBy) user.updatedBy = updatedBy;
+    const saved = await this.userRepo.save(user);
+    return this.toResponse(saved);
+  }
+
+  async resetPassword(id: string, newPassword: string): Promise<void> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new DomainException('User not found', 'USER_NOT_FOUND');
+    user.passwordHash = this.hashPassword(newPassword);
+    await this.userRepo.save(user);
+  }
+
+  async getUserStats(): Promise<UserStatsDto> {
+    const qb = this.userRepo.createQueryBuilder('u');
+    const total = await qb
+      .where('u.isDeleted = :isDeleted', { isDeleted: false })
+      .getCount();
+    const active = await qb
+      .clone()
+      .andWhere('u.status = :status', { status: UserStatus.ACTIVE })
+      .getCount();
+    const inactive = await qb
+      .clone()
+      .andWhere('u.status = :status', { status: UserStatus.INACTIVE })
+      .getCount();
+    const pending = await qb
+      .clone()
+      .andWhere('u.status = :status', { status: UserStatus.PENDING })
+      .getCount();
+    const suspended = await qb
+      .clone()
+      .andWhere('u.status = :status', { status: UserStatus.SUSPENDED })
+      .getCount();
+
+    const locked = await qb
+      .clone()
+      .andWhere('u.mustChangePwd = :mustChangePwd', { mustChangePwd: true })
+      .getCount();
+
+    return { total, active, inactive, pending, suspended, locked };
   }
 
   async approveUser(id: string, approvedBy?: string): Promise<UserResponseDto> {

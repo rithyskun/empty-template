@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { Home, ChevronRight } from 'lucide-vue-next';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -50,12 +49,11 @@ const formatSegment = (segment: string): string => {
       to="/"
       class="flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
     >
-      <Home class="h-5 w-5" />
+      Home
     </router-link>
 
     <template v-for="(crumb, index) in breadcrumbs" :key="index">
-      <ChevronRight class="h-5 w-5 text-gray-400 dark:text-gray-600" />
-
+      <span class="h-5 text-gray-400 dark:text-gray-600">/</span>
       <router-link
         v-if="crumb.clickable"
         :to="crumb.path"

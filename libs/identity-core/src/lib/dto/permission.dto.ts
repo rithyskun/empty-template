@@ -1,31 +1,50 @@
 export interface CreatePermissionDto {
-  roleId: string;
-  resource: string;
+  name: string;
+  slug: string;
+  module: string;
   action: string;
+  description?: string;
   tenantId?: string;
+  isSystem?: boolean;
 }
 
 export interface UpdatePermissionDto {
-  resource?: string;
+  name?: string;
+  slug?: string;
+  module?: string;
   action?: string;
+  description?: string;
 }
 
 export interface PermissionResponseDto {
   id: string;
-  roleId: string;
-  resource: string;
+  name: string;
+  slug: string;
+  module: string;
   action: string;
+  description?: string;
+  isSystem: boolean;
   tenantId?: string;
+  rolesCount?: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface RolePermissionDto {
-  resource: string;
-  action: string;
-}
-
 export interface SetRolePermissionsDto {
   roleId: string;
-  permissions: RolePermissionDto[];
+  permissionIds: string[];
+}
+
+export interface PermissionStatsDto {
+  total: number;
+  system: number;
+  user: number;
+  role: number;
+  permission: number;
+  unused: number;
+}
+
+export interface PermissionUsageDto {
+  permission: PermissionResponseDto;
+  roleCount: number;
 }

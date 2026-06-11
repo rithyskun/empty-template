@@ -177,7 +177,7 @@ const fetchUsers = async () => {
 
   try {
     const response = await api.fetchApi<{ data: ApiUser[]; total: number }>(
-      '/users',
+      '/api/v1/identity/users',
       {
         params: {
           page: currentPage.value,
@@ -216,7 +216,7 @@ const fetchUserStats = async () => {
       pending: number;
       suspended: number;
       locked: number;
-    }>('/users/stats');
+    }>('/api/v1/identity/users/stats');
 
     userStats.value = response.data;
   } catch (err: any) {
@@ -270,7 +270,7 @@ const editUser = (user: UserListItem) => {
 // Activate user
 const activateUser = async (user: UserListItem) => {
   try {
-    await api.postApi(`/users/${user.id}/activate`, {});
+    await api.postApi(`/api/v1/identity/users/${user.id}/activate`, {});
     user.status = 'Active';
     user.statusColor = getStatusColor('active');
     await fetchUserStats();
@@ -296,7 +296,7 @@ const deactivateUser = async () => {
   actionError.value = null;
   try {
     await api.postApi(
-      `/users/${selectedUserForAction.value.id}/deactivate`,
+      `/api/v1/identity/users/${selectedUserForAction.value.id}/deactivate`,
       {},
     );
     selectedUserForAction.value.status = 'Inactive';
@@ -324,7 +324,10 @@ const suspendUser = async () => {
   isProcessingAction.value = true;
   actionError.value = null;
   try {
-    await api.postApi(`/users/${selectedUserForAction.value.id}/suspend`, {});
+    await api.postApi(
+      `/api/v1/identity/users/${selectedUserForAction.value.id}/suspend`,
+      {},
+    );
     selectedUserForAction.value.status = 'Suspended';
     selectedUserForAction.value.statusColor = getStatusColor('suspended');
     showSuspendModal.value = false;
@@ -350,7 +353,9 @@ const deleteUser = async () => {
   isProcessingAction.value = true;
   actionError.value = null;
   try {
-    await api.deleteApi(`/users/${selectedUserForAction.value.id}`);
+    await api.deleteApi(
+      `/api/v1/identity/users/${selectedUserForAction.value.id}`,
+    );
     showDeleteModal.value = false;
     selectedUserForAction.value = null;
     await fetchUsers();
@@ -385,7 +390,7 @@ const resetUserPassword = async () => {
   const userName = selectedUserForAction.value.name;
   try {
     await api.postApi(
-      `/users/${selectedUserForAction.value.id}/reset-password`,
+      `/api/v1/identity/users/${selectedUserForAction.value.id}/reset-password`,
       {
         newPassword: resetPasswordForm.value.newPassword,
         confirmPassword: resetPasswordForm.value.confirmPassword,
@@ -430,7 +435,7 @@ const saveUser = async () => {
   try {
     if (editingUser.value) {
       // Update existing user
-      await api.putApi(`/users/${editingUser.value.id}`, {
+      await api.putApi(`/api/v1/identity/users/${editingUser.value.id}`, {
         firstName: userForm.value.firstName,
         lastName: userForm.value.lastName,
         email: userForm.value.email,
@@ -441,7 +446,7 @@ const saveUser = async () => {
       });
     } else {
       // Create new user
-      await api.postApi('/users', {
+      await api.postApi('/api/v1/identity/users', {
         firstName: userForm.value.firstName,
         lastName: userForm.value.lastName,
         email: userForm.value.email,

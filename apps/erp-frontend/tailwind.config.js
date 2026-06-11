@@ -31,12 +31,12 @@ export default {
         brand: '1.85rem',
       },
       colors: {
-        logo: '#055f7c',
-        branch: '#0097a7',
+        aba: '#055f7c',
+        financial: '#0097a7',
         accent: '#e31013',
-        'brand-dark': '#055f7c',
-        'brand-accent': '#e31013',
-        'brand-teal': '#0097a7',
+        'aba-dark': '#055f7c',
+        'aba-accent': '#e31013',
+        'aba-teal': '#0097a7',
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',

@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Role } from '../entities/role.entity';
 import { Permission } from '../entities/permission.entity';
+import { RolePermission } from '../entities/role-permission.entity';
 import { UserRole } from '../entities/user-role.entity';
-import { CreateRoleDto, UpdateRoleDto, RoleResponseDto } from '../dto/role.dto';
+import {
+  CreateRoleDto,
+  UpdateRoleDto,
+  RoleResponseDto,
+  RoleStatsDto,
+} from '../dto/role.dto';
 import { DomainException } from '@erp/common';
 
 @Injectable()
@@ -14,6 +20,8 @@ export class RoleService {
     private readonly roleRepo: Repository<Role>,
     @InjectRepository(Permission)
     private readonly permissionRepo: Repository<Permission>,
+    @InjectRepository(RolePermission)
+    private readonly rolePermissionRepo: Repository<RolePermission>,
     @InjectRepository(UserRole)
     private readonly userRoleRepo: Repository<UserRole>,
   ) {}
@@ -29,23 +37,23 @@ export class RoleService {
     const role = this.roleRepo.create({
       name: dto.name,
       code: dto.code,
+      slug: dto.slug ?? dto.code,
       description: dto.description,
       tenantId: dto.tenantId,
       isSystem: dto.isSystem ?? false,
+      isActive: dto.isActive ?? true,
     });
     const saved = await this.roleRepo.save(role);
 
-    if (dto.permissions?.length) {
-      await this.permissionRepo.save(
-        dto.permissions.map((p) =>
-          this.permissionRepo.create({
-            roleId: saved.id,
-            resource: p.resource,
-            action: p.action,
-            tenantId: dto.tenantId,
-          }),
-        ),
+    if (dto.permissionIds?.length) {
+      const links = dto.permissionIds.map((pid) =>
+        this.rolePermissionRepo.create({
+          roleId: saved.id,
+          permissionId: pid,
+          tenantId: dto.tenantId,
+        }),
       );
+      await this.rolePermissionRepo.save(links);
     }
 
     return this.toResponse(saved);
@@ -54,8 +62,20 @@ export class RoleService {
   async update(id: string, dto: UpdateRoleDto): Promise<RoleResponseDto> {
     const role = await this.roleRepo.findOne({ where: { id } });
     if (!role) throw new DomainException('Role not found', 'ROLE_NOT_FOUND');
+
     Object.assign(role, dto);
     const saved = await this.roleRepo.save(role);
+
+    if (dto.permissionIds !== undefined) {
+      await this.rolePermissionRepo.delete({ roleId: id });
+      if (dto.permissionIds.length) {
+        const links = dto.permissionIds.map((pid) =>
+          this.rolePermissionRepo.create({ roleId: id, permissionId: pid }),
+        );
+        await this.rolePermissionRepo.save(links);
+      }
+    }
+
     return this.toResponse(saved);
   }
 
@@ -72,18 +92,33 @@ export class RoleService {
     tenantId?: string;
     page?: number;
     limit?: number;
+    search?: string;
+    isActive?: boolean;
   }): Promise<{ data: RoleResponseDto[]; total: number }> {
     const page = params.page || 1;
     const limit = params.limit || 20;
-    const where: Record<string, unknown> = { isDeleted: false };
-    if (params.tenantId) where['tenantId'] = params.tenantId;
 
-    const [roles, total] = await this.roleRepo.findAndCount({
-      where,
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { createdAt: 'DESC' },
-    });
+    const qb = this.roleRepo.createQueryBuilder('r');
+    qb.where('r.isDeleted = :isDeleted', { isDeleted: false });
+
+    if (params.tenantId) {
+      qb.andWhere('r.tenantId = :tenantId', { tenantId: params.tenantId });
+    }
+    if (params.search) {
+      qb.andWhere(
+        '(r.name LIKE :search OR r.code LIKE :search OR r.slug LIKE :search)',
+        { search: `%${params.search}%` },
+      );
+    }
+    if (params.isActive !== undefined) {
+      qb.andWhere('r.isActive = :isActive', { isActive: params.isActive });
+    }
+
+    const [roles, total] = await qb
+      .skip((page - 1) * limit)
+      .take(limit)
+      .orderBy('r.createdAt', 'DESC')
+      .getManyAndCount();
 
     const data = await Promise.all(roles.map((r) => this.toResponse(r)));
     return { data, total };
@@ -123,21 +158,49 @@ export class RoleService {
       where: { userId },
       relations: { role: true },
     });
-    return userRoles.map((ur) => ({
-      id: ur.role.id,
-      name: ur.role.name,
-      code: ur.role.code,
-      description: ur.role.description,
-      isSystem: ur.role.isSystem,
-      tenantId: ur.role.tenantId,
-      permissions: [],
-      createdAt: ur.role.createdAt,
-      updatedAt: ur.role.updatedAt,
-    }));
+    return Promise.all(userRoles.map((ur) => this.toResponse(ur.role)));
+  }
+
+  async getRoleStats(): Promise<RoleStatsDto> {
+    const total = await this.roleRepo.count({ where: { isDeleted: false } });
+    const active = await this.roleRepo.count({
+      where: { isDeleted: false, isActive: true },
+    });
+    const inactive = await this.roleRepo.count({
+      where: { isDeleted: false, isActive: false },
+    });
+
+    const withPerms = await this.rolePermissionRepo
+      .createQueryBuilder('rp')
+      .select('DISTINCT rp.roleId', 'roleId')
+      .getRawMany();
+
+    return {
+      total,
+      active,
+      inactive,
+      withPermissions: withPerms.length,
+    };
   }
 
   private async toResponse(role: Role): Promise<RoleResponseDto> {
-    const permissions = await this.permissionRepo.find({
+    const links = await this.rolePermissionRepo.find({
+      where: { roleId: role.id },
+      select: { permissionId: true },
+    });
+
+    let permissions: { id: string; name: string; slug: string }[] = [];
+    if (links.length) {
+      const permIds = links.map((l) => l.permissionId);
+      const perms = await this.permissionRepo.findBy({ id: In(permIds) });
+      permissions = perms.map((p) => ({
+        id: p.id,
+        name: p.name,
+        slug: p.slug,
+      }));
+    }
+
+    const userCount = await this.userRoleRepo.count({
       where: { roleId: role.id },
     });
 
@@ -145,13 +208,13 @@ export class RoleService {
       id: role.id,
       name: role.name,
       code: role.code,
+      slug: role.slug,
       description: role.description,
       isSystem: role.isSystem,
+      isActive: role.isActive,
       tenantId: role.tenantId,
-      permissions: permissions.map((p) => ({
-        resource: p.resource,
-        action: p.action,
-      })),
+      permissions,
+      userCount,
       createdAt: role.createdAt,
       updatedAt: role.updatedAt,
     };

@@ -97,7 +97,9 @@ const transformApiPermission = (
 // Fetch permission usage (role counts)
 const fetchPermissionUsage = async () => {
   try {
-    const response = await api.fetchApi<any>('/permissions/usage');
+    const response = await api.fetchApi<any>(
+      '/api/v1/identity/permissions/usage',
+    );
     return response.data || [];
   } catch (err) {
     console.error('Error fetching permission usage:', err);
@@ -112,7 +114,7 @@ const fetchPermissions = async () => {
 
   try {
     const response = await api.fetchApi<{ data: Permission[]; total: number }>(
-      '/permissions',
+      '/api/v1/identity/permissions',
       {
         params: {
           page: currentPage.value,
@@ -175,7 +177,7 @@ const fetchPermissionStats = async () => {
       role: number;
       permission: number;
       unused: number;
-    }>('/permissions/stats');
+    }>('/api/v1/identity/permissions/stats');
 
     permissionStats.value = response.data;
   } catch (err) {
@@ -211,7 +213,9 @@ const deletePermission = async () => {
   isDeleting.value = true;
   deleteError.value = null;
   try {
-    await api.deleteApi(`/permissions/${deletingPermission.value.id}`);
+    await api.deleteApi(
+      `/api/v1/identity/permissions/${deletingPermission.value.id}`,
+    );
     showDeleteModal.value = false;
     deletingPermission.value = null;
     await fetchPermissions();
@@ -238,16 +242,19 @@ const savePermission = async () => {
   try {
     if (editingPermission.value) {
       // Update existing permission
-      await api.putApi(`/permissions/${editingPermission.value.id}`, {
-        name: permissionForm.value.name,
-        slug: permissionForm.value.slug,
-        description: permissionForm.value.description,
-        module: permissionForm.value.module,
-        metadata: null,
-      });
+      await api.putApi(
+        `/api/v1/identity/permissions/${editingPermission.value.id}`,
+        {
+          name: permissionForm.value.name,
+          slug: permissionForm.value.slug,
+          description: permissionForm.value.description,
+          module: permissionForm.value.module,
+          metadata: null,
+        },
+      );
     } else {
       // Create new permission
-      await api.postApi('/permissions', {
+      await api.postApi('/api/v1/identity/permissions', {
         name: permissionForm.value.name,
         slug: permissionForm.value.slug,
         description: permissionForm.value.description,

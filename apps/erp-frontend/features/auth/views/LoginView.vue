@@ -40,7 +40,7 @@ onUnmounted(() => {
         class="relative z-10 flex flex-col items-center text-center animate-slide-in-left"
       >
         <!-- Brand Logo Block -->
-        <div
+        <!-- <div
           class="mb-6 w-28 h-28 rounded-3xl bg-white/70 dark:bg-white/10 backdrop-blur-sm shadow-lg border border-white/50 dark:border-white/10 flex items-center justify-center"
         >
           <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
@@ -82,12 +82,12 @@ onUnmounted(() => {
             />
             <circle cx="54" cy="34" r="2.5" fill="#e31013" />
           </svg>
-        </div>
+        </div> -->
 
         <!-- Brand Title -->
         <div class="inline-flex items-center mb-3">
           <span
-            class="text-[2.5rem] font-extrabold text-logo tracking-[0.04em] dark:text-[#80cbc4]"
+            class="text-[2.5rem] font-extrabold text-aba tracking-[0.04em] dark:text-[#80cbc4]"
           >
             ABA
           </span>
@@ -97,7 +97,7 @@ onUnmounted(() => {
             '
           </span>
           <span
-            class="text-[2.5rem] font-semibold text-branch tracking-[-0.01em] ml-1.5 dark:text-[#4fc3f7]"
+            class="text-[2.5rem] font-semibold text-financial tracking-[-0.01em] ml-1.5 dark:text-[#4fc3f7]"
           >
             Financial
           </span>
@@ -649,7 +649,7 @@ onUnmounted(() => {
         <div class="lg:hidden text-center mb-8">
           <div class="inline-flex items-center justify-center mb-2">
             <span
-              class="text-brand font-extrabold text-logo tracking-[0.04em] dark:text-[#80cbc4]"
+              class="text-aba font-extrabold tracking-[0.04em] dark:text-[#80cbc4]"
             >
               ABA
             </span>
@@ -659,7 +659,7 @@ onUnmounted(() => {
               '
             </span>
             <span
-              class="text-brand font-semibold text-branch tracking-[-0.01em] ml-1.5 dark:text-[#4fc3f7]"
+              class="text-financial font-semibold tracking-[-0.01em] ml-1.5 dark:text-[#4fc3f7]"
             >
               Financial
             </span>
@@ -672,7 +672,7 @@ onUnmounted(() => {
         <!-- Brand title at top of right panel -->
         <div class="hidden lg:flex items-center gap-1.5 mb-8">
           <span
-            class="text-xl font-extrabold text-logo tracking-[0.04em] dark:text-[#80cbc4]"
+            class="text-xl font-extrabold text-aba tracking-[0.04em] dark:text-[#80cbc4]"
           >
             ABA
           </span>
@@ -680,7 +680,7 @@ onUnmounted(() => {
             '
           </span>
           <span
-            class="text-xl font-semibold text-branch tracking-[-0.01em] ml-1 dark:text-[#4fc3f7]"
+            class="text-xl font-semibold text-financial tracking-[-0.01em] ml-1 dark:text-[#4fc3f7]"
           >
             Financial
           </span>

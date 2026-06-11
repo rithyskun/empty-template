@@ -1,7 +1,5 @@
-import { Entity, Column, OneToMany } from 'typeorm';
-import type { Relation } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 import { AuditableEntity } from '@erp/common';
-import { Permission } from './permission.entity';
 
 @Entity('roles')
 export class Role extends AuditableEntity {
@@ -11,12 +9,15 @@ export class Role extends AuditableEntity {
   @Column({ length: 50 })
   code!: string;
 
+  @Column({ length: 50, nullable: true })
+  slug?: string;
+
   @Column('text', { nullable: true })
   description?: string;
 
   @Column({ default: false })
   isSystem!: boolean;
 
-  @OneToMany(() => Permission, (p) => p.role)
-  permissions!: Relation<Permission[]>;
+  @Column({ name: 'is_active', default: true })
+  isActive!: boolean;
 }

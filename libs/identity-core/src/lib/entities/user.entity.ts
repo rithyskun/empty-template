@@ -40,4 +40,7 @@ export class User extends AuditableEntity {
 
   @Column({ name: 'two_factor_secret', length: 255, nullable: true })
   twoFactorSecret?: string;
+
+  @Column({ length: 500, nullable: true })
+  avatar?: string;
 }

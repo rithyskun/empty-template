@@ -1,21 +1,24 @@
-import { Entity, Column, ManyToOne, JoinColumn, Unique } from 'typeorm';
-import type { Relation } from 'typeorm';
+import { Entity, Column, Index } from 'typeorm';
 import { AuditableEntity } from '@erp/common';
-import { Role } from './role.entity';
 
 @Entity('permissions')
-@Unique(['roleId', 'resource', 'action'])
+@Index(['slug', 'tenantId'], { unique: true })
 export class Permission extends AuditableEntity {
-  @Column('uuid', { name: 'role_id' })
-  roleId!: string;
-
   @Column({ length: 100 })
-  resource!: string;
+  name!: string;
+
+  @Column({ length: 100, unique: true })
+  slug!: string;
+
+  @Column({ length: 50 })
+  module!: string;
 
   @Column({ length: 50 })
   action!: string;
 
-  @ManyToOne(() => Role, (r) => r.permissions)
-  @JoinColumn({ name: 'role_id' })
-  role!: Relation<Role>;
+  @Column('text', { nullable: true })
+  description?: string;
+
+  @Column({ name: 'is_system', default: false })
+  isSystem!: boolean;
 }

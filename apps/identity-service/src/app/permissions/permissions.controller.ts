@@ -50,18 +50,42 @@ export class PermissionsController {
   )
   @Permissions('permissions:read')
   async list(
-    @Query('roleId') roleId?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
+    @Query('search') search?: string,
+    @Query('module') module?: string,
     @CurrentUser() user?: UserPayload,
   ) {
     const result = await this.permissionService.list({
-      roleId,
       tenantId: user?.tenantId,
       page: page ? Number(page) : 1,
       limit: limit ? Number(limit) : 20,
+      search,
+      module,
     });
     return { data: result.data, total: result.total };
+  }
+
+  @Get('stats')
+  @Roles(
+    PlatformRole.SUPER_ADMIN,
+    PlatformRole.TENANT_ADMIN,
+    PlatformRole.VIEWER,
+  )
+  @Permissions('permissions:read')
+  async stats() {
+    return { data: await this.permissionService.getPermissionStats() };
+  }
+
+  @Get('usage')
+  @Roles(
+    PlatformRole.SUPER_ADMIN,
+    PlatformRole.TENANT_ADMIN,
+    PlatformRole.VIEWER,
+  )
+  @Permissions('permissions:read')
+  async usage() {
+    return { data: await this.permissionService.getPermissionUsage() };
   }
 
   @Get('role/:roleId')
@@ -122,7 +146,7 @@ export class PermissionsController {
   async setRolePermissions(@Body() dto: SetRolePermissionsDto) {
     const perms = await this.permissionService.setRolePermissions(
       dto.roleId,
-      dto.permissions,
+      dto.permissionIds,
     );
     return { data: perms };
   }

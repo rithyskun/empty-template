@@ -44,12 +44,38 @@ export class RolesController {
   async list(
     @Query('page') page?: string,
     @Query('limit') limit?: string,
+    @Query('search') search?: string,
+    @Query('isActive') isActive?: string,
     @CurrentUser() user?: UserPayload,
   ) {
     const result = await this.roleService.list({
       tenantId: user?.tenantId,
       page: page ? Number(page) : 1,
       limit: limit ? Number(limit) : 20,
+      search,
+      isActive: isActive !== undefined ? isActive === 'true' : undefined,
+    });
+    return { data: result.data, total: result.total };
+  }
+
+  @Get('stats')
+  @Permissions('roles:read')
+  async stats() {
+    return { data: await this.roleService.getRoleStats() };
+  }
+
+  @Get('active')
+  @Permissions('roles:read')
+  async active(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @CurrentUser() user?: UserPayload,
+  ) {
+    const result = await this.roleService.list({
+      tenantId: user?.tenantId,
+      page: page ? Number(page) : 1,
+      limit: limit ? Number(limit) : 20,
+      isActive: true,
     });
     return { data: result.data, total: result.total };
   }
