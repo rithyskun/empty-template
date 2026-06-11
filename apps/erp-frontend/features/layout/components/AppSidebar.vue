@@ -9,6 +9,7 @@ import {
   Zap,
   PanelLeft,
   PanelRight,
+  ChevronRight,
   LogOut,
   Globe,
   Check,
@@ -153,10 +154,8 @@ function navigate(path: string) {
     <!-- Logo -->
     <div
       :class="[
-        'shrink-0 h-14 sm:h-16 flex items-center border-b border-gray-200 dark:border-dark-border w-full',
-        sidebarCollapsed
-          ? 'justify-center cursor-pointer'
-          : 'justify-between px-3 xl:px-4 2xl:px-5',
+        'shrink-0 h-14 sm:h-16 flex items-center justify-center border-b border-gray-200 dark:border-dark-border w-full relative',
+        sidebarCollapsed ? 'cursor-pointer' : 'px-3 xl:px-4 2xl:px-5',
       ]"
       :title="sidebarCollapsed ? 'Expand sidebar' : undefined"
       @click="sidebarCollapsed && toggleSidebar()"
@@ -185,16 +184,26 @@ function navigate(path: string) {
         </span>
       </div>
 
-      <!-- Toggle -->
+      <!-- Toggle (expanded only) -->
       <button
-        class="w-7 h-7 rounded flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:text-dark-text-tertiary dark:hover:bg-dark-bg-hover transition-colors shrink-0"
+        v-if="!sidebarCollapsed"
+        class="absolute right-3 xl:right-4 2xl:right-5 top-1/2 -translate-y-1/2 w-7 h-7 rounded flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:text-dark-text-tertiary dark:hover:bg-dark-bg-hover transition-colors shrink-0"
         :title="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
         @click.stop="toggleSidebar"
       >
-        <PanelLeft v-if="!sidebarCollapsed" class="w-5 h-5" />
-        <PanelRight v-else class="w-5 h-5" />
+        <PanelLeft class="w-4 h-4" />
       </button>
     </div>
+
+    <!-- Floating toggle for collapsed sidebar -->
+    <button
+      v-if="sidebarCollapsed"
+      class="absolute -right-4 sm:-right-4 top-3 sm:top-4 z-50 w-6 sm:w-7 h-8 rounded-r bg-white dark:bg-dark-bg-secondary shadow-sm flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-dark-text-secondary dark:hover:text-dark-text dark:hover:bg-dark-bg-hover transition-colors cursor-pointer"
+      title="Expand sidebar"
+      @click="toggleSidebar"
+    >
+      <PanelRight class="w-4 h-4" />
+    </button>
 
     <nav class="flex-1 overflow-y-auto py-4 sm:py-6">
       <div v-for="(section, sIdx) in props.sections" :key="sIdx" class="mb-6">
