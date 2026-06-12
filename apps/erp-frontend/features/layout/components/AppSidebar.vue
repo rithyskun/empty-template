@@ -19,13 +19,16 @@ import {
   Monitor,
 } from 'lucide-vue-next';
 import { useTheme, type Theme } from '@/composables/useTheme';
-import type { MenuSection } from '@/config/menu.config';
+import type { MenuItem, MenuSection } from '@/config/menu.config';
 
 interface Props {
   sections: MenuSection[];
 }
 
 const props = defineProps<Props>();
+const emit = defineEmits<{
+  action: [action: string];
+}>();
 const route = useRoute();
 const router = useRouter();
 const {
@@ -129,6 +132,15 @@ function navigate(path: string) {
   router.push(path);
   closeMobileSidebar();
 }
+
+function handleItemClick(item: MenuItem) {
+  if (item.action) {
+    emit('action', item.action);
+    closeMobileSidebar();
+  } else {
+    navigate(item.path);
+  }
+}
 </script>
 
 <template>
@@ -154,7 +166,7 @@ function navigate(path: string) {
     <!-- Logo -->
     <div
       :class="[
-        'shrink-0 h-14 sm:h-16 flex items-center justify-center border-b border-gray-200 dark:border-dark-border w-full relative',
+        'shrink-0 h-14 sm:h-16 flex items-center justify-start border-b border-gray-200 dark:border-dark-border w-full relative',
         sidebarCollapsed ? 'cursor-pointer' : 'px-3 xl:px-4 2xl:px-5',
       ]"
       :title="sidebarCollapsed ? 'Expand sidebar' : undefined"
@@ -224,7 +236,7 @@ function navigate(path: string) {
                 sidebarCollapsed ? 'justify-center' : '',
               ]"
               :title="sidebarCollapsed ? item.label : undefined"
-              @click="navigate(item.path)"
+              @click="handleItemClick(item)"
             >
               <component
                 v-if="item.icon"

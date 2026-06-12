@@ -11,6 +11,8 @@ export interface MenuItem {
   permissions?: string[];
   /** Role strings required to see this item (any of them). Example: ['SUPER_ADMIN'] */
   roles?: string[];
+  /** Trigger a custom action instead of navigation (e.g., open a modal) */
+  action?: string;
 }
 
 export interface MenuSection {

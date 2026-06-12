@@ -3,10 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AdvanceRequest } from './entities/advance-request.entity';
 import { AdvanceRepayment } from './entities/advance-repayment.entity';
+import { AdvanceRequestItem } from './entities/advance-request-item.entity';
 import {
   CreateAdvanceRequestDto,
   UpdateAdvanceRequestDto,
   AdvanceRequestResponseDto,
+  AdvanceRequestItemResponseDto,
   CreateAdvanceRepaymentDto,
   AdvanceRepaymentResponseDto,
 } from './dto/advance.dto';
@@ -24,15 +26,38 @@ export class AdvanceCoreService {
   async createRequest(
     dto: CreateAdvanceRequestDto,
   ): Promise<AdvanceRequestResponseDto> {
-    const entity = this.advanceRepo.create(dto);
-    const saved = await this.advanceRepo.save(entity);
-    return this.toRequestResponse(saved);
+    return this.advanceRepo.manager.transaction(async (manager) => {
+      const advanceRepo = manager.getRepository(AdvanceRequest);
+      const itemRepo = manager.getRepository(AdvanceRequestItem);
+
+      const { items, ...requestData } = dto;
+      const entity = advanceRepo.create(requestData);
+      const saved = await advanceRepo.save(entity);
+
+      if (items && items.length > 0) {
+        const itemEntities = items.map((item) =>
+          itemRepo.create({ ...item, advanceRequestId: saved.id }),
+        );
+        await itemRepo.save(itemEntities);
+      }
+
+      const result = await advanceRepo.findOne({
+        where: { id: saved.id },
+        relations: { repayments: true, items: true },
+      });
+      if (!result)
+        throw new DomainException(
+          'Advance request not found after save',
+          'ADVANCE_NOT_FOUND',
+        );
+      return this.toRequestResponse(result);
+    });
   }
 
   async findRequestById(id: string): Promise<AdvanceRequestResponseDto | null> {
     const entity = await this.advanceRepo.findOne({
       where: { id },
-      relations: { repayments: true },
+      relations: { repayments: true, items: true },
     });
     if (!entity) return null;
     return this.toRequestResponse(entity);
@@ -57,7 +82,7 @@ export class AdvanceCoreService {
       skip: (page - 1) * limit,
       take: limit,
       order: { createdAt: 'DESC' },
-      relations: { repayments: true },
+      relations: { repayments: true, items: true },
     });
     return { data: items.map((i) => this.toRequestResponse(i)), total };
   }
@@ -66,15 +91,45 @@ export class AdvanceCoreService {
     id: string,
     dto: UpdateAdvanceRequestDto,
   ): Promise<AdvanceRequestResponseDto> {
-    const entity = await this.advanceRepo.findOne({ where: { id } });
-    if (!entity)
-      throw new DomainException(
-        'Advance request not found',
-        'ADVANCE_NOT_FOUND',
-      );
-    Object.assign(entity, dto);
-    const saved = await this.advanceRepo.save(entity);
-    return this.toRequestResponse(saved);
+    return this.advanceRepo.manager.transaction(async (manager) => {
+      const advanceRepo = manager.getRepository(AdvanceRequest);
+      const itemRepo = manager.getRepository(AdvanceRequestItem);
+
+      const entity = await advanceRepo.findOne({
+        where: { id },
+        relations: { items: true },
+      });
+      if (!entity)
+        throw new DomainException(
+          'Advance request not found',
+          'ADVANCE_NOT_FOUND',
+        );
+
+      const { items, ...requestData } = dto;
+      Object.assign(entity, requestData);
+      const saved = await advanceRepo.save(entity);
+
+      if (items) {
+        await itemRepo.delete({ advanceRequestId: id });
+        if (items.length > 0) {
+          const itemEntities = items.map((item) =>
+            itemRepo.create({ ...item, advanceRequestId: saved.id }),
+          );
+          await itemRepo.save(itemEntities);
+        }
+      }
+
+      const result = await advanceRepo.findOne({
+        where: { id: saved.id },
+        relations: { repayments: true, items: true },
+      });
+      if (!result)
+        throw new DomainException(
+          'Advance request not found after update',
+          'ADVANCE_NOT_FOUND',
+        );
+      return this.toRequestResponse(result);
+    });
   }
 
   async updateRequestStatus(
@@ -162,7 +217,27 @@ export class AdvanceCoreService {
     return {
       id: e.id,
       requestNo: e.requestNo,
+      type: e.type,
       employeeId: e.employeeId,
+      requestDate: e.requestDate,
+      requesterName: e.requesterName,
+      requesterPosition: e.requesterPosition,
+      department: e.department,
+      contactStaffName: e.contactStaffName,
+      contactStaffPosition: e.contactStaffPosition,
+      contactStaffPhone: e.contactStaffPhone,
+      expectedSettleDate: e.expectedSettleDate,
+      purpose: e.purpose,
+      accountName: e.accountName,
+      accountNumber: e.accountNumber,
+      country: e.country,
+      cityProvince: e.cityProvince,
+      travelFrom: e.travelFrom,
+      travelTo: e.travelTo,
+      numberOfDays: e.numberOfDays,
+      missionPurpose: e.missionPurpose,
+      payrollAccountNumber: e.payrollAccountNumber,
+      remarks: e.remarks,
       amount: e.amount,
       currency: e.currency,
       reason: e.reason,
@@ -175,10 +250,33 @@ export class AdvanceCoreService {
       branchId: e.branchId,
       createdBy: e.createdBy,
       approvedBy: e.approvedBy,
+      approvedByName: e.approvedByName,
+      approvedByPosition: e.approvedByPosition,
       approvedAt: e.approvedAt,
+      checkedByName: e.checkedByName,
+      checkedByPosition: e.checkedByPosition,
+      checkedAt: e.checkedAt,
       createdAt: e.createdAt,
       updatedAt: e.updatedAt,
       repayments: e.repayments?.map((r) => this.toRepaymentResponse(r)),
+      items: e.items?.map((i) => this.toItemResponse(i)),
+    };
+  }
+
+  private toItemResponse(e: AdvanceRequestItem): AdvanceRequestItemResponseDto {
+    return {
+      id: e.id,
+      advanceRequestId: e.advanceRequestId,
+      itemNo: e.itemNo,
+      itemType: e.itemType,
+      description: e.description,
+      currency: e.currency,
+      amount: e.amount,
+      numberOfDays: e.numberOfDays,
+      rate: e.rate,
+      remark: e.remark,
+      createdAt: e.createdAt,
+      updatedAt: e.updatedAt,
     };
   }
 

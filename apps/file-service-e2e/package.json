@@ -1,0 +1,27 @@
+{
+  "name": "@erp/file-service-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "file-service-e2e",
+    "implicitDependencies": [
+      "file-service"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/file-service-e2e/jest.config.cts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "file-service:build",
+          "file-service:serve"
+        ]
+      }
+    }
+  }
+}

@@ -566,6 +566,391 @@ Unit tests for guards live in `libs/auth/src/lib/guards/`:
 
 - `permissions.guard.spec.ts` — covers public bypass, exact match, wildcard, SUPER_ADMIN fallback, missing permissions
 
+## Backend Service & Library Architecture
+
+### Services (`apps/*-service`)
+
+Every service application follows a consistent layered architecture:
+
+```
+app/
+├── dto/
+│   └── *.dto.ts              # Request/response DTOs with class-validator decorators
+├── entities/
+│   └── *.entity.ts           # TypeORM entities (only if service-specific, otherwise use libs/*-core)
+├── controllers/
+│   └── *.controller.ts       # NestJS controllers — HTTP layer, route definitions, guards
+├── services/
+│   └── *.service.ts          # Business logic, orchestration, external calls
+├── repositories/
+│   └── *.repository.ts       # Custom TypeORM repositories (only if service-specific)
+├── features/
+│   └── <feature>/            # Feature-scoped modules when a service has multiple domains
+│       ├── *.controller.ts
+│       ├── *.service.ts
+│       └── *.module.ts
+├── app.module.ts             # Root module wiring imports, controllers, providers
+└── main.ts                   # Bootstrap: NestFactory, global prefix, CORS, port
+```
+
+**Rules:**
+
+1. **DTOs in `dto/`** — Every request body and response shape must be a class (not an interface) with decorators from `@erp/common`. Use the field decorators (`@StringField()`, `@NumberField()`, `@UuidField()`, `@OptionalStringField()`, etc.) instead of manual `class-validator` / `class-transformer` / `@nestjs/swagger` decorators. These helpers combine `ApiProperty`, `class-validator`, and `class-transformer` in one declaration.
+
+   ```typescript
+   import {
+     StringField,
+     NumberField,
+     UuidField,
+     OptionalStringField,
+     OptionalNumberField,
+     EnumField,
+   } from '@erp/common';
+
+   export class CreateAdvanceRequestDto {
+     @StringField({ description: 'Employee identifier', example: 'emp-001' })
+     employeeId!: string;
+
+     @NumberField({ description: 'Requested amount', min: 0, example: 1000 })
+     amount!: number;
+
+     @UuidField({ description: 'Tenant ID', required: false })
+     tenantId?: string;
+
+     @OptionalStringField({ description: 'Approval remarks' })
+     remarks?: string;
+
+     @EnumField(['DEPARTMENT', 'TRAVEL'], { description: 'Advance type' })
+     type!: 'DEPARTMENT' | 'TRAVEL';
+   }
+   ```
+
+   **Available decorators** from `@erp/common`:
+
+   | Decorator                        | Purpose                    | Options                                            |
+   | -------------------------------- | -------------------------- | -------------------------------------------------- |
+   | `@StringField()`                 | Required string            | `minLength`, `maxLength`, `example`, `description` |
+   | `@NumberField()`                 | Required number            | `min`, `max`, `example`, `description`             |
+   | `@IntegerField()`                | Required integer           | `min`, `max`, `example`, `description`             |
+   | `@PositiveNumberField()`         | Required positive number   | `example`, `description`                           |
+   | `@BooleanField()`                | Required boolean           | `example`, `description`, `default`                |
+   | `@DateField()`                   | Required Date              | `example`, `description`                           |
+   | `@EnumField(enum)`               | Required enum              | `example`, `description`                           |
+   | `@EmailField()`                  | Required email string      | `example`, `description`                           |
+   | `@UrlField()`                    | Required URL string        | `example`, `description`                           |
+   | `@UuidField()`                   | Required UUID string       | `example`, `description`                           |
+   | `@ArrayField()`                  | Required array             | `example`, `description`                           |
+   | `@ObjectField()`                 | Required object            | `example`, `description`                           |
+   | `@OptionalStringField()`         | Optional string            | `minLength`, `maxLength`, `example`                |
+   | `@OptionalNumberField()`         | Optional number            | `min`, `max`, `example`                            |
+   | `@OptionalIntegerField()`        | Optional integer           | `min`, `max`, `example`                            |
+   | `@OptionalPositiveNumberField()` | Optional positive number   | `example`                                          |
+   | `@OptionalBooleanField()`        | Optional boolean           | `example`, `default`                               |
+   | `@OptionalDateField()`           | Optional Date              | `example`                                          |
+   | `@OptionalEnumField(enum)`       | Optional enum              | `example`                                          |
+   | `@OptionalArrayField()`          | Optional array             | `example`                                          |
+   | `@OptionalObjectField()`         | Optional object            | `example`                                          |
+   | `@TransformToNumber()`           | Transform string → number  | —                                                  |
+   | `@TransformToBoolean()`          | Transform string → boolean | —                                                  |
+
+   **Rules for DTOs:**
+   - Use `@erp/common` decorators **only**. Do not import `class-validator`, `class-transformer`, or `@nestjs/swagger` directly in DTO files.
+   - All response DTOs must also be classes with decorators (for OpenAPI generation).
+   - Do not use `interface` for DTOs.
+   - For nested DTOs (arrays of objects), define a separate class and use `@ArrayField()` on the parent.
+
+### DTOs vs Types
+
+Core libraries must separate decorated DTOs from pure TypeScript interfaces:
+
+```
+src/lib/
+├── dto/
+│   └── *.dto.ts              # Decorated CLASSES for API input/output
+├── types/
+│   └── *.types.ts            # Pure INTERFACES for internal typing
+```
+
+|             | `dto/*.dto.ts`                | `types/*.types.ts`           |
+| ----------- | ----------------------------- | ---------------------------- |
+| **Form**    | `class` with decorators       | `interface` (no decorators)  |
+| **Purpose** | API validation + OpenAPI docs | Internal service/repo typing |
+| **Imports** | `@erp/common` decorators only | No decorator imports         |
+| **Example** | `CreateFileAttachmentDto`     | `FileAttachmentType`         |
+
+**When to use each:**
+
+- **DTOs** — Controller `@Body()` parameters, response shapes, anything crossing the HTTP boundary
+- **Types** — Repository method signatures, internal service helpers, state shapes that never leave the service
+
+Example:
+
+```typescript
+// dto/file-attachment.dto.ts
+export class CreateFileAttachmentDto {
+  @StringField({ description: 'Entity type' })
+  entityType!: string;
+}
+
+// types/file-attachment.types.ts
+export interface FileAttachmentType {
+  id: string;
+  entityType: string;
+  // ... all fields, no decorators
+}
+```
+
+2. **Controllers in `controllers/` or `features/<name>/`** — Controllers handle HTTP concerns only: routing, guards, decorators, and delegating to services. No business logic in controllers.
+3. **Services in `services/` or `features/<name>/`** — Services contain business logic, orchestrate repository calls, and handle side effects. Services never depend directly on HTTP layer types (`Request`, `Response`).
+4. **Features folder for multi-domain services** — If a service manages more than one domain (e.g., `advance-service` handles both department advances and travel allowances), group by feature folder.
+5. **TypeORM entities** — Service-specific entities (not shared) live in `app/entities/`. Shared entities live in `libs/*-core/src/lib/entities/`.
+6. **No raw SQL in controllers or services** — All database access goes through repositories or TypeORM `Repository` injected via `@InjectRepository`.
+
+### Libraries (`libs/*-core`)
+
+Core libraries are shared across multiple services and follow this structure:
+
+```
+src/lib/
+├── entities/
+│   └── *.entity.ts           # Shared TypeORM entities
+├── dto/
+│   └── *.dto.ts              # Decorated CLASSES for API input/output (Create, Update, Response)
+├── types/
+│   └── *.types.ts            # Pure TypeScript INTERFACES for internal typing
+├── repositories/
+│   └── *.repository.ts       # Custom repositories wrapping TypeORM Repository
+├── services/
+│   └── *.service.ts          # Domain business logic used by multiple services
+├── <domain>.module.ts        # NestJS module exporting entities, repositories, services
+└── index.ts                  # Public API exports
+```
+
+**Rules:**
+
+1. **Entities in `entities/`** — Shared TypeORM entities used by multiple services. Keep entities thin: columns, relations, and lifecycle hooks only. No business logic.
+2. **Repositories in `repositories/`** — Custom repositories abstract all SQL/TypeORM operations. They wrap `Repository<Entity>` and provide typed methods (`findByX`, `create`, `update`, `delete`). Services depend on repositories, not on `Repository` directly.
+3. **Services in `services/`** — Domain services that orchestrate repository calls and contain shared business rules. These are consumed by `apps/*-service` controllers.
+4. **Module exports everything** — The root module must export entities, repositories, and services so consuming apps can import the module and get all providers.
+
+```typescript
+// libs/advance-core/src/lib/advance-core.module.ts
+@Module({
+  imports: [TypeOrmModule.forFeature([AdvanceRequest, AdvanceRepayment])],
+  providers: [AdvanceRepository, AdvanceCoreService],
+  exports: [AdvanceRepository, AdvanceCoreService],
+})
+export class AdvanceCoreModule {}
+```
+
+5. **Repository pattern — extend `BaseRepository`:**
+
+All custom repositories extend `BaseRepository<T>` from `@erp/common`, which provides generic CRUD, pagination, and transaction support. Custom repositories only add domain-specific query methods.
+
+```typescript
+// libs/common/src/repositories/base.repository.ts
+export abstract class BaseRepository<T extends object> {
+  protected constructor(protected readonly repo: Repository<T>) {}
+
+  // Standard CRUD
+  async create(dto: DeepPartial<T>): Promise<T> {
+    /* ... */
+  }
+  async findById(id: string): Promise<T | null> {
+    /* ... */
+  }
+  async findMany(
+    where: FindOptionsWhere<T>,
+    order?: FindOptionsOrder<T>,
+  ): Promise<T[]> {
+    /* ... */
+  }
+  async delete(id: string): Promise<void> {
+    /* ... */
+  }
+  async softDelete(id: string): Promise<void> {
+    /* ... */
+  }
+  async count(where: FindOptionsWhere<T>): Promise<number> {
+    /* ... */
+  }
+  async paginate(
+    where: FindOptionsWhere<T>,
+    page: number,
+    limit: number,
+    order?: FindOptionsOrder<T>,
+  ): Promise<PaginatedResult<T>> {
+    /* ... */
+  }
+
+  // Transaction-aware CRUD (single entity)
+  async createWithTransaction(
+    dto: DeepPartial<T>,
+    manager: EntityManager,
+  ): Promise<T> {
+    /* ... */
+  }
+  async updateWithTransaction(
+    id: string,
+    dto: DeepPartial<T>,
+    manager: EntityManager,
+  ): Promise<T> {
+    /* ... */
+  }
+  async deleteWithTransaction(
+    id: string,
+    manager: EntityManager,
+  ): Promise<void> {
+    /* ... */
+  }
+  async runInTransaction<R>(
+    callback: (manager: EntityManager) => Promise<R>,
+  ): Promise<R> {
+    /* ... */
+  }
+
+  // Bulk operations (large datasets)
+  async saveManyWithTransaction(
+    dtos: DeepPartial<T>[],
+    manager: EntityManager,
+    batchSize?: number,
+  ): Promise<T[]> {
+    /* ... */
+  }
+  async bulkInsert(dtos: DeepPartial<T>[], batchSize?: number): Promise<void> {
+    /* ... */
+  }
+  async bulkInsertWithTransaction(
+    dtos: DeepPartial<T>[],
+    manager: EntityManager,
+    batchSize?: number,
+  ): Promise<void> {
+    /* ... */
+  }
+}
+```
+
+**Bulk operations and large datasets**
+
+For small datasets (< 100 rows), use `create()` or `saveManyWithTransaction()` with default batching.
+
+For large datasets (1K–10K+ rows), use **bulk INSERT** to avoid memory bloat and excessive round-trips:
+
+```typescript
+// 10,000 file attachments — atomic, chunked, fast
+await this.attachmentRepo.runInTransaction(async (manager) => {
+  await this.attachmentRepo.bulkInsertWithTransaction(dtos, manager, 1000);
+  // 10 batches of 1,000 = 10 SQL INSERT statements
+});
+```
+
+| Method                                 | SQL Strategy                        | Round-trips for 10K | Use When                      |
+| -------------------------------------- | ----------------------------------- | ------------------- | ----------------------------- |
+| `create()` / `save()`                  | Per-entity INSERT                   | 10,000              | Single entity, need listeners |
+| `saveManyWithTransaction(..., 500)`    | Chunked `save`                      | 20                  | Need entity listeners         |
+| `bulkInsert(..., 1000)`                | `INSERT INTO ... VALUES (...), ...` | 10                  | Raw speed, import jobs        |
+| `bulkInsertWithTransaction(..., 1000)` | Same, inside tx                     | 10                  | Atomic bulk import            |
+
+**Rule:** Never call `repo.save(entities)` with > 500 unbatched items. Always use `bulkInsert` or pass `{ chunk: N }` to `save`.
+
+Custom repository — only domain-specific methods:
+
+```typescript
+// libs/file-core/src/lib/repositories/file-attachment.repository.ts
+@Injectable()
+export class FileAttachmentRepository extends BaseRepository<FileAttachment> {
+  constructor(
+    @InjectRepository(FileAttachment)
+    repo: Repository<FileAttachment>,
+  ) {
+    super(repo);
+  }
+
+  async findByEntity(
+    entityType: string,
+    entityId: string,
+  ): Promise<FileAttachment[]> {
+    return this.repo.find({
+      where: { entityType, entityId },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async deleteByEntity(entityType: string, entityId: string): Promise<void> {
+    await this.repo.delete({ entityType, entityId });
+  }
+}
+```
+
+6. **Service delegates to repository:**
+
+```typescript
+// libs/file-core/src/lib/services/file-core.service.ts
+@Injectable()
+export class FileCoreService {
+  constructor(private readonly repository: FileAttachmentRepository) {}
+
+  async create(
+    dto: CreateFileAttachmentDto,
+  ): Promise<FileAttachmentResponseDto> {
+    const saved = await this.repository.create(dto);
+    return this.toResponse(saved);
+  }
+}
+```
+
+### Communication Flow
+
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   Controller    │────▶│    Service      │────▶│  Repository     │
+│  (HTTP layer)   │     │ (business logic)│     │  (SQL/TypeORM)  │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+       │                        │
+       ▼                        ▼
+  @Body() dto              this.repo.find()
+  @Param() id              this.repo.save()
+  @Query() filter          this.repo.delete()
+```
+
+**Forbidden:**
+
+- Controllers calling `Repository` directly (bypassing service/repository)
+- Services importing HTTP types (`Request`, `Response` from `express`)
+- Business logic in DTOs or entities
+- Raw SQL strings outside of repositories
+
+### Unit Testing for Core Libraries
+
+**Every `libs/*-core` project must have unit tests.** This is non-negotiable.
+
+| Artifact                       | Test File                    | Coverage Target                                                 |
+| ------------------------------ | ---------------------------- | --------------------------------------------------------------- |
+| `services/*.service.ts`        | `services/*.service.spec.ts` | Business logic branches                                         |
+| `repositories/*.repository.ts` | —                            | No unit test needed; thin wrappers around TypeORM `Repository`  |
+| `dto/*.dto.ts`                 | —                            | No unit test needed; validated at runtime via `class-validator` |
+| `entities/*.entity.ts`         | —                            | No unit test needed; TypeORM schema only                        |
+
+**Rules:**
+
+1. **Tests are colocated** — `*.spec.ts` lives next to the file it tests (`services/foo.service.spec.ts` next to `services/foo.service.ts`).
+2. **Prefer direct instantiation** — Instantiate services with mocked collaborators rather than full `@nestjs/testing` DI wiring:
+
+```typescript
+// file-core.service.spec.ts
+const mockRepo = {
+  create: jest.fn(),
+  findByEntity: jest.fn(),
+};
+const service = new FileCoreService(
+  mockRepo as unknown as FileAttachmentRepository,
+);
+```
+
+3. **Run tests via nx** — `npx nx test <project>` or `npx nx affected -t test`.
+4. **Never delete or weaken tests** to make a build pass — fix the root cause.
+5. **Read `docs/unit-testing.md`** before adding tests to a library that doesn't have them yet, and update its coverage table when a lib gains tests.
+
 ## Frontend Feature Structure
 
 The `apps/erp-frontend` application is organized by **feature folders** under `apps/erp-frontend/features/`. Every feature must follow the same directory layout as `features/auth/`.

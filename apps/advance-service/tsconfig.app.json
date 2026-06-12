@@ -25,6 +25,9 @@
     },
     {
       "path": "../../libs/advance-core/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/file-core/tsconfig.lib.json"
     }
   ]
 }

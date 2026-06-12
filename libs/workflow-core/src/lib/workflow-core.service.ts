@@ -159,6 +159,53 @@ const WORKFLOW_REGISTRY: Record<
       },
     ],
   },
+  'advance-request': {
+    name: 'Advance Request',
+    stages: [
+      {
+        order: 1,
+        type: WorkflowStageType.MAKER,
+        roleRequired: ['REQUESTER'],
+        deadlineHours: 0,
+        autoEscalate: false,
+      },
+      {
+        order: 2,
+        type: 'LINE_MANAGER',
+        roleRequired: ['LINE_MANAGER'],
+        deadlineHours: 48,
+        autoEscalate: true,
+      },
+      {
+        order: 3,
+        type: 'DEPARTMENT_HEAD',
+        roleRequired: ['DEPARTMENT_HEAD'],
+        deadlineHours: 48,
+        autoEscalate: true,
+      },
+      {
+        order: 4,
+        type: WorkflowStageType.CHECKER,
+        roleRequired: ['CHECKER'],
+        deadlineHours: 48,
+        autoEscalate: true,
+      },
+      {
+        order: 5,
+        type: 'REVIEWER',
+        roleRequired: ['TREASURY'],
+        deadlineHours: 24,
+        autoEscalate: true,
+      },
+      {
+        order: 6,
+        type: WorkflowStageType.AUTHORIZER,
+        roleRequired: ['AUTHORIZER', 'FINANCE_MANAGER'],
+        deadlineHours: 72,
+        autoEscalate: true,
+      },
+    ],
+  },
 };
 
 @Injectable()

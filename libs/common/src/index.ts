@@ -4,3 +4,5 @@ export * from './entities/base.entity';
 export * from './dto/pagination.dto';
 export * from './dto/response-wrapper';
 export * from './exceptions/domain.exception';
+export * from './decorators/dto.decorator';
+export * from './repositories/base.repository';

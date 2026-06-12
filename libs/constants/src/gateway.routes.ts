@@ -53,9 +53,15 @@ export const EXTERNAL_ROUTES: ServiceRoute[] = [
     auth: 'jwt',
   },
   {
-    prefix: '/api/v1/advances',
+    prefix: '/api/v1/advance',
     targetEnv: 'ADVANCE_SERVICE_URL',
     defaultHost: 'http://localhost:8010',
+    auth: 'jwt',
+  },
+  {
+    prefix: '/api/v1/files',
+    targetEnv: 'FILE_SERVICE_URL',
+    defaultHost: 'http://localhost:8015',
     auth: 'jwt',
   },
   {
@@ -116,9 +122,15 @@ export const INTERNAL_ROUTES: ServiceRoute[] = [
     auth: 'internal',
   },
   {
-    prefix: '/internal/v1/advances',
+    prefix: '/internal/v1/advance',
     targetEnv: 'ADVANCE_SERVICE_URL',
     defaultHost: 'http://localhost:8010',
+    auth: 'internal',
+  },
+  {
+    prefix: '/internal/v1/files',
+    targetEnv: 'FILE_SERVICE_URL',
+    defaultHost: 'http://localhost:8015',
     auth: 'internal',
   },
   {

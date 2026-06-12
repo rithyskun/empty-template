@@ -15,6 +15,7 @@ import type {
   UpdateAdvanceRequestDto,
   CreateAdvanceRepaymentDto,
 } from '@erp/advance-core';
+import { FileCoreService } from '@erp/file-core';
 import { JwtAuthGuard, RolesGuard, Roles, CurrentUser } from '@erp/auth';
 import type { UserPayload } from '@erp/auth';
 import { PlatformRole } from '@erp/enums';
@@ -22,7 +23,10 @@ import { PlatformRole } from '@erp/enums';
 @Controller('advance')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class AdvanceController {
-  constructor(private readonly service: AdvanceCoreService) {}
+  constructor(
+    private readonly service: AdvanceCoreService,
+    private readonly fileService: FileCoreService,
+  ) {}
 
   @Post()
   @Roles(PlatformRole.MAKER, PlatformRole.TENANT_ADMIN)
@@ -141,5 +145,60 @@ export class AdvanceController {
         body?.payrollRunId,
       ),
     };
+  }
+
+  @Post(':requestId/attachments')
+  @Roles(PlatformRole.MAKER, PlatformRole.TENANT_ADMIN)
+  async addAttachment(
+    @Param('requestId') requestId: string,
+    @Body()
+    body: {
+      fileName: string;
+      originalName: string;
+      mimeType: string;
+      size: number;
+      storagePath: string;
+      url?: string;
+    },
+    @CurrentUser() user: UserPayload,
+  ) {
+    const record = await this.fileService.create({
+      entityType: 'advance_request',
+      entityId: requestId,
+      fileName: body.fileName,
+      originalName: body.originalName,
+      mimeType: body.mimeType,
+      size: body.size,
+      storagePath: body.storagePath,
+      url: body.url,
+      tenantId: user.tenantId,
+      companyId: user.companyId,
+      createdBy: user.userId,
+    });
+    return { data: record };
+  }
+
+  @Get(':requestId/attachments')
+  @Roles(
+    PlatformRole.MAKER,
+    PlatformRole.CHECKER,
+    PlatformRole.VIEWER,
+    PlatformRole.TENANT_ADMIN,
+  )
+  async listAttachments(@Param('requestId') requestId: string) {
+    return {
+      data: await this.fileService.findByEntity('advance_request', requestId),
+    };
+  }
+
+  @Delete('attachments/:attachmentId')
+  @Roles(PlatformRole.MAKER, PlatformRole.TENANT_ADMIN)
+  async deleteAttachment(@Param('attachmentId') attachmentId: string) {
+    const record = await this.fileService.findOne(attachmentId);
+    if (!record) {
+      return { statusCode: 404, message: 'Attachment not found' };
+    }
+    await this.fileService.delete(attachmentId);
+    return { data: { id: attachmentId }, message: 'Attachment deleted' };
   }
 }

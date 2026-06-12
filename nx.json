@@ -47,7 +47,8 @@
       "plugin": "@nx/jest/plugin",
       "options": {
         "targetName": "test"
-      }
+      },
+      "exclude": ["apps/file-service-e2e/**/*"]
     }
   ],
   "sync": {

@@ -7,7 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { AdvanceRequest } from './advance-request.entity';
+import type { AdvanceRequest } from './advance-request.entity';
 
 @Entity('advance_repayments')
 export class AdvanceRepayment {
@@ -41,7 +41,10 @@ export class AdvanceRepayment {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: Date;
 
-  @ManyToOne(() => AdvanceRequest, (r) => r.repayments)
+  @ManyToOne(
+    () => require('./advance-request.entity').AdvanceRequest,
+    (r: AdvanceRequest) => r.repayments,
+  )
   @JoinColumn({ name: 'advance_request_id' })
   advanceRequest!: AdvanceRequest;
 }
