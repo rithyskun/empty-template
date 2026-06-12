@@ -154,7 +154,7 @@ function handleItemClick(item: MenuItem) {
   <!-- Sidebar -->
   <aside
     :class="[
-      'fixed top-0 bottom-0 left-0 z-40 bg-white dark:bg-dark-bg-secondary border-r border-gray-200 dark:border-dark-border transition-all duration-300 flex flex-col',
+      'fixed top-0 bottom-0 left-0 z-40 bg-aba dark:bg-dark-bg-secondary border-r border-white/10 dark:border-dark-border transition-all duration-300 flex flex-col',
       sidebarWidth,
       sidebarHidden
         ? '-translate-x-full'
@@ -166,8 +166,10 @@ function handleItemClick(item: MenuItem) {
     <!-- Logo -->
     <div
       :class="[
-        'shrink-0 h-14 sm:h-16 flex items-center justify-start border-b border-gray-200 dark:border-dark-border w-full relative',
-        sidebarCollapsed ? 'cursor-pointer' : 'px-3 xl:px-4 2xl:px-5',
+        'shrink-0 h-14 sm:h-16 flex items-center justify-start border-b border-white/10 dark:border-dark-border w-full relative',
+        sidebarCollapsed
+          ? 'cursor-pointer justify-center'
+          : 'px-3 xl:px-4 2xl:px-5',
       ]"
       :title="sidebarCollapsed ? 'Expand sidebar' : undefined"
       @click="sidebarCollapsed && toggleSidebar()"
@@ -175,22 +177,22 @@ function handleItemClick(item: MenuItem) {
       <!-- Collapsed: just ABA -->
       <div
         v-if="sidebarCollapsed"
-        class="text-brand text-aba font-extrabold text-lg tracking-[0.04em] dark:text-[#80cbc4]"
+        class="text-white font-extrabold text-lg tracking-[0.04em] dark:text-[#80cbc4]"
       >
         ABA
       </div>
       <!-- Expanded: ABA' Financial -->
       <div v-else class="inline-flex items-center">
         <span
-          class="text-aba font-extrabold text-xl tracking-[0.04em] dark:text-[#80cbc4]"
+          class="text-white font-extrabold text-xl tracking-[0.04em] dark:text-[#80cbc4]"
         >
           ABA
         </span>
-        <span class="text-lg font-extrabold text-accent relative -top-0.5">
+        <span class="text-lg font-extrabold text-[#e31013] relative -top-0.5">
           '
         </span>
         <span
-          class="text-financial font-semibold text-lg tracking-[-0.01em] ml-1 dark:text-[#4fc3f7]"
+          class="text-white font-semibold text-lg tracking-[-0.01em] ml-1 dark:text-[#4fc3f7]"
         >
           Financial
         </span>
@@ -199,7 +201,7 @@ function handleItemClick(item: MenuItem) {
       <!-- Toggle (expanded only) -->
       <button
         v-if="!sidebarCollapsed"
-        class="absolute right-3 xl:right-4 2xl:right-5 top-1/2 -translate-y-1/2 w-7 h-7 rounded flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:text-dark-text-tertiary dark:hover:bg-dark-bg-hover transition-colors shrink-0"
+        class="absolute right-3 xl:right-4 2xl:right-5 top-1/2 -translate-y-1/2 w-7 h-7 rounded flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 dark:text-dark-text-tertiary dark:hover:bg-dark-bg-hover transition-colors shrink-0"
         :title="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
         @click.stop="toggleSidebar"
       >
@@ -210,7 +212,7 @@ function handleItemClick(item: MenuItem) {
     <!-- Floating toggle for collapsed sidebar -->
     <button
       v-if="sidebarCollapsed"
-      class="absolute -right-4 sm:-right-4 top-3 sm:top-4 z-50 w-6 sm:w-7 h-8 rounded-r bg-white dark:bg-dark-bg-secondary shadow-sm flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-dark-text-secondary dark:hover:text-dark-text dark:hover:bg-dark-bg-hover transition-colors cursor-pointer"
+      class="absolute -right-4 sm:-right-4 top-3 sm:top-4 z-50 w-6 sm:w-7 h-8 rounded-r bg-aba dark:bg-dark-bg-secondary shadow-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 dark:text-dark-text-secondary dark:hover:text-dark-text dark:hover:bg-dark-bg-hover transition-colors cursor-pointer"
       title="Expand sidebar"
       @click="toggleSidebar"
     >
@@ -221,7 +223,7 @@ function handleItemClick(item: MenuItem) {
       <div v-for="(section, sIdx) in props.sections" :key="sIdx" class="mb-6">
         <h3
           v-if="!sidebarCollapsed"
-          class="px-4 xl:px-5 2xl:px-6 3xl:px-6 text-xs font-semibold text-gray-400 dark:text-dark-text-tertiary uppercase tracking-wider mb-2"
+          class="px-4 xl:px-5 2xl:px-6 3xl:px-6 text-xs font-semibold text-white/50 dark:text-dark-text-tertiary uppercase tracking-wider mb-2"
         >
           {{ section.title }}
         </h3>
@@ -231,8 +233,8 @@ function handleItemClick(item: MenuItem) {
               :class="[
                 'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
                 isActive(item.path)
-                  ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-medium'
-                  : 'text-gray-600 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-bg-hover',
+                  ? 'bg-white/15 dark:bg-primary-900/30 text-white dark:text-primary-300 font-medium'
+                  : 'text-white/80 dark:text-dark-text-secondary hover:bg-white/10 dark:hover:bg-dark-bg-hover',
                 sidebarCollapsed ? 'justify-center' : '',
               ]"
               :title="sidebarCollapsed ? item.label : undefined"
@@ -262,17 +264,17 @@ function handleItemClick(item: MenuItem) {
     <!-- User Profile Card + Menu -->
     <div
       ref="userMenuRef"
-      class="border-t border-gray-200 dark:border-dark-border shrink-0 relative"
+      class="border-t border-white/10 dark:border-dark-border shrink-0 relative"
     >
       <!-- Expanded card -->
       <button
         v-if="!sidebarCollapsed"
-        class="w-full flex items-center gap-3 px-3 xl:px-4 2xl:px-5 py-3 hover:bg-gray-50 dark:hover:bg-dark-bg-hover transition-colors text-left"
+        class="w-full flex items-center gap-3 px-3 xl:px-4 2xl:px-5 py-3 hover:bg-white/10 dark:hover:bg-dark-bg-hover transition-colors text-left"
         @click.stop="toggleUserMenu"
       >
         <div class="relative shrink-0">
           <div
-            class="w-9 h-9 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 flex items-center justify-center text-xs font-bold"
+            class="w-9 h-9 rounded-full bg-white/15 dark:bg-primary-900 text-white dark:text-primary-300 flex items-center justify-center text-xs font-bold"
           >
             {{ userInitials }}
           </div>
@@ -282,7 +284,7 @@ function handleItemClick(item: MenuItem) {
         </div>
         <div class="min-w-0 flex-1">
           <p
-            class="text-sm font-medium text-gray-900 dark:text-dark-text truncate"
+            class="text-sm font-medium text-white dark:text-dark-text truncate"
           >
             {{
               user?.firstName
@@ -291,13 +293,13 @@ function handleItemClick(item: MenuItem) {
             }}
           </p>
           <p
-            class="text-xs text-gray-500 dark:text-dark-text-tertiary truncate"
+            class="text-xs text-white/70 dark:text-dark-text-tertiary truncate"
           >
             {{ user?.email }}
           </p>
         </div>
         <ChevronRight
-          class="w-4 h-4 text-gray-400 dark:text-dark-text-tertiary shrink-0 transition-transform duration-200"
+          class="w-4 h-4 text-white/60 dark:text-dark-text-tertiary shrink-0 transition-transform duration-200"
           :class="userMenuOpen ? 'rotate-90' : ''"
         />
       </button>
@@ -305,12 +307,12 @@ function handleItemClick(item: MenuItem) {
       <!-- Collapsed: avatar only -->
       <button
         v-else
-        class="w-full flex items-center justify-center py-3 hover:bg-gray-50 dark:hover:bg-dark-bg-hover transition-colors"
+        class="w-full flex items-center justify-center py-3 hover:bg-white/10 dark:hover:bg-dark-bg-hover transition-colors"
         @click.stop="toggleUserMenu"
       >
         <div class="relative">
           <div
-            class="w-9 h-9 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 flex items-center justify-center text-xs font-bold"
+            class="w-9 h-9 rounded-full bg-white/15 dark:bg-primary-900 text-white dark:text-primary-300 flex items-center justify-center text-xs font-bold"
           >
             {{ userInitials }}
           </div>

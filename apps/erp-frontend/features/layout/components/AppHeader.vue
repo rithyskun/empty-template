@@ -8,9 +8,8 @@ const { sidebarCollapsed, sidebarHidden, openMobileSidebar } = useLayout();
 
 const headerLeftClass = computed(() => {
   if (sidebarHidden.value) return 'left-0';
-  if (sidebarCollapsed.value)
-    return 'lg:left-20 xl:left-20 2xl:left-20 3xl:left-20';
-  return 'lg:left-64 xl:left-72 2xl:left-80 3xl:left-80';
+  if (sidebarCollapsed.value) return 'lg:left-20';
+  return 'lg:left-64';
 });
 </script>
 

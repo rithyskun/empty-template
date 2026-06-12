@@ -27,9 +27,8 @@ export function useLayout() {
   };
 
   const sidebarWidth = computed(() => {
-    if (sidebarMode.value === 'collapsed')
-      return 'w-20 lg:w-20 xl:w-20 2xl:w-20 3xl:w-20';
-    return 'w-64 lg:w-64 xl:w-72 2xl:w-80 3xl:w-80';
+    if (sidebarMode.value === 'collapsed') return 'w-20';
+    return 'w-64';
   });
 
   const sidebarCollapsed = computed(() => sidebarMode.value === 'collapsed');
