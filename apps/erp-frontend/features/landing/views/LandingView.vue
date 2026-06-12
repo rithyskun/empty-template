@@ -29,7 +29,7 @@ function navigateToFeature(path: string) {
   <div>
     <div class="mb-8">
       <h1 class="text-2xl font-bold text-gray-900 dark:text-dark-text">
-        Welcome back, {{ user?.firstName || user?.email || 'User' }}
+        Welcome back, {{ user?.lastName || user?.email || 'User' }}
       </h1>
       <p class="text-gray-600 dark:text-dark-text-tertiary mt-1">
         Select a module below to get started

@@ -26,7 +26,7 @@ export const featureTiles: FeatureTile[] = [
     id: 'advances',
     label: 'Advances',
     description: 'Manage employee advances and repayment schedules',
-    path: '/advances',
+    path: '/advances/dashboard',
     icon: DollarSign,
     // requiredRole: 'ADVANCES_READ',
     color: 'text-emerald-700 dark:text-emerald-300',

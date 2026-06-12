@@ -14,7 +14,7 @@ export const advancesSidebar: MenuSection[] = [
     items: [
       {
         label: 'Dashboard',
-        path: '/advances/dashbard',
+        path: '/advances/dashboard',
         icon: LayoutDashboard,
       },
       {

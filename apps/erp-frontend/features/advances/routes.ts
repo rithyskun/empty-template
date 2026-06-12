@@ -6,7 +6,7 @@ import { advancesSidebar } from './config/sidebar.config';
 
 export const advanceRoutes: RouteRecordRaw[] = [
   {
-    path: '/advances',
+    path: '/advances/dashboard',
     name: 'advances',
     component: AdvancesView,
     meta: {
