@@ -1,4 +1,4 @@
-import { AdvanceCoreService } from '../advance-core.service';
+import { AdvanceCoreService } from './advance-core.service';
 import { AdvanceRequest } from '../entities/advance-request.entity';
 import { AdvanceRepayment } from '../entities/advance-repayment.entity';
 

@@ -18,7 +18,7 @@ export interface UpdatePermissionDto {
 
 export interface PermissionResponseDto {
   id: string;
-  name: string;
+  name?: string;
   slug: string;
   module: string;
   action: string;

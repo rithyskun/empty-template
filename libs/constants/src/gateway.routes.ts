@@ -57,6 +57,7 @@ export const EXTERNAL_ROUTES: ServiceRoute[] = [
     targetEnv: 'ADVANCE_SERVICE_URL',
     defaultHost: 'http://localhost:8010',
     auth: 'jwt',
+    pathRewrite: '/api/advance',
   },
   {
     prefix: '/api/v1/files',
@@ -126,6 +127,7 @@ export const INTERNAL_ROUTES: ServiceRoute[] = [
     targetEnv: 'ADVANCE_SERVICE_URL',
     defaultHost: 'http://localhost:8010',
     auth: 'internal',
+    pathRewrite: '/api/advance',
   },
   {
     prefix: '/internal/v1/files',

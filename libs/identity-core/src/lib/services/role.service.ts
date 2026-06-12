@@ -189,7 +189,7 @@ export class RoleService {
       select: { permissionId: true },
     });
 
-    let permissions: { id: string; name: string; slug: string }[] = [];
+    let permissions: { id: string; name?: string; slug: string }[] = [];
     if (links.length) {
       const permIds = links.map((l) => l.permissionId);
       const perms = await this.permissionRepo.findBy({ id: In(permIds) });

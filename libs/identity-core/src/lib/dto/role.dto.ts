@@ -27,7 +27,7 @@ export interface RoleResponseDto {
   isSystem: boolean;
   isActive: boolean;
   tenantId?: string;
-  permissions: { id: string; name: string; slug: string }[];
+  permissions: { id: string; name?: string; slug: string }[];
   userCount?: number;
   createdAt: Date;
   updatedAt: Date;

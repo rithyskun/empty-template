@@ -17,7 +17,6 @@ set -e
 cleanup() {
   echo ""
   echo "Stopping all services..."
-  pkill -f "vite dev" 2>/dev/null || true
   pkill -f "nx serve" 2>/dev/null || true
   pkill -f "webpack" 2>/dev/null || true
   exit 0

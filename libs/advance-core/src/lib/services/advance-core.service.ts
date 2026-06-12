@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AdvanceRequest } from './entities/advance-request.entity';
-import { AdvanceRepayment } from './entities/advance-repayment.entity';
-import { AdvanceRequestItem } from './entities/advance-request-item.entity';
+import { AdvanceRequest } from '../entities/advance-request.entity';
+import { AdvanceRepayment } from '../entities/advance-repayment.entity';
+import { AdvanceRequestItem } from '../entities/advance-request-item.entity';
 import {
   CreateAdvanceRequestDto,
   UpdateAdvanceRequestDto,
@@ -11,7 +11,7 @@ import {
   AdvanceRequestItemResponseDto,
   CreateAdvanceRepaymentDto,
   AdvanceRepaymentResponseDto,
-} from './dto/advance.dto';
+} from '../dto/advance.dto';
 import { DomainException } from '@erp/common';
 
 @Injectable()

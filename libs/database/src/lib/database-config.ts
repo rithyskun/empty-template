@@ -109,8 +109,8 @@ export function loadDatabaseConfig(): DatabaseConfig {
       ? Number(process.env.DB_TIMEOUT)
       : undefined,
     isExternal: process.env.DB_EXTERNAL === 'true',
-    synchronize: process.env.NODE_ENV !== 'production',
-    logging: process.env.NODE_ENV !== 'production',
+    synchronize: process.env.DB_SYNCHRONIZE === 'true',
+    logging: process.env.DB_LOGGING === 'true',
     autoLoadEntities: true,
   };
 }

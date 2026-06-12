@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdvanceRequest } from './entities/advance-request.entity';
 import { AdvanceRepayment } from './entities/advance-repayment.entity';
 import { AdvanceRequestItem } from './entities/advance-request-item.entity';
-import { AdvanceCoreService } from './advance-core.service';
+import { AdvanceCoreService } from './services/advance-core.service';
 
 @Global()
 @Module({
